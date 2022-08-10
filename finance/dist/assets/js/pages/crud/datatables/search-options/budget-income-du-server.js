@@ -189,7 +189,7 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 					targets: 7,
 					render: function (data, type, full, meta) {
 
-						if (data === '' || data === null || data === '0') {
+						if (data === '' || data === null ) {
 							return 'UNKNOWN';
 						} else {
 							return '<span class="font-weight-bolder">' + String(data).replace(/(.)(?=(\d{3})+$)/g, '$1,') + '</span>';
