@@ -404,7 +404,7 @@ $(document).ready(function () {
 	function list_student() {
 		$.ajax({
 			type: "ajax",
-			url: `${HOST_URL}/finance/savings/get_all_student`,
+			url: `${HOST_URL}finance/savings/savings/get_all_student`,
 			dataType: "JSON",
 			async: false,
 			success: function (data) {
