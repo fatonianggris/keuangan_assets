@@ -1053,7 +1053,7 @@ $(document).ready(function () {
 				nama_siswa + "' (" + nis_siswa + ") dengan nominal Kredit (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 			didOpen: () => {
 				grecaptcha.render('recaptcha_delete', {
-					'sitekey': '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+					'sitekey': '6LcUwakcAAAAAFUZzySZs5K0ANRJIzbsq_NDVkdp'
 				})
 			},
 			preConfirm: function () {
@@ -1131,7 +1131,7 @@ $(document).ready(function () {
 				nama_siswa + "' (" + nis_siswa + ") dengan nominal Debet (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 			didOpen: () => {
 				grecaptcha.render('recaptcha_delete', {
-					'sitekey': '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+					'sitekey': '6LcUwakcAAAAAFUZzySZs5K0ANRJIzbsq_NDVkdp'
 				})
 			},
 			preConfirm: function () {
