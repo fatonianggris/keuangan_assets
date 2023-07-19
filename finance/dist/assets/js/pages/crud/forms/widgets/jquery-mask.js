@@ -24,6 +24,12 @@
             $('#kt_money_input_wali').mask('000.000.000.000.000', {
                 reverse: true
             });
+			$('.kt_money_input_kredit').mask('000.000.000.000.000', {
+                reverse: true
+            });
+			$('.kt_money_input_debet').mask('000.000.000.000.000', {
+                reverse: true
+            });
         }
 
         return {
