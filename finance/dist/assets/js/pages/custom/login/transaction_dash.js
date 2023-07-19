@@ -180,8 +180,8 @@ $(document).ready(function () {
 		$.ajax({
 			type: "ajax",
 			url: `${HOST_URL}finance/savings/savings/get_all_student`,
-			dataType: "JSON",
-			async: false,
+			contentType:'application/json; charset=utf-8',
+			dataType: 'json',
 			success: function (data) {
 				var html = "";
 				var option = "<option></option>";
