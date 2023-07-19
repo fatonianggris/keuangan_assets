@@ -178,7 +178,7 @@ $(document).ready(function () {
 
 	function list_student() {
 		$.ajax({
-			type: "ajax",
+			type: "POST",
 			url: `${HOST_URL}finance/savings/savings/get_all_student`,
 			contentType:'application/json; charset=utf-8',
 			dataType: 'json',
