@@ -1,109 +1,308 @@
 $(document).ready(function () {
-	show_transaksi();
 
-	var table = $("#table_transcation").DataTable({
-		responsive: true,
-		dom: `<'row'<'col-sm-12'tr>>
+	var start = moment().subtract(29, 'days');
+	var end = moment();
+	var lstart
+	var lend;
+	var date_range = '';
+
+	function call_today(start, end) {
+		$('#kt_daterangepicker_6 .form-control').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+		$("#date_range_excel").val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+		date_range = start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY');
+
+		lstart = $('#kt_daterangepicker_6').data('daterangepicker').startDate.format('YYYY-MM-DD');
+		lend = $('#kt_daterangepicker_6').data('daterangepicker').endDate.format('YYYY-MM-DD');
+	}
+
+	$('#kt_daterangepicker_6').daterangepicker({
+		buttonClasses: ' btn',
+		applyClass: 'btn-primary',
+		cancelClass: 'btn-secondary',
+		startDate: start,
+		endDate: end,
+		ranges: {
+			'Today': [moment(), moment()],
+			'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+			'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+			'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+			'This Month': [moment().startOf('month'), moment().endOf('month')],
+			'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+		}
+	}, call_today);
+
+	call_today(start, end);
+
+	$('#kt_daterangepicker_6').on('apply.daterangepicker', function (ev, picker) {
+		$("#table_transcation").DataTable().destroy();
+		datatable_init();
+
+	});
+
+	$('kt_daterangepicker_6').on('cancel.daterangepicker', function (ev, picker) {
+		$("#table_transcation").DataTable().destroy();
+		datatable_init();
+
+	});
+
+	datatable_init();
+
+	function datatable_init() {
+
+		show_transaksi();
+
+		var table = $("#table_transcation").DataTable({
+			responsive: true,
+			dom: `<'row'<'col-sm-12'tr>>
 		<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
-		lengthMenu: [[-1], ["All"]],
-		pageLength: -1,
-		searchDelay: 500,
-		scrollY: '60vh',
-		scrollX: true,
-		scrollCollapse: true,
-		processing: true,
-		headerCallback: function (row, data, start, end, display) {
-			row.getElementsByTagName('th')[0].innerHTML = `
+			lengthMenu: [[-1], ["All"]],
+			pageLength: -1,
+			searchDelay: 500,
+			scrollY: '60vh',
+			scrollX: true,
+			scrollCollapse: true,
+			processing: true,
+			headerCallback: function (row, data, start, end, display) {
+				row.getElementsByTagName('th')[0].innerHTML = `
 			<label class="checkbox checkbox-single">
 				<input type="checkbox" value="" class="group-checkable"/>
 				<span></span>
 			</label>`;
-		},
-		footerCallback: function (row, data, start, end, display) {
-			var column_kr = 7;
-			var column_de = 8;
-			var column_sa = 9;
-			var api = this.api(),
-				data;
+			},
+			footerCallback: function (row, data, start, end, display) {
+				var column_kr = 7;
+				var column_de = 8;
+				var column_sa = 9;
+				var api = this.api(),
+					data;
 
-			// Remove the formatting to get integer data for summation
-			var intVal = function (i) {
-				return typeof i === 'string' ? i.replace(/[\$,.]/g, '') * 1 : typeof i ===
-					'number' ? i : 0;
-			};
-			// Total over this page
-			var pageTotal_kr = api.column(column_kr, {
-				page: 'current'
-			}).data().reduce(function (a, b) {
-				return intVal(a) + intVal(b);
-			}, 0);
-			var pageTotal_de = api.column(column_de, {
-				page: 'current'
-			}).data().reduce(function (a, b) {
-				return intVal(a) + intVal(b);
-			}, 0);
-			var pageTotal_sa = api.column(column_sa, {
-				page: 'current'
-			}).data().reduce(function (a, b) {
-				return intVal(a) + intVal(b);
-			}, 0);
-			// Update footer
-			$(api.column(column_kr).footer()).html('Rp. ' + KTUtil.numberString(pageTotal_kr
-				.toFixed(0)));
+				// Remove the formatting to get integer data for summation
+				var intVal = function (i) {
+					return typeof i === 'string' ? i.replace(/[\$,.]/g, '') * 1 : typeof i ===
+						'number' ? i : 0;
+				};
+				// Total over this page
+				var pageTotal_kr = api.column(column_kr, {
+					page: 'current'
+				}).data().reduce(function (a, b) {
+					return intVal(a) + intVal(b);
+				}, 0);
+				var pageTotal_de = api.column(column_de, {
+					page: 'current'
+				}).data().reduce(function (a, b) {
+					return intVal(a) + intVal(b);
+				}, 0);
+				var pageTotal_sa = api.column(column_sa, {
+					page: 'current'
+				}).data().reduce(function (a, b) {
+					return intVal(a) + intVal(b);
+				}, 0);
+				// Update footer
+				$(api.column(column_kr).footer()).html('Rp. ' + KTUtil.numberString(pageTotal_kr
+					.toFixed(0)));
 
-			$(api.column(column_de).footer()).html('Rp. ' + KTUtil.numberString(pageTotal_de
-				.toFixed(0)));
+				$(api.column(column_de).footer()).html('Rp. ' + KTUtil.numberString(pageTotal_de
+					.toFixed(0)));
 
-			$(api.column(column_sa).footer()).html('Rp. ' + KTUtil.numberString(pageTotal_sa
-				.toFixed(0)));
-		},
-		columnDefs: [
-			{
-				targets: 0,
-				orderable: false,
-				width: '22',
-				checkboxes: {
-					'selectRow': false
-				},
-				render: function (data, type, full, meta) {
-					return `
+				$(api.column(column_sa).footer()).html('Rp. ' + KTUtil.numberString(pageTotal_sa
+					.toFixed(0)));
+			},
+			columnDefs: [
+				{
+					targets: 0,
+					orderable: false,
+					width: '22',
+					checkboxes: {
+						'selectRow': false
+					},
+					render: function (data, type, full, meta) {
+						return `
 				<label class="checkbox checkbox-single checkbox-primary mb-0">
 					<input type="checkbox" value="" class="dt-checkboxes checkable"/>
 					<span></span>
 				</label>`;
-				},
-			}
-		]
+					},
+				}
+			]
+		});
+
+		$('#kt_search').on('click', function (e) {
+			e.preventDefault();
+			var params = {};
+			$('.datatable-input').each(function () {
+				var i = $(this).data('col-index');
+				if (params[i]) {
+					params[i] += '|' + $(this).val();
+				} else {
+					params[i] = $(this).val();
+				}
+
+			});
+			console.log(params);
+			$.each(params, function (i, val) {
+				// apply search params to datatable
+				table.column(i).search(val ? val : '', false, false);
+			});
+			table.table().draw();
+		});
+
+
+		$('#kt_reset').on('click', function (e) {
+			e.preventDefault();
+			$('.datatable-input').each(function () {
+				$(this).val('');
+				table.column($(this).data('col-index')).search('', false, false);
+			});
+			table.table().draw();
+		});
+
+	}
+
+	$('#btn_excel').on('click', function (e) {
+		var csrfName = $('.txt_csrfname').attr('name');
+		var csrfHash = $('.txt_csrfname').val(); // CSRF hash
+
+		var rows_selected = $("#table_transcation").DataTable().column(0).checkboxes.selected();
+		// Iterate over all selected checkboxes
+		//alert(rows_selected.join(","));
+		KTApp.blockPage({
+			overlayColor: '#FFA800',
+			state: 'warning',
+			size: 'lg',
+			opacity: 0.1,
+			message: 'Silahkan Tunggu...'
+		});
+
+		$.ajax({
+			type: "POST",
+			url: `${HOST_URL}/finance/report/export_data_csv_all`,
+			dataType: "JSON",
+			data: {
+				data_check: rows_selected.join(","),
+				date_range: date_range,
+				[csrfName]: csrfHash
+			},
+			success: function (data) {
+				// Update CSRF hash
+				KTApp.unblockPage();
+				console.log(data);
+
+				$('.txt_csrfname').val(data.token);
+
+				if (data.status) {
+
+					var $a = $("<a>");
+					$a.attr("href", data.file);
+					$("body").append($a);
+					$a.attr("download", data.filename);
+					$a[0].click();
+					$a.remove();
+
+					Swal.fire({
+						text: data.messages,
+						icon: "success",
+						buttonsStyling: false,
+						confirmButtonText: "Oke!",
+						customClass: {
+							confirmButton: "btn font-weight-bold btn-success"
+						}
+					}).then(function () {
+						KTUtil.scrollTop();
+					});
+
+				} else {
+					Swal.fire({
+						text: data.messages,
+						icon: "error",
+						buttonsStyling: false,
+						confirmButtonText: "Oke!",
+						customClass: {
+							confirmButton: "btn font-weight-bold btn-danger"
+						}
+					}).then(function () {
+						KTUtil.scrollTop();
+					});
+				}
+
+			},
+		});
+		e.preventDefault();
 	});
 
-	$('#kt_search').on('click', function (e) {
-		e.preventDefault();
-		var params = {};
-		$('.datatable-input').each(function () {
-			var i = $(this).data('col-index');
-			if (params[i]) {
-				params[i] += '|' + $(this).val();
-			} else {
-				params[i] = $(this).val();
+	$('#btn_pdf').on('click', function (e) {
+
+		var rows_selected = $("#table_transcation").DataTable().column(0).checkboxes.selected();
+		// Iterate over all selected checkboxes
+		//alert(rows_selected.join(","));
+		KTApp.blockPage({
+			overlayColor: '#FFA800',
+			state: 'warning',
+			size: 'lg',
+			opacity: 0.1,
+			message: 'Silahkan Tunggu...'
+		});
+
+		$.ajax({
+			type: "POST",
+			url: `${HOST_URL}/finance/savings/print_saving_pdf`,
+			data: {
+				data_check: rows_selected.join(","),
+				date_range: date_range
+			},
+			xhrFields: {
+				responseType: 'blob' // to avoid binary data being mangled on charset conversion
+			},
+			success: function (blob, data, xhr) {
+				KTApp.unblockPage();
+				// check for a filename
+				var filename = "";
+				var disposition = xhr.getResponseHeader('Content-Disposition');
+				if (disposition && disposition.indexOf('attachment') !== -1) {
+					var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+					var matches = filenameRegex.exec(disposition);
+					if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+				}
+
+				if (typeof window.navigator.msSaveBlob !== 'undefined') {
+					// IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+					window.navigator.msSaveBlob(blob, filename);
+				} else {
+					var URL = window.URL || window.webkitURL;
+					var downloadUrl = URL.createObjectURL(blob);
+
+					if (filename) {
+						// use HTML5 a[download] attribute to specify filename
+						var a = document.createElement("a");
+						// safari doesn't support this yet
+						if (typeof a.download === 'undefined') {
+							window.open(downloadUrl, '_blank');
+						} else {
+							a.href = downloadUrl;
+							a.download = filename;
+							document.body.appendChild(a);
+							a.click();
+						}
+					} else {
+						window.open(downloadUrl, '_blank');
+					}
+
+					setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+				}
+
+				Swal.fire({
+					text: "Berhasil!, Laporan berhasil dicetak, Silahkan cek ulang.",
+					icon: "success",
+					buttonsStyling: false,
+					confirmButtonText: "Oke!",
+					customClass: {
+						confirmButton: "btn font-weight-bold btn-success"
+					}
+				}).then(function () {
+					KTUtil.scrollTop();
+				});
 			}
-
 		});
-		console.log(params);
-		$.each(params, function (i, val) {
-			// apply search params to datatable
-			table.column(i).search(val ? val : '', false, false);
-		});
-		table.table().draw();
-	});
-
-
-	$('#kt_reset').on('click', function (e) {
 		e.preventDefault();
-		$('.datatable-input').each(function () {
-			$(this).val('');
-			table.column($(this).data('col-index')).search('', false, false);
-		});
-		table.table().draw();
 	});
 
 	$('#kt_datepicker_transaction').datepicker({
@@ -146,6 +345,7 @@ $(document).ready(function () {
 		$("#userKredit").html("username");
 		$("#inputNISKredit").val("");
 		$("#inputNIPKredit").val("");
+		$("#inputCatatanKredit").val("");
 		$("#userJumlahSaldo").html(0);
 	});
 
@@ -155,6 +355,7 @@ $(document).ready(function () {
 		$("#inputNISDebet").val("");
 		$("#inputNIPDebet").val("");
 		$("#cekSaldo").val("");
+		$("#inputCatatanDebet").val("");
 		$("#userJumlahSaldo2").html(0);
 	});
 
@@ -262,7 +463,6 @@ $(document).ready(function () {
 		}
 
 	});
-
 
 	$("#findNasabahKredit").on("change", function () {
 		var nis = $("#findNasabahKredit").find(":selected").val();
@@ -403,9 +603,9 @@ $(document).ready(function () {
 
 	function list_student() {
 		$.ajax({
-			type: "POST",
+			type: "ajax",
 			url: `${HOST_URL}finance/savings/savings/get_all_student`,
-			contentType:'application/json; charset=utf-8',
+			contentType: 'application/json; charset=utf-8',
 			dataType: 'json',
 			success: function (data) {
 				var html = "";
@@ -448,7 +648,8 @@ $(document).ready(function () {
 		var tahun_ajaran = $("#inputTahunAjaranKredit").val();
 		var catatan = $("#inputCatatanKredit").val();
 		var tanggal_transaksi = $("#inputTanggalKredit").val()
-		nominal = nominal.replace(/\./g, "");
+
+		nominal = parseInt(nominal.replace(/\./g, ""));
 
 		if (nominal != null && nominal > 0 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "") {
 
@@ -516,8 +717,8 @@ $(document).ready(function () {
 									KTUtil.scrollTop();
 								});
 							}
-
-							show_transaksi();
+							$("#table_transcation").DataTable().destroy();
+							datatable_init();
 						},
 					});
 				} else {
@@ -556,7 +757,7 @@ $(document).ready(function () {
 		var catatan = $('[name="catatan_kredit"]').val();
 		var tanggal_transaksi = $('[name="waktu_transaksi_kredit"]').val()
 
-		nominal = nominal.replace(/\./g, "");
+		nominal = parseInt(nominal.replace(/\./g, ""));
 
 		if (nominal != null && nominal > 0 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "") {
 
@@ -626,8 +827,8 @@ $(document).ready(function () {
 									KTUtil.scrollTop();
 								});
 							}
-
-							show_transaksi();
+							$("#table_transcation").DataTable().destroy();
+							datatable_init();
 						},
 					});
 				} else {
@@ -663,13 +864,14 @@ $(document).ready(function () {
 		var saldo = document.getElementById("userJumlahSaldoDebet").textContent;
 		var nominal = $("#inputNominalDebet").val();
 		var catatan = $("#inputCatatanDebet").val();
-		var tahun_ajaran = $("#inputTahunAjaranDebet").val()
-		var tanggal_transaksi = $("#inputTanggalDebet").val()
-		nominal = nominal.replace(/\./g, "");
-		saldo = saldo.replace(/\./g, "");
+		var tahun_ajaran = $("#inputTahunAjaranDebet").val();
+		var tanggal_transaksi = $("#inputTanggalDebet").val();
+
+		nominal = parseInt(nominal.replace(/\./g, ""));
+		saldo = parseInt(saldo.replace(/\./g, ""));
 
 		if (nominal <= saldo) {
-
+		
 			if (nominal != null && nominal > 0 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "") {
 
 				Swal.fire({
@@ -737,8 +939,8 @@ $(document).ready(function () {
 										KTUtil.scrollTop();
 									});
 								}
-
-								show_transaksi();
+								$("#table_transcation").DataTable().destroy();
+								datatable_init();
 							},
 						});
 					} else {
@@ -792,8 +994,8 @@ $(document).ready(function () {
 		var tanggal_transaksi = $('[name="waktu_transaksi_debet"]').val()
 		var saldo = document.getElementById("userJumlahSaldoDebetEdit").textContent;
 
-		nominal = nominal.replace(/\./g, "");
-		saldo = saldo.replace(/\./g, "");
+		nominal = parseInt(nominal.replace(/\./g, ""));
+		saldo = parseInt(saldo.replace(/\./g, ""));
 
 		if (nominal <= saldo) {
 
@@ -865,8 +1067,8 @@ $(document).ready(function () {
 										KTUtil.scrollTop();
 									});
 								}
-
-								show_transaksi();
+								show_transaksi(); $("#table_transcation").DataTable().destroy();
+								datatable_init();
 							},
 						});
 					} else {
@@ -908,14 +1110,19 @@ $(document).ready(function () {
 	});
 
 	function show_transaksi() {
+
 		$.ajax({
-			type: "ajax",
+			type: "GET",
 			url: `${HOST_URL}/finance/savings/get_all_transaction`,
 			async: false,
+			data: {
+				start_date: lstart,
+				end_date: lend,
+			},
 			dataType: "JSON",
 			success: function (data) {
 				var html = "";
-				var number = 1;
+			
 				for (var i = 0; i < data.length; i++) {
 					if (data[i].status_kredit_debet == "1") {
 						var bg_color = "bg-light-success";
@@ -982,7 +1189,7 @@ $(document).ready(function () {
 					html +=
 						"<tr class='" + `${bg_color}` + "'>" +
 						"<td>" +
-						number++ +
+						`${data[i].id_transaksi}` +
 						"</td>" +
 						"<td class='font-weight-bolder'>" +
 						`${data[i].nis_siswa}` +
@@ -1017,8 +1224,10 @@ $(document).ready(function () {
 						"</tr>";
 				}
 				$("#tb_transaksi").html(html);
+
 			},
 		});
+
 	}
 
 	$("#tb_transaksi").on("click", ".delete_transaksi_kredit", function () {
@@ -1079,8 +1288,8 @@ $(document).ready(function () {
 						}).then(function () {
 							KTUtil.scrollTop();
 						});
-
-						show_transaksi();
+						$("#table_transcation").DataTable().destroy();
+						datatable_init();
 					},
 					error: function (result) {
 						console.log(result);
@@ -1157,8 +1366,8 @@ $(document).ready(function () {
 						}).then(function () {
 							KTUtil.scrollTop();
 						});
-
-						show_transaksi();
+						$("#table_transcation").DataTable().destroy();
+						datatable_init();
 					},
 					error: function (result) {
 						console.log(result);
@@ -1175,6 +1384,5 @@ $(document).ready(function () {
 		});
 
 	});
-
 
 });
