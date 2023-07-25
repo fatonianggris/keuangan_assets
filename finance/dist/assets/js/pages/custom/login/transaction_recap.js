@@ -376,7 +376,7 @@ $(document).ready(function () {
 		$('[name="catatan_kredit"]').val(catatan);
 
 		$.ajax({
-			type: "ajax",
+			type: "GET",
 			url: `${HOST_URL}/finance/savings/get_student_info/${nis_siswa}`,
 			async: false,
 			dataType: "JSON",
@@ -422,7 +422,7 @@ $(document).ready(function () {
 		$('[name="catatan_debet"]').val(catatan);
 
 		$.ajax({
-			type: "ajax",
+			type: "GET",
 			url: `${HOST_URL}/finance/savings/get_student_info/${nis_siswa}`,
 			async: false,
 			dataType: "JSON",
@@ -459,7 +459,7 @@ $(document).ready(function () {
 		var nama = $("#findNasabahKredit").find(":selected").text();
 		// var HOST_URL = "<?php echo base_url('admin/getMemberInfo/'); ?>" + nis;
 		$.ajax({
-			type: "ajax",
+			type: "GET",
 			url: `${HOST_URL}/finance/savings/get_student_info/${nis}`,
 			async: false,
 			dataType: "JSON",
@@ -502,7 +502,7 @@ $(document).ready(function () {
 		var nama = $("#findNasabahDebet").find(":selected").text();
 		// var HOST_URL = "<?php echo base_url('admin/getMemberInfo/'); ?>" + nis;
 		$.ajax({
-			type: "ajax",
+			type: "GET",
 			url: `${HOST_URL}/finance/savings/get_student_info/${nis}`,
 			async: false,
 			dataType: "JSON",
@@ -1159,7 +1159,7 @@ $(document).ready(function () {
 		var nama = $("#findNasabahKredit").find(":selected").text();
 		// var HOST_URL = "<?php echo base_url('admin/getMemberInfo/'); ?>" + nis;
 		$.ajax({
-			type: "ajax",
+			type: "GET",
 			url: `${HOST_URL}/finance/savings/get_student_info/${nis}`,
 			async: false,
 			dataType: "JSON",
@@ -1201,7 +1201,7 @@ $(document).ready(function () {
 		var nama = $("#findNasabahDebet").find(":selected").text();
 		// var HOST_URL = "<?php echo base_url('admin/getMemberInfo/'); ?>" + nis;
 		$.ajax({
-			type: "ajax",
+			type: "GET",
 			url: `${HOST_URL}/finance/savings/get_student_info/${nis}`,
 			async: false,
 			dataType: "JSON",
@@ -1272,7 +1272,7 @@ $(document).ready(function () {
 		}).then(function (result) {
 			if (result.value) {
 				$.ajax({
-					type: "post",
+					type: "GET",
 					url: `${HOST_URL}/finance/savings/delete_credit_transaction`,
 					data: {
 						id_transaksi: id_transaksi,

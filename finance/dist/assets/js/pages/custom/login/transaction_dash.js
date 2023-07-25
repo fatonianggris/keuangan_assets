@@ -44,7 +44,7 @@ $(document).ready(function () {
 		var nama = $("#findNasabahKredit").find(":selected").text();
 		// var HOST_URL = "<?php echo base_url('admin/getMemberInfo/'); ?>" + nis;
 		$.ajax({
-			type: "ajax",
+			type: "GET",
 			url: `${HOST_URL}/finance/savings/get_student_info/${nis}`,
 			async: false,
 			dataType: "JSON",
@@ -87,7 +87,7 @@ $(document).ready(function () {
 		var nama = $("#findNasabahDebet").find(":selected").text();
 		// var HOST_URL = "<?php echo base_url('admin/getMemberInfo/'); ?>" + nis;
 		$.ajax({
-			type: "ajax",
+			type: "GET",
 			url: `${HOST_URL}/finance/savings/get_student_info/${nis}`,
 			async: false,
 			dataType: "JSON",
@@ -133,7 +133,7 @@ $(document).ready(function () {
 		var nama = $("#findRekapNasabah").find(":selected").text();
 
 		$.ajax({
-			type: "ajax",
+			type: "GET",
 			url: `${HOST_URL}/finance/savings/get_student_info/${nis}`,
 			async: false,
 			dataType: "JSON",
