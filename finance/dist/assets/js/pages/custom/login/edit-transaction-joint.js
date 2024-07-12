@@ -4,105 +4,58 @@
 
 	// Class Definition
 	var KTLogin = function () {
-		var _credit;
-		var _debet;
-		var _recap;
+		var _credit_edit;
+		var _debet_edit;
 
-		var _handleCreditForm = function () {
+		var _handleCreditFormEdit = function () {
 			var validation;
-			var form = KTUtil.getById('kt_add_transaction_credit')
+			var form = KTUtil.getById('kt_add_transaction_credit_edit');
 			var submitButton = form.querySelector('[type="submit"]');
 			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
 			validation = FormValidation.formValidation(
 				form,
 				{
 					fields: {
-						inputCariSiswaKredit: {
+						nomor_rekening_kredit_edit: {
 							validators: {
 								notEmpty: {
-									message: 'NIS/Rekening Siswa diperlukan'
+									message: 'Nomor Rekening Tabungan diperlukan'
 								},
-								stringLength: {
-									max: 6,
-									min: 5,
-									message: 'Nomor Rekening harus memiliki 6 karakter'
-								}
 							}
 						},
-						inputNominalKreditName: {
+						nominal_kredit_edit: {
 							validators: {
 								notEmpty: {
 									message: 'Nominal Kredit diperlukan'
 								},
 								integer: {
 									message: 'Inputan harus Angka',
-									// The default separators
-									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Setoran harus lebih atau sama dengan Rp. 5.000',
+									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 5000',
 									min: 5000,
 								},
 							}
 						},
-						inputTahunAjaranKredit: {
+						th_ajaran_kredit_edit: {
 							validators: {
 								notEmpty: {
 									message: 'Tahun Ajaran diperlukan'
 								},
 							}
 						},
-						inputTanggalKredit: {
+						waktu_transaksi_kredit_edit: {
 							validators: {
 								notEmpty: {
 									message: 'Tanggal Kredit diperlukan'
 								},
 							}
 						},
-						inputJenisTabungan: {
-							validators: {
-								notEmpty: {
-									message: 'Jenis Tabungan diperlukan'
-								},
-							}
-						},
-						inputTingkatKredit: {
+						tingkat_kredit_edit: {
 							validators: {
 								notEmpty: {
 									message: 'Tingkat diperlukan'
 								},
-							}
-						},
-						nama_nasabah: {
-							validators: {
-								regexp: {
-									regexp: /^[a-zs\s.()-]+$/i,
-									message: 'Inputan harus berupa huruf'
-								}
-							}
-						},
-						nama_orangtua: {
-							validators: {
-								regexp: {
-									regexp: /^[a-zs\s.()-]+$/i,
-									message: 'Inputan harus berupa huruf'
-								}
-							}
-						},
-						nomor_hp_aktif: {
-							validators: {
-								integer: {
-									message: 'Inputan harus Angka',
-									// The default separators
-									thousandsSeparator: ''
-								},
-							}
-						},
-						email_orangtua: {
-							validators: {
-								emailAddress: {
-									message: 'Email anda tidak valid'
-								}
 							}
 						},
 
@@ -124,7 +77,7 @@
 				}
 			);
 
-			_credit.on('submit', function (wizard) {
+			_credit_edit.on('submit', function (wizard) {
 				if (validation) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
@@ -147,58 +100,51 @@
 			});
 		};
 
-		var _handleDebitForm = function () {
+		var _handleDebitFormEdit = function () {
 			var validation;
-			var form = KTUtil.getById('kt_add_transaction_debet')
+			var form = KTUtil.getById('kt_add_transaction_debet_edit');
 			var submitButton = form.querySelector('[type="submit"]');
 			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
 			validation = FormValidation.formValidation(
 				form,
 				{
 					fields: {
-						inputCariSiswaDebet: {
+						nomor_rekening_debet_edit: {
 							validators: {
 								notEmpty: {
-									message: 'NIS/Rekening Siswa diperlukan'
+									message: 'Nomor Rekening Tabungan diperlukan'
 								},
-								stringLength: {
-									max: 6,
-									min: 6,
-									message: 'Nomor Rekening harus memiliki 6 karakter'
-								}
 							}
 						},
-						inputNominalDebetName: {
+						nominal_debet_edit: {
 							validators: {
 								notEmpty: {
-									message: 'Nominal Debit diperlukan'
+									message: 'Nominal Debet diperlukan'
 								},
 								integer: {
 									message: 'Inputan harus Angka',
-									// The default separators
-									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Penarikan harus lebih atau sama dengan Rp. 5.000',
+									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 5000',
 									min: 5000,
 								},
 							}
 						},
-						inputTahunAjaranDebet: {
+						th_ajaran_debet_edit: {
 							validators: {
 								notEmpty: {
 									message: 'Tahun Ajaran diperlukan'
 								},
 							}
 						},
-						inputTanggalDebet: {
+						waktu_transaksi_debet_edit: {
 							validators: {
 								notEmpty: {
-									message: 'Tanggal Debit diperlukan'
+									message: 'Tanggal Debet diperlukan'
 								},
 							}
 						},
-						inputTingkatDebet: {
+						tingkat_debet_edit: {
 							validators: {
 								notEmpty: {
 									message: 'Tingkat diperlukan'
@@ -224,7 +170,7 @@
 				}
 			);
 
-			_debet.on('submit', function (wizard) {
+			_debet_edit.on('submit', function (wizard) {
 				if (validation) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
@@ -247,63 +193,14 @@
 			});
 		};
 
-		var _handleRecapForm = function () {
-			var validation;
-			var form = KTUtil.getById('kt_add_transaction_recap')
-			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
-			validation = FormValidation.formValidation(
-				form,
-				{
-					fields: {
-						nis_siswa: {
-							validators: {
-								notEmpty: {
-									message: 'NIS Siswa diperlukan'
-								},
-							}
-						},
-					},
-					plugins: {
-						trigger: new FormValidation.plugins.Trigger(),
-						submitButton: new FormValidation.plugins.SubmitButton(),
-						defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
-						bootstrap: new FormValidation.plugins.Bootstrap()
-					}
-				}
-			);
-
-			_recap.on('submit', function (wizard) {
-				if (validation) {
-					validation.validate().then(function (status) {
-						if (status == 'Valid') {
-							form.submit(); // Submit form
-						} else {
-							Swal.fire({
-								text: "Mohon Maaf, kemungkinan terjadi kesalahan pada pengisian Anda, Mohon menginputkan dengan benar.",
-								icon: "error",
-								buttonsStyling: false,
-								confirmButtonText: "Oke!",
-								customClass: {
-									confirmButton: "btn font-weight-bold btn-primary"
-								}
-							}).then(function () {
-								KTUtil.scrollTop();
-							});
-						}
-					});
-				}
-			});
-		};
 		// Public Functions
 		return {
 			// public functions
 			init: function () {
-				_credit = $('#kt_form_credit');
-				_debet = $('#kt_form_debet');
-				_recap = $('#kt_form_recap');
-				_handleCreditForm();
-				_handleDebitForm();
-				_handleRecapForm();
+				_credit_edit = $('#kt_form_credit_edit');
+				_debet_edit = $('#kt_form_debet_edit');
+				_handleCreditFormEdit();
+				_handleDebitFormEdit();
 			}
 		};
 	}();

@@ -47,7 +47,7 @@
                     form,
                     {
                         fields: {
-                            file_tagihan_dpb: {
+                            file_tagihan_du: {
                                 validators: {
                                     notEmpty: {
                                         message: 'Upload File Excel diperlukan'

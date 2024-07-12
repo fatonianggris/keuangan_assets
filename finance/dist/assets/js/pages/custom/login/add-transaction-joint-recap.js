@@ -17,15 +17,15 @@
 				form,
 				{
 					fields: {
-						inputCariSiswaKredit: {
+						inputCariTabunganKredit: {
 							validators: {
 								notEmpty: {
-									message: 'NIS/Rekening Siswa diperlukan'
+									message: 'Nomor Rekening Tabungan diperlukan'
 								},
 								stringLength: {
-									max: 6,
-									min: 5,
-									message: 'Nomor Rekening harus memiliki 6 karakter'
+									max: 7,
+									min: 7,
+									message: 'Nomor Rekening harus memiliki 7 karakter'
 								}
 							}
 						},
@@ -36,11 +36,9 @@
 								},
 								integer: {
 									message: 'Inputan harus Angka',
-									// The default separators
-									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Setoran harus lebih atau sama dengan Rp. 5.000',
+									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 5000',
 									min: 5000,
 								},
 							}
@@ -59,53 +57,13 @@
 								},
 							}
 						},
-						inputJenisTabungan: {
-							validators: {
-								notEmpty: {
-									message: 'Jenis Tabungan diperlukan'
-								},
-							}
-						},
-						inputTingkatKredit: {
+						input_tingkat_kredit: {
 							validators: {
 								notEmpty: {
 									message: 'Tingkat diperlukan'
 								},
 							}
 						},
-						nama_nasabah: {
-							validators: {
-								regexp: {
-									regexp: /^[a-zs\s.()-]+$/i,
-									message: 'Inputan harus berupa huruf'
-								}
-							}
-						},
-						nama_orangtua: {
-							validators: {
-								regexp: {
-									regexp: /^[a-zs\s.()-]+$/i,
-									message: 'Inputan harus berupa huruf'
-								}
-							}
-						},
-						nomor_hp_aktif: {
-							validators: {
-								integer: {
-									message: 'Inputan harus Angka',
-									// The default separators
-									thousandsSeparator: ''
-								},
-							}
-						},
-						email_orangtua: {
-							validators: {
-								emailAddress: {
-									message: 'Email anda tidak valid'
-								}
-							}
-						},
-
 					},
 					plugins: {
 						trigger: new FormValidation.plugins.Trigger(),
@@ -156,30 +114,23 @@
 				form,
 				{
 					fields: {
-						inputCariSiswaDebet: {
+						inputCariTabunganDebet: {
 							validators: {
 								notEmpty: {
-									message: 'NIS/Rekening Siswa diperlukan'
+									message: 'Nomor Rekening Tabungan diperlukan'
 								},
-								stringLength: {
-									max: 6,
-									min: 6,
-									message: 'Nomor Rekening harus memiliki 6 karakter'
-								}
 							}
 						},
 						inputNominalDebetName: {
 							validators: {
 								notEmpty: {
-									message: 'Nominal Debit diperlukan'
+									message: 'Nominal Debet diperlukan'
 								},
 								integer: {
 									message: 'Inputan harus Angka',
-									// The default separators
-									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Penarikan harus lebih atau sama dengan Rp. 5.000',
+									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 5000',
 									min: 5000,
 								},
 							}
@@ -194,11 +145,11 @@
 						inputTanggalDebet: {
 							validators: {
 								notEmpty: {
-									message: 'Tanggal Debit diperlukan'
+									message: 'Tanggal Debet diperlukan'
 								},
 							}
 						},
-						inputTingkatDebet: {
+						input_tingkat_debet: {
 							validators: {
 								notEmpty: {
 									message: 'Tingkat diperlukan'
@@ -255,10 +206,10 @@
 				form,
 				{
 					fields: {
-						nis_siswa: {
+						nomor_rekening_bersama: {
 							validators: {
 								notEmpty: {
-									message: 'NIS Siswa diperlukan'
+									message: 'Nomor Rekening Tabungan Bersama diperlukan'
 								},
 							}
 						},

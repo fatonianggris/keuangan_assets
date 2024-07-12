@@ -185,7 +185,7 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "POST",
-			url: `${HOST_URL}/finance/report/export_data_csv_transaction_general_all`,
+			url: `${HOST_URL}/finance/report/export_data_csv_transaction_qurban_all`,
 			dataType: "JSON",
 			data: {
 				data_check: rows_selected.join(","),
@@ -254,7 +254,7 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "POST",
-			url: `${HOST_URL}/finance/report/print_data_pdf_transaction_general_all`,
+			url: `${HOST_URL}/finance/report/print_data_pdf_transaction_qurban_all`,
 			data: {
 				data_check: rows_selected.join(","),
 				date_range: date_range
@@ -347,7 +347,6 @@ $(document).ready(function () {
 		maximumInputLength: 6,
 		tags: true
 	}).on("change", function (e) {
-		//var isNew = e.params.data;
 		var isNew = $(".findNasabahKredit option:selected").text();
 		if (isNew.length == 6 || isNew.length == 5) {
 			if (stat_close == true) {
@@ -424,12 +423,12 @@ $(document).ready(function () {
 	$("#tb_transaksi").on("click", ".edit_transaksi_kredit", function () {
 
 		var id_transaksi = $(this).data("id_transaksi");
-		var nomor_transaksi = $(this).data("nomor_transaksi");
 		var nis_siswa = $(this).data("nis_siswa");
+		var nomor_transaksi = $(this).data("nomor_transaksi");
 		var nama_lengkap = $(this).data("nama_lengkap");
 		var id_th_ajaran = $(this).data("id_th_ajaran");
-		var id_tingkat = $(this).data("id_tingkat");
 		var th_ajaran = $(this).data("th_ajaran");
+		var id_tingkat = $(this).data("id_tingkat");
 		var nominal = $(this).data("nominal");
 		var waktu_transaksi = $(this).data("waktu_transaksi");
 		var catatan = $(this).data("catatan");
@@ -460,13 +459,13 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "GET",
-			url: `${HOST_URL}/finance/savings/get_student_info/${nis_siswa}`,
+			url: `${HOST_URL}/finance/savings/get_student_qurban_info/${nis_siswa}`,
 			async: false,
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_siswa']) {
-					jumlah_saldo_awal = (Number(data['info_siswa'][0]['saldo_tabungan_umum']) - Number(data['info_tabungan'][0]['nominal']));
-					jumlah_saldo_akhir = data['info_siswa'][0]['saldo_tabungan_umum'];
+					jumlah_saldo_awal = (Number(data['info_siswa'][0]['saldo_tabungan_qurban']) - Number(data['info_tabungan'][0]['nominal']));
+					jumlah_saldo_akhir = data['info_siswa'][0]['saldo_tabungan_qurban'];
 					id_tingkat = data['info_siswa'][0]['id_tingkat'];
 
 					if (id_tingkat == "1") {
@@ -485,7 +484,6 @@ $(document).ready(function () {
 					jumlah_saldo_akhir = "-";
 					nama_tingkat = "-";
 				}
-
 				if (data['info_tabungan'].length !== 0) {
 
 					if (data['info_tabungan'][0]['catatan'] == "" || data['info_tabungan'][0]['catatan'] == null) {
@@ -549,13 +547,13 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "GET",
-			url: `${HOST_URL}/finance/savings/get_student_info/${nis_siswa}`,
+			url: `${HOST_URL}/finance/savings/get_student_qurban_info/${nis_siswa}`,
 			async: false,
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_siswa']) {
-					jumlah_saldo_awal = (Number(data['info_siswa'][0]['saldo_tabungan_umum']) + Number(data['info_tabungan'][0]['nominal']));
-					jumlah_saldo_akhir = data['info_siswa'][0]['saldo_tabungan_umum'];
+					jumlah_saldo_awal = (Number(data['info_siswa'][0]['saldo_tabungan_qurban']) + Number(data['info_tabungan'][0]['nominal']));
+					jumlah_saldo_akhir = data['info_siswa'][0]['saldo_tabungan_qurban'];
 					id_tingkat = data['info_siswa'][0]['id_tingkat'];
 
 					if (id_tingkat == "1") {
@@ -587,15 +585,15 @@ $(document).ready(function () {
 					info_catatan = "-";
 					info_waktu_transaksi = "-";
 				}
-
 			},
 		});
+
 		$("#nomorTransaksiDebetEdit").html("(" + nomor_transaksi + ")");
 
 		$("#userNisDebetEdit").html(nis_siswa);
 		$("#userNamaDebetEdit").html(nama_lengkap);
 		$("#userTingkatDebetEdit").html(nama_tingkat);
-		$("#infoTerakhirTransaksiDebetEdit").html(info_waktu_transaksi);
+		$("#infoTerakhirTransaksDebetEdit").html(info_waktu_transaksi);
 		$("#userJumlahSaldoDebetEdit").html(CurrencyID(jumlah_saldo_awal));
 		$("#userJumlahSaldoDebetEditNow").html(CurrencyID(jumlah_saldo_akhir));
 
@@ -607,14 +605,14 @@ $(document).ready(function () {
 		// var HOST_URL = "<?php echo base_url('admin/getMemberInfo/'); ?>" + nis;
 		$.ajax({
 			type: "GET",
-			url: `${HOST_URL}/finance/savings/get_student_info/${nis}`,
+			url: `${HOST_URL}/finance/savings/get_student_qurban_info/${nis}`,
 			async: false,
 			dataType: "JSON",
 			success: function (data) {
 
 				if (data['info_siswa'][0]) {
 
-					jumlah_saldo = data['info_siswa'][0]['saldo_tabungan_umum'];
+					jumlah_saldo = data['info_siswa'][0]['saldo_tabungan_qurban'];
 					id_tingkat = data['info_siswa'][0]['id_tingkat'];
 
 					if (id_tingkat == "1") {
@@ -628,6 +626,7 @@ $(document).ready(function () {
 					} else if (id_tingkat == "6") {
 						nama_tingkat = "DC";
 					}
+
 					show_info_nasabah();
 					hide_nasabah_div();
 
@@ -669,12 +668,12 @@ $(document).ready(function () {
 		// var HOST_URL = "<?php echo base_url('admin/getMemberInfo/'); ?>" + nis;
 		$.ajax({
 			type: "GET",
-			url: `${HOST_URL}/finance/savings/get_student_info/${nis}`,
+			url: `${HOST_URL}/finance/savings/get_student_qurban_info/${nis}`,
 			async: false,
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_siswa'][0]) {
-					jumlah_saldo = data['info_siswa'][0]['saldo_tabungan_umum'];
+					jumlah_saldo = data['info_siswa'][0]['saldo_tabungan_qurban'];
 					id_tingkat = data['info_siswa'][0]['id_tingkat'];
 
 					if (id_tingkat == "1") {
@@ -688,7 +687,6 @@ $(document).ready(function () {
 					} else if (id_tingkat == "6") {
 						nama_tingkat = "DC";
 					}
-
 				} else {
 					jumlah_saldo = "-";
 					nama_tingkat = "-";
@@ -716,6 +714,7 @@ $(document).ready(function () {
 		$("#userCatatanDebet").html(info_catatan);
 		$("#infoTerakhirTransaksiDebet").html(info_waktu_transaksi);
 		$("#userJumlahSaldoDebet").html(CurrencyID(jumlah_saldo));
+
 	});
 
 	$("#findRekapNasabah").on("change", function () {
@@ -794,7 +793,7 @@ $(document).ready(function () {
 		$('[name="inputNISRekap"]').val(nis);
 		$("#userNisRekap").html(nis);
 		$("#userNamaRekap").html(nama[1].slice(0, -1));
-		$("#userTingkatRekap").html(nama_tingkat);
+		$("#userKelasRekap").html(nama_tingkat);
 
 		$("#userCatatanRekap").html(info_catatan_umum);
 		$("#infoTerakhirTransaksiRekap").html(info_waktu_transaksi_umum);
@@ -808,6 +807,7 @@ $(document).ready(function () {
 		$("#infoTerakhirTransaksiRekapWisata").html(info_waktu_transaksi_wisata);
 		$("#userJumlahSaldoRekapWisata").html(CurrencyID(jumlah_saldo_wisata));
 	});
+
 
 	function CurrencyID(nominal) {
 		var formatter = new Intl.NumberFormat("id-ID", {
@@ -875,7 +875,7 @@ $(document).ready(function () {
 
 				Swal.fire({
 					title: "Peringatan!",
-					html: "Apakah anda yakin ingin Menyetor Tabungan Umum atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
+					html: "Apakah anda yakin ingin Menyetor Tabungan Qurban atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
 					icon: "warning",
 					showCancelButton: true,
 					confirmButtonColor: "#DD6B55",
@@ -897,7 +897,7 @@ $(document).ready(function () {
 
 						$.ajax({
 							type: "POST",
-							url: `${HOST_URL}/finance/savings/post_credit`,
+							url: `${HOST_URL}/finance/savings/post_qurban_credit`,
 							dataType: "JSON",
 							data: {
 								nis: nis,
@@ -944,23 +944,24 @@ $(document).ready(function () {
 							},
 						});
 					} else {
-						Swal.fire("Dibatalkan!", "Setoran Tabungan Umum atas nama <b>" + nama.toUpperCase() + "</b> batal diinputkan.", "error");
+						Swal.fire("Dibatalkan!", "Setoran Tabungan Qurban atas nama <b>" + nama.toUpperCase() + "</b> batal diinputkan.", "error");
 						return false;
 					}
 				});
 			} else if (stat_close == false) {
-
 
 				var nama_nasabah = $('#nama_nasabah').val();
 				var nama_orangtua = $("#nama_orangtua").val();
 				var nomor_hp_aktif = $("#nomor_hp_aktif").val();
 				var email_orangtua = $("#email_orangtua").val();
 
-				if (nama_nasabah != null && nama_nasabah != "" && jenis_tabungan != null && jenis_tabungan != "" && tingkat != null && tingkat != "") {
+				nominal = parseInt(nominal.replace(/\./g, ""));
+
+				if (nama_nasabah != null && nama_nasabah != "" && tingkat != null && tingkat != "" && jenis_tabungan != null && jenis_tabungan != "") {
 
 					Swal.fire({
 						title: "Peringatan!",
-						html: "Apakah anda yakin ingin MENYETOR TABUNGAN UMUM & MENAMBAH NASABAH BARU atas nama <b>" + nama_nasabah.toUpperCase() + " (" + nis + ")</b> dengan Nominal Rp." + nominal + " ?",
+						html: "Apakah anda yakin ingin MENYETOR TABUNGAN QURBAN & MENAMBAH NASABAH BARU atas nama <b>" + nama_nasabah.toUpperCase() + " (" + nis + ")</b> dengan Nominal Rp." + nominal + " ?",
 						icon: "warning",
 						showCancelButton: true,
 						confirmButtonColor: "#DD6B55",
@@ -982,7 +983,7 @@ $(document).ready(function () {
 
 							$.ajax({
 								type: "POST",
-								url: `${HOST_URL}/finance/savings/post_credit_new_client`,
+								url: `${HOST_URL}/finance/savings/post_qurban_credit_new_client`,
 								dataType: "JSON",
 								data: {
 									nis: nis,
@@ -1033,7 +1034,7 @@ $(document).ready(function () {
 								},
 							});
 						} else {
-							Swal.fire("Dibatalkan!", "Setoran Tabungan Umum & Tambah Nasabah Baru atas nama <b>" + nama.toUpperCase() + " (" + nis + ")</b> batal diinputkan.", "error");
+							Swal.fire("Dibatalkan!", "Setoran Tabungan Qurban & Tambah Nasabah Baru atas nama <b>" + nama.toUpperCase() + " (" + nis + ")</b> batal diinputkan.", "error");
 							return false;
 						}
 					});
@@ -1090,7 +1091,7 @@ $(document).ready(function () {
 
 			Swal.fire({
 				title: "Peringatan!",
-				html: "Apakah anda yakin Update Kredit Tabungan Umum atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
+				html: "Apakah anda yakin Update Kredit Tabungan Qurban atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
 				icon: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
@@ -1112,7 +1113,7 @@ $(document).ready(function () {
 
 					$.ajax({
 						type: "POST",
-						url: `${HOST_URL}/finance/savings/update_credit`,
+						url: `${HOST_URL}/finance/savings/update_qurban_credit`,
 						dataType: "JSON",
 						data: {
 							id_transaksi: id_transaksi,
@@ -1160,7 +1161,7 @@ $(document).ready(function () {
 						},
 					});
 				} else {
-					Swal.fire("Dibatalkan!", "Edit Setoran Tabungan Umum atas nama <b>" + nama.toUpperCase() + "</b> batal diubah.", "error");
+					Swal.fire("Dibatalkan!", "Edit Setoran Tabungan Qurban atas nama <b>" + nama.toUpperCase() + "</b> batal diubah.", "error");
 					return false;
 				}
 			});
@@ -1168,7 +1169,7 @@ $(document).ready(function () {
 			return false;
 		} else {
 			Swal.fire({
-				html: "Opps!, Pastikan Inputan Terisi dengan Benar &  Nominal Tidak Boleh < 5000 dan Kosong, Silahkan input ulang.",
+				html: "Opps!, Pastikan Inputan Terisi dengan Benar & Nominal Tidak Boleh < 5000 dan Kosong, Silahkan input ulang.",
 				icon: "error",
 				buttonsStyling: false,
 				confirmButtonText: "Oke!",
@@ -1205,7 +1206,7 @@ $(document).ready(function () {
 
 				Swal.fire({
 					title: "Peringatan!",
-					html: "Apakah anda yakin Menarik Tabungan Umum atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
+					html: "Apakah anda yakin Menarik Tabungan Qurban atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
 					icon: "warning",
 					showCancelButton: true,
 					confirmButtonColor: "#DD6B55",
@@ -1227,7 +1228,7 @@ $(document).ready(function () {
 
 						$.ajax({
 							type: "POST",
-							url: `${HOST_URL}/finance/savings/post_debet`,
+							url: `${HOST_URL}/finance/savings/post_qurban_debet`,
 							dataType: "JSON",
 							data: {
 								nis: nis,
@@ -1274,7 +1275,7 @@ $(document).ready(function () {
 							},
 						});
 					} else {
-						Swal.fire("Dibatalkan!", "Penarikan Tabungan Umum atas nama <b>" + nama.toUpperCase() + "</b> batal diubah.", "error");
+						Swal.fire("Dibatalkan!", "Penarikan Tabungan Qurban atas nama <b>" + nama.toUpperCase() + "</b> batal diubah.", "error");
 						return false;
 					}
 				});
@@ -1334,7 +1335,7 @@ $(document).ready(function () {
 
 				Swal.fire({
 					title: "Peringatan!",
-					html: "Apakah anda yakin Update Penarikan Tabungan Umum atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
+					html: "Apakah anda yakin Update Penarikan Tabungan Qurban atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
 					icon: "warning",
 					showCancelButton: true,
 					confirmButtonColor: "#DD6B55",
@@ -1356,7 +1357,7 @@ $(document).ready(function () {
 
 						$.ajax({
 							type: "POST",
-							url: `${HOST_URL}/finance/savings/update_debet`,
+							url: `${HOST_URL}/finance/savings/update_qurban_debet`,
 							dataType: "JSON",
 							data: {
 								id_transaksi: id_transaksi,
@@ -1404,7 +1405,7 @@ $(document).ready(function () {
 							},
 						});
 					} else {
-						Swal.fire("Dibatalkan!", "Edit Penarikan Tabungan Umum atas nama <b>" + nama.toUpperCase() + "</b> batal diubah.", "error");
+						Swal.fire("Dibatalkan!", "Edit Penarikan Tabungan Qurban atas nama <b>" + nama.toUpperCase() + "</b> batal diubah.", "error");
 						return false;
 					}
 				});
@@ -1445,7 +1446,7 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "GET",
-			url: `${HOST_URL}/finance/savings/get_all_transaction`,
+			url: `${HOST_URL}/finance/savings/get_all_qurban_transaction`,
 			async: false,
 			data: {
 				start_date: lstart,
@@ -1493,7 +1494,6 @@ $(document).ready(function () {
 						var nama_tingkat = "DC";
 					}
 
-
 					if (data[i].saldo != null) {
 						var saldo = CurrencyID(data[i].saldo);
 					} else if (data[i].saldo == null) {
@@ -1510,11 +1510,11 @@ $(document).ready(function () {
 								"<div class='dropdown-menu dropdown-menu-sm dropdown-menu-right'>" +
 								"<ul class='nav nav-hover flex-column'>" +
 								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link edit_transaksi_kredit' data-id_transaksi='" +
-								data[i].id_transaksi_umum + "' data-nis_siswa='" + data[i].nis_siswa + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_umum +
+								data[i].id_transaksi_qurban + "' data-nis_siswa='" + data[i].nis_siswa + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_qurban +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-id_th_ajaran='" + data[i].th_ajaran + "' data-th_ajaran='" + data[i].tahun_ajaran + "' data-nominal='" + data[i].nominal + "' data-waktu_transaksi='" + data[i].tanggal_transaksi + "' data-catatan='" + data[i].catatan +
 								"' href='javascript:void(0);'><i class='nav-icon la la-pencil-ruler text-warning'></i><span class='nav-text text-warning font-weight-bold text-hover-primary'>Edit</span></a></li>" +
 								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link delete_transaksi_kredit' data-id_transaksi='" +
-								data[i].id_transaksi_umum + "' data-nis_siswa='" + data[i].nis_siswa + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_umum +
+								data[i].id_transaksi_qurban + "' data-nis_siswa='" + data[i].nis_siswa + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_qurban +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-nominal='" + data[i].nominal + "'><i class='nav-icon la la-trash text-danger'></i><span class='nav-text text-danger font-weight-bold text-hover-primary'>Hapus</span></a></li>" +
 								"</ul>" +
 								"</div>" +
@@ -1527,11 +1527,11 @@ $(document).ready(function () {
 								"<div class='dropdown-menu dropdown-menu-sm dropdown-menu-right'>" +
 								"<ul class='nav nav-hover flex-column'>" +
 								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link edit_transaksi_debet' data-id_transaksi='" +
-								data[i].id_transaksi_umum + "' data-nis_siswa='" + data[i].nis_siswa + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_umum +
+								data[i].id_transaksi_qurban + "' data-nis_siswa='" + data[i].nis_siswa + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_qurban +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-id_th_ajaran='" + data[i].th_ajaran + "' data-th_ajaran='" + data[i].tahun_ajaran + "' data-nominal='" + data[i].nominal + "' data-waktu_transaksi='" + data[i].tanggal_transaksi + "' data-catatan='" + data[i].catatan +
 								"' href='javascript:void(0);'><i class='nav-icon la la-pencil-ruler text-warning'></i><span class='nav-text text-warning font-weight-bold text-hover-primary'>Edit</span></a></li>" +
 								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link delete_transaksi_debet' data-id_transaksi='" +
-								data[i].id_transaksi_umum + "' data-nis_siswa='" + data[i].nis_siswa + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_umum +
+								data[i].id_transaksi_qurban + "' data-nis_siswa='" + data[i].nis_siswa + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_qurban +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-nominal='" + data[i].nominal + "'><i class='nav-icon la la-trash text-danger'></i><span class='nav-text text-danger font-weight-bold text-hover-primary'>Hapus</span></a></li>" +
 								"</ul>" +
 								"</div>" +
@@ -1547,10 +1547,10 @@ $(document).ready(function () {
 					html +=
 						"<tr class='" + `${bg_color}` + "'>" +
 						"<td>" +
-						`${data[i].id_transaksi_umum}` +
+						`${data[i].id_transaksi_qurban}` +
 						"</td>" +
 						"<td class='font-weight-bolder text-danger'>" +
-						`${data[i].nomor_transaksi_umum}` +
+						`${data[i].nomor_transaksi_qurban}` +
 						"</td>" +
 						"<td class='font-weight-bolder'>" +
 						`${data[i].nis_siswa}` +
@@ -1598,8 +1598,8 @@ $(document).ready(function () {
 		var nis_siswa = $(this).data("nis_siswa");
 		var nama_siswa = $(this).data("nama_lengkap");
 		var jenis_transaksi = $(this).data("jenis_transaksi");
-		var nomor_transaksi = $(this).data("nomor_transaksi");
 		var nominal = $(this).data("nominal");
+		var nomor_transaksi = $(this).data("nomor_transaksi");
 
 		var csrfName = $('.txt_csrfname').attr('name');
 		var csrfHash = $('.txt_csrfname').val(); // CSRF hash
@@ -1613,7 +1613,7 @@ $(document).ready(function () {
 			cancelButtonText: "Tidak, batal!",
 			closeOnConfirm: false,
 			closeOnCancel: false,
-			html: "Apakah anda yakin ingin menghapus Transaksi Umum <b>" + nomor_transaksi + "</b> (" + jenis_transaksi + ") atas nama <b>'" +
+			html: "Apakah anda yakin ingin menghapus Transaksi Qurban <b>" + nomor_transaksi + "</b> (" + jenis_transaksi + ") atas nama <b>'" +
 				nama_siswa.toUpperCase() + "'</b> (" + nis_siswa + ") dengan nominal Kredit (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 			didOpen: () => {
 				grecaptcha.render('recaptcha_delete', {
@@ -1629,7 +1629,7 @@ $(document).ready(function () {
 			if (result.value) {
 				$.ajax({
 					type: "post",
-					url: `${HOST_URL}/finance/savings/delete_credit_transaction`,
+					url: `${HOST_URL}/finance/savings/delete_qurban_credit_transaction`,
 					data: {
 						id_transaksi: id_transaksi,
 						nomor_transaksi: nomor_transaksi,
@@ -1663,7 +1663,7 @@ $(document).ready(function () {
 
 				return false;
 			} else {
-				Swal.fire("Dibatalkan!", "Penghapusan Transaksi Umum <b>" + nomor_transaksi + "</b> (" + jenis_transaksi + ")  atas nama <b>'" + nama_siswa.toUpperCase() + "'</b> (" + nis_siswa + ") batal dihapus.", "error");
+				Swal.fire("Dibatalkan!", "Penghapusan Transaksi Qurban <b>" + nomor_transaksi + "</b> (" + jenis_transaksi + ") atas nama <b>'" + nama_siswa.toUpperCase() + "'</b> (" + nis_siswa + ") batal dihapus.", "error");
 
 				return false;
 			}
@@ -1677,8 +1677,8 @@ $(document).ready(function () {
 		var nis_siswa = $(this).data("nis_siswa");
 		var nama_siswa = $(this).data("nama_lengkap");
 		var jenis_transaksi = $(this).data("jenis_transaksi");
-		var nomor_transaksi = $(this).data("nomor_transaksi");
 		var nominal = $(this).data("nominal");
+		var nomor_transaksi = $(this).data("nomor_transaksi");
 
 		var csrfName = $('.txt_csrfname').attr('name');
 		var csrfHash = $('.txt_csrfname').val(); // CSRF hash
@@ -1692,7 +1692,7 @@ $(document).ready(function () {
 			cancelButtonText: "Tidak, batal!",
 			closeOnConfirm: false,
 			closeOnCancel: false,
-			html: "Apakah anda yakin ingin menghapus Transaksi Umum <b>" + nomor_transaksi + "</b> (" + jenis_transaksi + ") atas nama <b>'" +
+			html: "Apakah anda yakin ingin menghapus Transaksi Qurban <b>" + nomor_transaksi + "</b> (" + jenis_transaksi + ") atas nama <b>'" +
 				nama_siswa.toUpperCase() + "'</b> (" + nis_siswa + ") dengan nominal Debet (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 			didOpen: () => {
 				grecaptcha.render('recaptcha_delete', {
@@ -1708,7 +1708,7 @@ $(document).ready(function () {
 			if (result.value) {
 				$.ajax({
 					type: "post",
-					url: `${HOST_URL}/finance/savings/delete_debet_transaction`,
+					url: `${HOST_URL}/finance/savings/delete_qurban_debet_transaction`,
 					data: {
 						id_transaksi: id_transaksi,
 						nomor_transaksi: nomor_transaksi,
@@ -1742,7 +1742,7 @@ $(document).ready(function () {
 				return false;
 
 			} else {
-				Swal.fire("Dibatalkan!", "Penghapusan Transaksi Umum <b>" + nomor_transaksi + "</b> (" + jenis_transaksi + ") atas nama <b>'" + nama_siswa.toUpperCase() + "'</b> (" + nis_siswa + ") batal dihapus.", "error");
+				Swal.fire("Dibatalkan!", "Penghapusan Transaksi Qurban <b>" + nomor_transaksi + "</b> (" + jenis_transaksi + ") atas nama <b>'" + nama_siswa.toUpperCase() + "'</b> (" + nis_siswa + ") batal dihapus.", "error");
 
 				return false;
 			}
