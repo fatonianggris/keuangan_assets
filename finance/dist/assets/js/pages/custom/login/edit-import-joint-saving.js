@@ -4,68 +4,64 @@
 
 	// Class Definition
 	var KTLogin = function () {
-		var _edit_personal;
+		var _edit_joint;
 
-		var _handlePersonalForm = function () {
+		var _handleJointForm = function () {
 			var validation;
 
-			var edit_button = document.querySelectorAll('.edit_nasabah');
-			var form = KTUtil.getById('kt_form_edit_personal');
+			var edit_button = document.querySelectorAll('.edit_joint');
+			var form = KTUtil.getById('kt_form_edit_joint');
 			var submitButton = form.querySelector('[type="submit"]');
 			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
 			validation = FormValidation.formValidation(
 				form,
 				{
 					fields: {
-						nis_siswa: {
+						nomor_rekening_bersama: {
 							validators: {
 								notEmpty: {
-									message: 'Nomor Rekening Nasabah diperlukan'
+									message: 'Nomor Rekening Bersama diperlukan'
 								},
 								integer: {
 									message: 'Inputan harus Angka',
 									// The default separators
 								},
 								remote: {
-									url: HOST_URL + 'finance/savings/check_number_import_personal_saving',
+									url: HOST_URL + 'finance/savings/check_number_import_joint_saving',
 									method: 'POST',
 									data: function () {
 										return {
-											old_nis: form.querySelector('[name="old_nis"]').value,
+											old_nomor_rekening_bersama: form.querySelector('[name="old_nomor_rekening_bersama"]').value,
 										};
 									},
 									message: 'Nomor Rekening telah digunakan, inputkan Nomor Rekening lain!',
 								},
 								stringLength: {
-									max: 6,
-									min: 5,
-									message: 'Nomor Rekening harus memiliki 5 sampai 6 karakter'
+									max: 7,
+									min: 7,
+									message: 'Nomor Rekening harus memiliki 7 karakter'
 								}
 							}
 						},
-						nama_siswa: {
+						nama_tabungan_bersama: {
 							validators: {
 								notEmpty: {
-									message: 'Nama Siswa diperlukan'
+									message: 'Nama Tabungan Bersama diperlukan'
 								},
-								regexp: {
-									regexp: /^[a-zs\s.()-]+$/i,
-									message: 'Inputan harus berupa huruf'
-								}
 							}
 						},
-						level_tingkat: {
+						id_siswa_penanggung_jawab: {
+							validators: {
+								notEmpty: {
+									message: 'Siswa Penanggung Jawab diperlukan'
+								},
+							}
+						},
+						id_tingkat: {
 							validators: {
 								notEmpty: {
 									message: 'Tingkat diperlukan'
 								},
-							}
-						},
-						email_wali: {
-							validators: {
-								emailAddress: {
-									message: 'Email anda tidak valid'
-								}
 							}
 						},
 						nama_wali: {
@@ -81,45 +77,21 @@
 								integer: {
 									message: 'Inputan harus Angka',
 									// The default separators
-								},
-							}
-						},
-						saldo_umum: {
-							validators: {
-								notEmpty: {
-									message: 'Nominal Saldo Umum diperlukan'
-								},
-								integer: {
-									message: 'Inputan harus Angka',
-									// The default separators
 									thousandsSeparator: ''
 								},
-								greaterThan: {
-									message: 'Nominal Saldo tidak boleh kurang dari 0',
-									min: 0,
+							}
+						},
+						id_th_ajaran: {
+							validators: {
+								notEmpty: {
+									message: 'Tahun Ajaran diperlukan'
 								},
 							}
 						},
-						saldo_qurban: {
+						saldo_bersama: {
 							validators: {
 								notEmpty: {
-									message: 'Nominal Saldo Qurban diperlukan'
-								},
-								integer: {
-									message: 'Inputan harus Angka',
-									// The default separators
-									thousandsSeparator: ''
-								},
-								greaterThan: {
-									message: 'Nominal Saldo tidak boleh kurang dari 0',
-									min: 0,
-								},
-							}
-						},
-						saldo_wisata: {
-							validators: {
-								notEmpty: {
-									message: 'Nominal Saldo Wisata diperlukan'
+									message: 'Nominal Saldo Bersama diperlukan'
 								},
 								integer: {
 									message: 'Inputan harus Angka',
@@ -157,7 +129,7 @@
 				});
 			}
 
-			_edit_personal.on('submit', function (wizard) {
+			_edit_joint.on('submit', function (wizard) {
 				if (validation) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
@@ -184,7 +156,7 @@
 		return {
 			// public functions
 			init: function () {
-				_handlePersonalForm();
+				_handleJointForm();
 			}
 		};
 	}();
