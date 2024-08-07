@@ -361,7 +361,16 @@ $(document).ready(function () {
 		allowClear: false,
 	});
 
+	$("#modalKredit").on("hidden.bs.modal", function () {
+		window.bundleObj.resetOTPKredit();
+	});
+
+	$("#modalDebet").on("hidden.bs.modal", function () {
+		window.bundleObj.resetOTPDebet();
+	});
+
 	$("#tb_transaksi").on("click", ".edit_transaksi_kredit", function () {
+		window.bundleObj.resetOTPKreditEdit();
 
 		var id_transaksi = $(this).data("id_transaksi");
 		var nis_siswa = $(this).data("nis_siswa");
@@ -546,6 +555,7 @@ $(document).ready(function () {
 	});
 
 	$("#tb_transaksi").on("click", ".edit_transaksi_debet", function () {
+		window.bundleObj.resetOTPDebetEdit();
 
 		var id_transaksi = $(this).data("id_transaksi");
 		var nis_siswa = $(this).data("nis_siswa");
@@ -739,6 +749,44 @@ $(document).ready(function () {
 
 	});
 
+	$("#tb_transaksi").on("click", ".cetak_transaksi_kredit", function () {
+
+		var nomor_transaksi = $(this).data("nomor_transaksi");
+		var nis_siswa = $(this).data("nis_siswa");
+		var nama = $(this).data("nama_lengkap").toUpperCase();
+		var jenjang = $(this).data("tingkat");
+		var nominal = $(this).data("nominal").toString();
+		var jenis_transaksi = $(this).data("jenis_transaksi");
+		var jenis_tabungan = $(this).data("jenis_tabungan");
+		var waktu_transaksi = $(this).data("waktu_transaksi");
+		var saldo_akhir = $(this).data("saldo").toString();
+		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) - parseInt(nominal.replace(/\./g, "")));
+
+		window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+			"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis_siswa,
+			nomor_transaksi, jenis_tabungan, jenis_transaksi, waktu_transaksi, nominal, CurrencyID(saldo_awal.toString()), saldo_akhir, "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", nama, jenjang, 'www.sekolahutsman.sch.id');
+
+	});
+
+	$("#tb_transaksi").on("click", ".cetak_transaksi_debet", function () {
+
+		var nomor_transaksi = $(this).data("nomor_transaksi");
+		var nis_siswa = $(this).data("nis_siswa");
+		var nama = $(this).data("nama_lengkap").toUpperCase();
+		var jenjang = $(this).data("tingkat");
+		var nominal = $(this).data("nominal").toString();
+		var jenis_transaksi = $(this).data("jenis_transaksi");
+		var jenis_tabungan = $(this).data("jenis_tabungan");
+		var waktu_transaksi = $(this).data("waktu_transaksi");
+		var saldo_akhir = $(this).data("saldo").toString();
+		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) + parseInt(nominal.replace(/\./g, "")));
+
+		window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+			"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis_siswa,
+			nomor_transaksi, jenis_tabungan, jenis_transaksi, waktu_transaksi, nominal, CurrencyID(saldo_awal.toString()), saldo_akhir, "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", nama, jenjang, 'www.sekolahutsman.sch.id');
+
+	});
+
 	$("#findNasabahKredit").on("change", function () {
 		var nis = $("#findNasabahKredit").find(":selected").val();
 		var nama = $("#findNasabahKredit").find(":selected").text();
@@ -884,255 +932,318 @@ $(document).ready(function () {
 		var jenis_tabungan = $('#inputJenisTabunganKredit').find(":selected").val();
 		var tingkat = $("#inputTingkatKredit").val();
 
+		if (tingkat == "1") {
+			var nama_tingkat = "KB";
+		} else if (tingkat == "2") {
+			var nama_tingkat = "TK";
+		} else if (tingkat == "3") {
+			var nama_tingkat = "SD";
+		} else if (tingkat == "4") {
+			var nama_tingkat = "SMP";
+		} else if (tingkat == "6") {
+			var nama_tingkat = "DC";
+		}
+
 		nominal = parseInt(nominal.replace(/\./g, ""));
 
-		if (nominal != null && nominal >= 5000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && jenis_tabungan != "" && jenis_tabungan != null) {
+		if (nominal != null && nominal >= 2000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && jenis_tabungan != "" && jenis_tabungan != null) {
 
-			if (jenis_tabungan == '1') {
-
-				nama_jenis_tabungan = "UMUM";
-
+			if (window.bundleObj.getOTPKredit() === false) {
 				Swal.fire({
-					title: "Peringatan!",
-					text: "Apakah anda yakin ingin Menyetor Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
-					icon: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Ya, Setor!",
-					cancelButtonText: "Tidak, Batal!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				}).then(function (result) {
-					if (result.value) {
-
-						$("#modalKredit").modal("hide");
-						KTApp.blockPage({
-							overlayColor: '#FFA800',
-							state: 'warning',
-							size: 'lg',
-							opacity: 0.1,
-							message: 'Silahkan Tunggu...'
-						});
-
-						$.ajax({
-							type: "POST",
-							url: `${HOST_URL}/finance/savings/post_credit`,
-							dataType: "JSON",
-							data: {
-								nis: nis,
-								nominal: nominal,
-								tahun_ajaran: tahun_ajaran,
-								id_tingkat: tingkat,
-								catatan_kredit: catatan,
-								jenis_tabungan: jenis_tabungan,
-								tanggal_transaksi: tanggal_transaksi,
-								[csrfName]: csrfHash
-							},
-							success: function (data) {
-								// Update CSRF hash
-								KTApp.unblockPage();
-
-								$('.txt_csrfname').val(data.token);
-								if (data.status) {
-									Swal.fire({
-										text: data.messages,
-										icon: "success",
-										buttonsStyling: false,
-										confirmButtonText: "Oke!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-success"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								} else {
-									Swal.fire({
-										text: data.messages,
-										icon: "error",
-										buttonsStyling: false,
-										confirmButtonText: "Oke!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-danger"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								}
-								$("#table_transcation").DataTable().destroy();
-								datatable_init();
-							},
-						});
-					} else {
-						Swal.fire("Dibatalkan!", "Setoran Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diinputkan.", "error");
-						return false;
+					html: "<b>PIN</b> Anda Salah!.",
+					icon: "error",
+					buttonsStyling: false,
+					confirmButtonText: "Oke!",
+					customClass: {
+						confirmButton: "btn font-weight-bold btn-primary"
 					}
+				}).then(function () {
+					KTUtil.scrollTop();
 				});
+			} else {
 
-				return false;
+				if (jenis_tabungan == '1') {
 
-			} else if (jenis_tabungan == '2') {
-				nama_jenis_tabungan = "QURBAN";
+					nama_jenis_tabungan = "UMUM";
 
-				Swal.fire({
-					title: "Peringatan!",
-					text: "Apakah anda yakin ingin Menyetor Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
-					icon: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Ya, Setor!",
-					cancelButtonText: "Tidak, Batal!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				}).then(function (result) {
-					if (result.value) {
+					Swal.fire({
+						title: "Peringatan!",
+						text: "Apakah anda yakin ingin Menyetor Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
+						icon: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#DD6B55",
+						confirmButtonText: "Ya, Setor!",
+						cancelButtonText: "Tidak, Batal!",
+						closeOnConfirm: false,
+						closeOnCancel: false
+					}).then(function (result) {
+						if (result.value) {
 
-						$("#modalKredit").modal("hide");
-						KTApp.blockPage({
-							overlayColor: '#FFA800',
-							state: 'warning',
-							size: 'lg',
-							opacity: 0.1,
-							message: 'Silahkan Tunggu...'
-						});
+							$("#modalKredit").modal("hide");
+							KTApp.blockPage({
+								overlayColor: '#FFA800',
+								state: 'warning',
+								size: 'lg',
+								opacity: 0.1,
+								message: 'Silahkan Tunggu...'
+							});
 
-						$.ajax({
-							type: "POST",
-							url: `${HOST_URL}/finance/savings/post_qurban_credit`,
-							dataType: "JSON",
-							data: {
-								nis: nis,
-								nominal: nominal,
-								tahun_ajaran: tahun_ajaran,
-								id_tingkat: tingkat,
-								catatan_kredit: catatan,
-								jenis_tabungan: jenis_tabungan,
-								tanggal_transaksi: tanggal_transaksi,
-								[csrfName]: csrfHash
-							},
-							success: function (data) {
-								// Update CSRF hash
-								KTApp.unblockPage();
+							$.ajax({
+								type: "POST",
+								url: `${HOST_URL}/finance/savings/post_credit`,
+								dataType: "JSON",
+								data: {
+									nis: nis,
+									nominal: nominal,
+									tahun_ajaran: tahun_ajaran,
+									id_tingkat: tingkat,
+									catatan_kredit: catatan,
+									jenis_tabungan: jenis_tabungan,
+									tanggal_transaksi: tanggal_transaksi,
+									pin_verification_kredit: $('[name="pin_verification_kredit"]').val(),
+									[csrfName]: csrfHash
+								},
+								success: function (data) {
+									// Update CSRF hash
+									KTApp.unblockPage();
 
-								$('.txt_csrfname').val(data.token);
-								if (data.status) {
-									Swal.fire({
-										text: data.messages,
-										icon: "success",
-										buttonsStyling: false,
-										confirmButtonText: "Oke!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-success"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								} else {
-									Swal.fire({
-										text: data.messages,
-										icon: "error",
-										buttonsStyling: false,
-										confirmButtonText: "Oke!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-danger"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								}
-								$("#table_transcation").DataTable().destroy();
-								datatable_init();
-							},
-						});
-					} else {
-						Swal.fire("Dibatalkan!", "Setoran Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diinputkan.", "error");
-						return false;
-					}
-				});
-				return false;
+									$('.txt_csrfname').val(data.token);
+									if (data.status) {
+										Swal.fire({
+											html: data.messages,
+											icon: "success",
+											buttonsStyling: false,
+											showCancelButton: true,
+											confirmButtonText: "Cetak Struk?",
+											cancelButtonText: "Oke!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-success mr-10",
+												cancelButton: "btn btn-danger font-weight-bold"
+											}
+										}).then(function (result) {
+											if (result.isConfirmed) {
+												var saldo_awal = (parseInt(data.saldo_akhir) - parseInt(nominal));
+												var only_name = $('#findNasabahKredit').find(":selected").text().split('(');
 
-			} else if (jenis_tabungan == '3') {
-				nama_jenis_tabungan = "WISATA";
+												window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+													"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
+													data.nomor_transaksi, nama_jenis_tabungan, "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+													CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(0, -1), nama_tingkat, 'www.sekolahutsman.sch.id');
+											}
+										});
+									} else {
+										Swal.fire({
+											text: data.messages,
+											icon: "error",
+											buttonsStyling: false,
+											confirmButtonText: "Oke!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-danger"
+											}
+										}).then(function () {
+											KTUtil.scrollTop();
+										});
+									}
+									$("#table_transcation").DataTable().destroy();
+									datatable_init();
+								},
+							});
+						} else {
+							Swal.fire("Dibatalkan!", "Setoran Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diinputkan.", "error");
+							return false;
+						}
+					});
 
-				Swal.fire({
-					title: "Peringatan!",
-					text: "Apakah anda yakin ingin Menyetor Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
-					icon: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Ya, Setor!",
-					cancelButtonText: "Tidak, Batal!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				}).then(function (result) {
-					if (result.value) {
+					return false;
 
-						$("#modalKredit").modal("hide");
-						KTApp.blockPage({
-							overlayColor: '#FFA800',
-							state: 'warning',
-							size: 'lg',
-							opacity: 0.1,
-							message: 'Silahkan Tunggu...'
-						});
+				} else if (jenis_tabungan == '2') {
+					nama_jenis_tabungan = "QURBAN";
 
-						$.ajax({
-							type: "POST",
-							url: `${HOST_URL}/finance/savings/post_tour_credit`,
-							dataType: "JSON",
-							data: {
-								nis: nis,
-								nominal: nominal,
-								tahun_ajaran: tahun_ajaran,
-								id_tingkat: tingkat,
-								catatan_kredit: catatan,
-								jenis_tabungan: jenis_tabungan,
-								tanggal_transaksi: tanggal_transaksi,
-								[csrfName]: csrfHash
-							},
-							success: function (data) {
-								// Update CSRF hash
-								KTApp.unblockPage();
+					Swal.fire({
+						title: "Peringatan!",
+						text: "Apakah anda yakin ingin Menyetor Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
+						icon: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#DD6B55",
+						confirmButtonText: "Ya, Setor!",
+						cancelButtonText: "Tidak, Batal!",
+						closeOnConfirm: false,
+						closeOnCancel: false
+					}).then(function (result) {
+						if (result.value) {
 
-								$('.txt_csrfname').val(data.token);
-								if (data.status) {
-									Swal.fire({
-										text: data.messages,
-										icon: "success",
-										buttonsStyling: false,
-										confirmButtonText: "Oke!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-success"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								} else {
-									Swal.fire({
-										text: data.messages,
-										icon: "error",
-										buttonsStyling: false,
-										confirmButtonText: "Oke!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-danger"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								}
-								$("#table_transcation").DataTable().destroy();
-								datatable_init();
-							},
-						});
-					} else {
-						Swal.fire("Dibatalkan!", "Setoran Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diinputkan.", "error");
-						return false;
-					}
-				});
-				return false;
+							$("#modalKredit").modal("hide");
+							KTApp.blockPage({
+								overlayColor: '#FFA800',
+								state: 'warning',
+								size: 'lg',
+								opacity: 0.1,
+								message: 'Silahkan Tunggu...'
+							});
+
+							$.ajax({
+								type: "POST",
+								url: `${HOST_URL}/finance/savings/post_qurban_credit`,
+								dataType: "JSON",
+								data: {
+									nis: nis,
+									nominal: nominal,
+									tahun_ajaran: tahun_ajaran,
+									id_tingkat: tingkat,
+									catatan_kredit: catatan,
+									jenis_tabungan: jenis_tabungan,
+									tanggal_transaksi: tanggal_transaksi,
+									pin_verification_kredit: $('[name="pin_verification_kredit"]').val(),
+									[csrfName]: csrfHash
+								},
+								success: function (data) {
+									// Update CSRF hash
+									KTApp.unblockPage();
+
+									$('.txt_csrfname').val(data.token);
+									if (data.status) {
+										Swal.fire({
+											html: data.messages,
+											icon: "success",
+											buttonsStyling: false,
+											showCancelButton: true,
+											confirmButtonText: "Cetak Struk?",
+											cancelButtonText: "Oke!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-success mr-10",
+												cancelButton: "btn btn-danger font-weight-bold"
+											}
+										}).then(function (result) {
+											if (result.isConfirmed) {
+												var saldo_awal = (parseInt(data.saldo_akhir) - parseInt(nominal));
+												var only_name = $('#findNasabahKredit').find(":selected").text().split('(');
+
+												window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+													"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
+													data.nomor_transaksi, nama_jenis_tabungan, "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+													CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(0, -1), nama_tingkat, 'www.sekolahutsman.sch.id');
+											}
+										});
+									} else {
+										Swal.fire({
+											text: data.messages,
+											icon: "error",
+											buttonsStyling: false,
+											confirmButtonText: "Oke!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-danger"
+											}
+										}).then(function () {
+											KTUtil.scrollTop();
+										});
+									}
+									$("#table_transcation").DataTable().destroy();
+									datatable_init();
+								},
+							});
+						} else {
+							Swal.fire("Dibatalkan!", "Setoran Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diinputkan.", "error");
+							return false;
+						}
+					});
+					return false;
+
+				} else if (jenis_tabungan == '3') {
+					nama_jenis_tabungan = "WISATA";
+
+					Swal.fire({
+						title: "Peringatan!",
+						text: "Apakah anda yakin ingin Menyetor Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
+						icon: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#DD6B55",
+						confirmButtonText: "Ya, Setor!",
+						cancelButtonText: "Tidak, Batal!",
+						closeOnConfirm: false,
+						closeOnCancel: false
+					}).then(function (result) {
+						if (result.value) {
+
+							$("#modalKredit").modal("hide");
+							KTApp.blockPage({
+								overlayColor: '#FFA800',
+								state: 'warning',
+								size: 'lg',
+								opacity: 0.1,
+								message: 'Silahkan Tunggu...'
+							});
+
+							$.ajax({
+								type: "POST",
+								url: `${HOST_URL}/finance/savings/post_tour_credit`,
+								dataType: "JSON",
+								data: {
+									nis: nis,
+									nominal: nominal,
+									tahun_ajaran: tahun_ajaran,
+									id_tingkat: tingkat,
+									catatan_kredit: catatan,
+									jenis_tabungan: jenis_tabungan,
+									tanggal_transaksi: tanggal_transaksi,
+									pin_verification_kredit: $('[name="pin_verification_kredit"]').val(),
+									[csrfName]: csrfHash
+								},
+								success: function (data) {
+									// Update CSRF hash
+									KTApp.unblockPage();
+
+									$('.txt_csrfname').val(data.token);
+									if (data.status) {
+										Swal.fire({
+											html: data.messages,
+											icon: "success",
+											buttonsStyling: false,
+											showCancelButton: true,
+											confirmButtonText: "Cetak Struk?",
+											cancelButtonText: "Oke!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-success mr-10",
+												cancelButton: "btn btn-danger font-weight-bold"
+											}
+										}).then(function (result) {
+											if (result.isConfirmed) {
+												var saldo_awal = (parseInt(data.saldo_akhir) - parseInt(nominal));
+												var only_name = $('#findNasabahKredit').find(":selected").text().split('(');
+
+												window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+													"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
+													data.nomor_transaksi, nama_jenis_tabungan, "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+													CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(0, -1), nama_tingkat, 'www.sekolahutsman.sch.id');
+											}
+										});
+									} else {
+										Swal.fire({
+											text: data.messages,
+											icon: "error",
+											buttonsStyling: false,
+											confirmButtonText: "Oke!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-danger"
+											}
+										}).then(function () {
+											KTUtil.scrollTop();
+										});
+									}
+									$("#table_transcation").DataTable().destroy();
+									datatable_init();
+								},
+							});
+						} else {
+							Swal.fire("Dibatalkan!", "Setoran Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diinputkan.", "error");
+							return false;
+						}
+					});
+					return false;
+				}
 			}
 		} else {
 			Swal.fire({
-				text: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 5000, Silahkan input ulang.",
+				text: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 2000, Silahkan input ulang.",
 				icon: "error",
 				buttonsStyling: false,
 				confirmButtonText: "Oke!",
@@ -1159,260 +1270,323 @@ $(document).ready(function () {
 		var jenis_tabungan = $('[name="jenis_tabungan_kredit"]').val();
 		var tahun_ajaran = $('[name="th_ajaran_kredit"]').val();
 		var catatan = $('[name="catatan_kredit"]').val();
-		var tanggal_transaksi = $('[name="waktu_transaksi_kredit"]').val()
-		var tingkat = $('[name="tingkat_kredit_edit"]').val()
+		var tanggal_transaksi = $('[name="waktu_transaksi_kredit"]').val();
+		var tingkat = $('[name="tingkat_kredit_edit"]').val();
+
+		if (tingkat == "1") {
+			var nama_tingkat = "KB";
+		} else if (tingkat == "2") {
+			var nama_tingkat = "TK";
+		} else if (tingkat == "3") {
+			var nama_tingkat = "SD";
+		} else if (tingkat == "4") {
+			var nama_tingkat = "SMP";
+		} else if (tingkat == "6") {
+			var nama_tingkat = "DC";
+		}
 
 		nominal = parseInt(nominal.replace(/\./g, ""));
 
-		if (nominal != null && nominal >= 5000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && jenis_tabungan != null && jenis_tabungan != "") {
+		if (nominal != null && nominal >= 2000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && jenis_tabungan != null && jenis_tabungan != "") {
 
-			if (jenis_tabungan == "1") {
-				nama_jenis_tabungan = "UMUM";
-
+			if (window.bundleObj.getOTPKreditEdit() === false) {
 				Swal.fire({
-					title: "Peringatan!",
-					text: "Apakah anda yakin Update Kredit Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
-					icon: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Ya, Setor!",
-					cancelButtonText: "Tidak, Batal!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				}).then(function (result) {
-					if (result.value) {
-
-						$("#modalEditKreditTransaksi").modal("hide");
-						KTApp.blockPage({
-							overlayColor: '#FFA800',
-							state: 'warning',
-							size: 'lg',
-							opacity: 0.1,
-							message: 'Silahkan Tunggu...'
-						});
-
-						$.ajax({
-							type: "POST",
-							url: `${HOST_URL}/finance/savings/update_credit`,
-							dataType: "JSON",
-							data: {
-								id_transaksi: id_transaksi,
-								nis: nis,
-								id_tingkat: tingkat,
-								nominal: nominal,
-								tahun_ajaran: tahun_ajaran,
-								catatan_kredit: catatan,
-								tanggal_transaksi: tanggal_transaksi,
-								[csrfName]: csrfHash
-							},
-							success: function (data) {
-								// Update CSRF hash
-								KTApp.unblockPage();
-
-								$('.txt_csrfname').val(data.token);
-
-								if (data.status) {
-									Swal.fire({
-										text: data.messages,
-										icon: "success",
-										buttonsStyling: false,
-										confirmButtonText: "Oke!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-success"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								} else {
-									Swal.fire({
-										text: data.messages,
-										icon: "error",
-										buttonsStyling: false,
-										confirmButtonText: "Oke!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-danger"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								}
-								$("#table_transcation").DataTable().destroy();
-								datatable_init();
-							},
-						});
-					} else {
-						Swal.fire("Dibatalkan!", "Edit Setoran Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
-						return false;
+					html: "<b>PIN</b> Anda Salah!.",
+					icon: "error",
+					buttonsStyling: false,
+					confirmButtonText: "Oke!",
+					customClass: {
+						confirmButton: "btn font-weight-bold btn-primary"
 					}
+				}).then(function () {
+					KTUtil.scrollTop();
 				});
+			} else {
+
+				if (jenis_tabungan == "1") {
+					nama_jenis_tabungan = "UMUM";
+
+					Swal.fire({
+						title: "Peringatan!",
+						text: "Apakah anda yakin Update Kredit Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
+						icon: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#DD6B55",
+						confirmButtonText: "Ya, Setor!",
+						cancelButtonText: "Tidak, Batal!",
+						closeOnConfirm: false,
+						closeOnCancel: false
+					}).then(function (result) {
+						if (result.value) {
+
+							$("#modalEditKreditTransaksi").modal("hide");
+							KTApp.blockPage({
+								overlayColor: '#FFA800',
+								state: 'warning',
+								size: 'lg',
+								opacity: 0.1,
+								message: 'Silahkan Tunggu...'
+							});
+
+							$.ajax({
+								type: "POST",
+								url: `${HOST_URL}/finance/savings/update_credit`,
+								dataType: "JSON",
+								data: {
+									id_transaksi: id_transaksi,
+									nis: nis,
+									id_tingkat: tingkat,
+									nominal: nominal,
+									tahun_ajaran: tahun_ajaran,
+									catatan_kredit: catatan,
+									tanggal_transaksi: tanggal_transaksi,
+									pin_verification_kredit_edit: $('[name="pin_verification_kredit_edit"]').val(),
+									[csrfName]: csrfHash
+								},
+								success: function (data) {
+									// Update CSRF hash
+									KTApp.unblockPage();
+
+									$('.txt_csrfname').val(data.token);
+
+									if (data.status) {
+										Swal.fire({
+											html: data.messages,
+											icon: "success",
+											buttonsStyling: false,
+											showCancelButton: true,
+											confirmButtonText: "Cetak Struk?",
+											cancelButtonText: "Oke!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-success mr-10",
+												cancelButton: "btn btn-danger font-weight-bold"
+											}
+										}).then(function (result) {
+											if (result.isConfirmed) {
+												var saldo_awal = (parseInt(data.saldo_akhir) - parseInt(nominal));
+												var only_name = $('[name="nis_kredit"]').find(":selected").text().split(')');
+
+												window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+													"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
+													data.nomor_transaksi, nama_jenis_tabungan, "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+													CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(1), nama_tingkat, 'www.sekolahutsman.sch.id');
+											}
+										});
+									} else {
+										Swal.fire({
+											text: data.messages,
+											icon: "error",
+											buttonsStyling: false,
+											confirmButtonText: "Oke!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-danger"
+											}
+										}).then(function () {
+											KTUtil.scrollTop();
+										});
+									}
+									$("#table_transcation").DataTable().destroy();
+									datatable_init();
+								},
+							});
+						} else {
+							Swal.fire("Dibatalkan!", "Edit Setoran Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
+							return false;
+						}
+					});
+				}
+				else if (jenis_tabungan == "2") {
+					nama_jenis_tabungan = "QURBAN";
+
+					Swal.fire({
+						title: "Peringatan!",
+						text: "Apakah anda yakin Update Kredit Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
+						icon: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#DD6B55",
+						confirmButtonText: "Ya, Setor!",
+						cancelButtonText: "Tidak, Batal!",
+						closeOnConfirm: false,
+						closeOnCancel: false
+					}).then(function (result) {
+						if (result.value) {
+
+							$("#modalEditKreditTransaksi").modal("hide");
+							KTApp.blockPage({
+								overlayColor: '#FFA800',
+								state: 'warning',
+								size: 'lg',
+								opacity: 0.1,
+								message: 'Silahkan Tunggu...'
+							});
+
+							$.ajax({
+								type: "POST",
+								url: `${HOST_URL}/finance/savings/update_qurban_credit`,
+								dataType: "JSON",
+								data: {
+									id_transaksi: id_transaksi,
+									nis: nis,
+									id_tingkat: tingkat,
+									nominal: nominal,
+									tahun_ajaran: tahun_ajaran,
+									catatan_kredit: catatan,
+									tanggal_transaksi: tanggal_transaksi,
+									pin_verification_kredit_edit: $('[name="pin_verification_kredit_edit"]').val(),
+									[csrfName]: csrfHash
+								},
+								success: function (data) {
+									// Update CSRF hash
+									KTApp.unblockPage();
+
+									$('.txt_csrfname').val(data.token);
+
+									if (data.status) {
+										Swal.fire({
+											html: data.messages,
+											icon: "success",
+											buttonsStyling: false,
+											showCancelButton: true,
+											confirmButtonText: "Cetak Struk?",
+											cancelButtonText: "Oke!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-success mr-10",
+												cancelButton: "btn btn-danger font-weight-bold"
+											}
+										}).then(function (result) {
+											if (result.isConfirmed) {
+												var saldo_awal = (parseInt(data.saldo_akhir) - parseInt(nominal));
+												var only_name = $('[name="nis_kredit"]').find(":selected").text().split(')');
+
+												window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+													"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
+													data.nomor_transaksi, nama_jenis_tabungan, "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+													CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(1), nama_tingkat, 'www.sekolahutsman.sch.id');
+											}
+										});
+									} else {
+										Swal.fire({
+											text: data.messages,
+											icon: "error",
+											buttonsStyling: false,
+											confirmButtonText: "Oke!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-danger"
+											}
+										}).then(function () {
+											KTUtil.scrollTop();
+										});
+									}
+									$("#table_transcation").DataTable().destroy();
+									datatable_init();
+								},
+							});
+						} else {
+							Swal.fire("Dibatalkan!", "Edit Setoran Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
+							return false;
+						}
+					});
+
+				}
+				else if (jenis_tabungan == "3") {
+					nama_jenis_tabungan = "WISATA";
+
+					Swal.fire({
+						title: "Peringatan!",
+						text: "Apakah anda yakin Update Kredit Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
+						icon: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#DD6B55",
+						confirmButtonText: "Ya, Setor!",
+						cancelButtonText: "Tidak, Batal!",
+						closeOnConfirm: false,
+						closeOnCancel: false
+					}).then(function (result) {
+						if (result.value) {
+
+							$("#modalEditKreditTransaksi").modal("hide");
+							KTApp.blockPage({
+								overlayColor: '#FFA800',
+								state: 'warning',
+								size: 'lg',
+								opacity: 0.1,
+								message: 'Silahkan Tunggu...'
+							});
+
+							$.ajax({
+								type: "POST",
+								url: `${HOST_URL}/finance/savings/update_tour_credit`,
+								dataType: "JSON",
+								data: {
+									id_transaksi: id_transaksi,
+									nis: nis,
+									id_tingkat: tingkat,
+									nominal: nominal,
+									tahun_ajaran: tahun_ajaran,
+									catatan_kredit: catatan,
+									tanggal_transaksi: tanggal_transaksi,
+									pin_verification_kredit_edit: $('[name="pin_verification_kredit_edit"]').val(),
+									[csrfName]: csrfHash
+								},
+								success: function (data) {
+									// Update CSRF hash
+									KTApp.unblockPage();
+
+									$('.txt_csrfname').val(data.token);
+
+									if (data.status) {
+										Swal.fire({
+											html: data.messages,
+											icon: "success",
+											buttonsStyling: false,
+											showCancelButton: true,
+											confirmButtonText: "Cetak Struk?",
+											cancelButtonText: "Oke!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-success mr-10",
+												cancelButton: "btn btn-danger font-weight-bold"
+											}
+										}).then(function (result) {
+											if (result.isConfirmed) {
+												var saldo_awal = (parseInt(data.saldo_akhir) - parseInt(nominal));
+												var only_name = $('[name="nis_kredit"]').find(":selected").text().split(')');
+
+												window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+													"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
+													data.nomor_transaksi, nama_jenis_tabungan, "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+													CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(1), nama_tingkat, 'www.sekolahutsman.sch.id');
+											}
+										});
+									} else {
+										Swal.fire({
+											text: data.messages,
+											icon: "error",
+											buttonsStyling: false,
+											confirmButtonText: "Oke!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-danger"
+											}
+										}).then(function () {
+											KTUtil.scrollTop();
+										});
+									}
+									$("#table_transcation").DataTable().destroy();
+									datatable_init();
+								},
+							});
+						} else {
+							Swal.fire("Dibatalkan!", "Edit Setoran Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
+							return false;
+						}
+					});
+
+				}
+
+				return false;
 			}
-			else if (jenis_tabungan == "2") {
-				nama_jenis_tabungan = "QURBAN";
-
-				Swal.fire({
-					title: "Peringatan!",
-					text: "Apakah anda yakin Update Kredit Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
-					icon: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Ya, Setor!",
-					cancelButtonText: "Tidak, Batal!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				}).then(function (result) {
-					if (result.value) {
-
-						$("#modalEditKreditTransaksi").modal("hide");
-						KTApp.blockPage({
-							overlayColor: '#FFA800',
-							state: 'warning',
-							size: 'lg',
-							opacity: 0.1,
-							message: 'Silahkan Tunggu...'
-						});
-
-						$.ajax({
-							type: "POST",
-							url: `${HOST_URL}/finance/savings/update_qurban_credit`,
-							dataType: "JSON",
-							data: {
-								id_transaksi: id_transaksi,
-								nis: nis,
-								id_tingkat: tingkat,
-								nominal: nominal,
-								tahun_ajaran: tahun_ajaran,
-								catatan_kredit: catatan,
-								tanggal_transaksi: tanggal_transaksi,
-								[csrfName]: csrfHash
-							},
-							success: function (data) {
-								// Update CSRF hash
-								KTApp.unblockPage();
-
-								$('.txt_csrfname').val(data.token);
-
-								if (data.status) {
-									Swal.fire({
-										text: data.messages,
-										icon: "success",
-										buttonsStyling: false,
-										confirmButtonText: "Oke!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-success"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								} else {
-									Swal.fire({
-										text: data.messages,
-										icon: "error",
-										buttonsStyling: false,
-										confirmButtonText: "Oke!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-danger"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								}
-								$("#table_transcation").DataTable().destroy();
-								datatable_init();
-							},
-						});
-					} else {
-						Swal.fire("Dibatalkan!", "Edit Setoran Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
-						return false;
-					}
-				});
-
-			}
-			else if (jenis_tabungan == "3") {
-				nama_jenis_tabungan = "WISATA";
-
-				Swal.fire({
-					title: "Peringatan!",
-					text: "Apakah anda yakin Update Kredit Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
-					icon: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Ya, Setor!",
-					cancelButtonText: "Tidak, Batal!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				}).then(function (result) {
-					if (result.value) {
-
-						$("#modalEditKreditTransaksi").modal("hide");
-						KTApp.blockPage({
-							overlayColor: '#FFA800',
-							state: 'warning',
-							size: 'lg',
-							opacity: 0.1,
-							message: 'Silahkan Tunggu...'
-						});
-
-						$.ajax({
-							type: "POST",
-							url: `${HOST_URL}/finance/savings/update_tour_credit`,
-							dataType: "JSON",
-							data: {
-								id_transaksi: id_transaksi,
-								nis: nis,
-								id_tingkat: tingkat,
-								nominal: nominal,
-								tahun_ajaran: tahun_ajaran,
-								catatan_kredit: catatan,
-								tanggal_transaksi: tanggal_transaksi,
-								[csrfName]: csrfHash
-							},
-							success: function (data) {
-								// Update CSRF hash
-								KTApp.unblockPage();
-
-								$('.txt_csrfname').val(data.token);
-
-								if (data.status) {
-									Swal.fire({
-										text: data.messages,
-										icon: "success",
-										buttonsStyling: false,
-										confirmButtonText: "Oke!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-success"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								} else {
-									Swal.fire({
-										text: data.messages,
-										icon: "error",
-										buttonsStyling: false,
-										confirmButtonText: "Oke!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-danger"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								}
-								$("#table_transcation").DataTable().destroy();
-								datatable_init();
-							},
-						});
-					} else {
-						Swal.fire("Dibatalkan!", "Edit Setoran Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
-						return false;
-					}
-				});
-
-			}
-
-			return false;
 		} else {
 			Swal.fire({
-				text: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 5000 dan Kosong, Silahkan input ulang.",
+				text: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 2000 dan Kosong, Silahkan input ulang.",
 				icon: "error",
 				buttonsStyling: false,
 				confirmButtonText: "Oke!",
@@ -1441,260 +1615,322 @@ $(document).ready(function () {
 		var jenis_tabungan = $('#inputJenisTabunganDebet').find(":selected").val();
 		var tingkat = $("#inputTingkatDebet").val();
 
+		if (tingkat == "1") {
+			var nama_tingkat = "KB";
+		} else if (tingkat == "2") {
+			var nama_tingkat = "TK";
+		} else if (tingkat == "3") {
+			var nama_tingkat = "SD";
+		} else if (tingkat == "4") {
+			var nama_tingkat = "SMP";
+		} else if (tingkat == "6") {
+			var nama_tingkat = "DC";
+		}
+
 		nominal = parseInt(nominal.replace(/\./g, ""));
 		saldo = parseInt(saldo.replace(/\./g, ""));
 
 		if (nominal <= saldo) {
 
-			if (nominal != null && nominal >= 5000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && jenis_tabungan != "" && jenis_tabungan != null) {
+			if (nominal != null && nominal >= 2000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && jenis_tabungan != "" && jenis_tabungan != null) {
 
-				if (jenis_tabungan == '1') {
-					nama_jenis_tabungan = "UMUM";
-
+				if (window.bundleObj.getOTPDebet() === false) {
 					Swal.fire({
-						title: "Peringatan!",
-						text: "Apakah anda yakin Menarik Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
-						icon: "warning",
-						showCancelButton: true,
-						confirmButtonColor: "#DD6B55",
-						confirmButtonText: "Ya, Tarik!",
-						cancelButtonText: "Tidak, Batal!",
-						closeOnConfirm: false,
-						closeOnCancel: false
-					}).then(function (result) {
-						if (result.value) {
-
-							$("#modalDebet").modal("hide");
-							KTApp.blockPage({
-								overlayColor: '#FFA800',
-								state: 'warning',
-								size: 'lg',
-								opacity: 0.1,
-								message: 'Silahkan Tunggu...'
-							});
-
-							$.ajax({
-								type: "POST",
-								url: `${HOST_URL}/finance/savings/post_debet`,
-								dataType: "JSON",
-								data: {
-									nis: nis,
-									nominal: nominal,
-									id_tingkat: tingkat,
-									tahun_ajaran: tahun_ajaran,
-									catatan_debet: catatan,
-									jenis_tabungan: jenis_tabungan,
-									tanggal_transaksi: tanggal_transaksi,
-									[csrfName]: csrfHash
-								},
-								success: function (data) {
-									// Update CSRF hash
-									KTApp.unblockPage();
-
-									$('.txt_csrfname').val(data.token);
-
-									if (data.status) {
-										Swal.fire({
-											text: data.messages,
-											icon: "success",
-											buttonsStyling: false,
-											confirmButtonText: "Oke!",
-											customClass: {
-												confirmButton: "btn font-weight-bold btn-success"
-											}
-										}).then(function () {
-											KTUtil.scrollTop();
-										});
-									} else {
-										Swal.fire({
-											text: data.messages,
-											icon: "error",
-											buttonsStyling: false,
-											confirmButtonText: "Oke!",
-											customClass: {
-												confirmButton: "btn font-weight-bold btn-danger"
-											}
-										}).then(function () {
-											KTUtil.scrollTop();
-										});
-									}
-									$("#table_transcation").DataTable().destroy();
-									datatable_init();
-								},
-							});
-						} else {
-							Swal.fire("Dibatalkan!", "Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
-							return false;
+						html: "<b>PIN</b> Anda Salah!.",
+						icon: "error",
+						buttonsStyling: false,
+						confirmButtonText: "Oke!",
+						customClass: {
+							confirmButton: "btn font-weight-bold btn-primary"
 						}
+					}).then(function () {
+						KTUtil.scrollTop();
 					});
+				} else {
 
-				} else if (jenis_tabungan == "2") {
-					nama_jenis_tabungan = "QURBAN";
+					if (jenis_tabungan == '1') {
+						nama_jenis_tabungan = "UMUM";
 
-					Swal.fire({
-						title: "Peringatan!",
-						text: "Apakah anda yakin Menarik Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
-						icon: "warning",
-						showCancelButton: true,
-						confirmButtonColor: "#DD6B55",
-						confirmButtonText: "Ya, Tarik!",
-						cancelButtonText: "Tidak, Batal!",
-						closeOnConfirm: false,
-						closeOnCancel: false
-					}).then(function (result) {
-						if (result.value) {
+						Swal.fire({
+							title: "Peringatan!",
+							text: "Apakah anda yakin Menarik Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
+							icon: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#DD6B55",
+							confirmButtonText: "Ya, Tarik!",
+							cancelButtonText: "Tidak, Batal!",
+							closeOnConfirm: false,
+							closeOnCancel: false
+						}).then(function (result) {
+							if (result.value) {
 
-							$("#modalDebet").modal("hide");
-							KTApp.blockPage({
-								overlayColor: '#FFA800',
-								state: 'warning',
-								size: 'lg',
-								opacity: 0.1,
-								message: 'Silahkan Tunggu...'
-							});
+								$("#modalDebet").modal("hide");
+								KTApp.blockPage({
+									overlayColor: '#FFA800',
+									state: 'warning',
+									size: 'lg',
+									opacity: 0.1,
+									message: 'Silahkan Tunggu...'
+								});
 
-							$.ajax({
-								type: "POST",
-								url: `${HOST_URL}/finance/savings/post_qurban_debet`,
-								dataType: "JSON",
-								data: {
-									nis: nis,
-									nominal: nominal,
-									id_tingkat: tingkat,
-									tahun_ajaran: tahun_ajaran,
-									catatan_debet: catatan,
-									jenis_tabungan: jenis_tabungan,
-									tanggal_transaksi: tanggal_transaksi,
-									[csrfName]: csrfHash
-								},
-								success: function (data) {
-									// Update CSRF hash
-									KTApp.unblockPage();
+								$.ajax({
+									type: "POST",
+									url: `${HOST_URL}/finance/savings/post_debet`,
+									dataType: "JSON",
+									data: {
+										nis: nis,
+										nominal: nominal,
+										id_tingkat: tingkat,
+										tahun_ajaran: tahun_ajaran,
+										catatan_debet: catatan,
+										jenis_tabungan: jenis_tabungan,
+										tanggal_transaksi: tanggal_transaksi,
+										pin_verification_debet: $('[name="pin_verification_debet"]').val(),
+										[csrfName]: csrfHash
+									},
+									success: function (data) {
+										// Update CSRF hash
+										KTApp.unblockPage();
 
-									$('.txt_csrfname').val(data.token);
+										$('.txt_csrfname').val(data.token);
 
-									if (data.status) {
-										Swal.fire({
-											text: data.messages,
-											icon: "success",
-											buttonsStyling: false,
-											confirmButtonText: "Oke!",
-											customClass: {
-												confirmButton: "btn font-weight-bold btn-success"
-											}
-										}).then(function () {
-											KTUtil.scrollTop();
-										});
-									} else {
-										Swal.fire({
-											text: data.messages,
-											icon: "error",
-											buttonsStyling: false,
-											confirmButtonText: "Oke!",
-											customClass: {
-												confirmButton: "btn font-weight-bold btn-danger"
-											}
-										}).then(function () {
-											KTUtil.scrollTop();
-										});
-									}
-									$("#table_transcation").DataTable().destroy();
-									datatable_init();
-								},
-							});
-						} else {
-							Swal.fire("Dibatalkan!", "Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
-							return false;
-						}
-					});
+										if (data.status) {
+											Swal.fire({
+												html: data.messages,
+												icon: "success",
+												buttonsStyling: false,
+												showCancelButton: true,
+												confirmButtonText: "Cetak Struk?",
+												cancelButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-success mr-10",
+													cancelButton: "btn btn-danger font-weight-bold"
+												}
+											}).then(function (result) {
+												if (result.isConfirmed) {
+													var saldo_awal = (parseInt(data.saldo_akhir) + parseInt(nominal));
+													var only_name = $('#findNasabahDebet').find(":selected").text().split('(');
 
-				} else if (jenis_tabungan == "3") {
-					nama_jenis_tabungan = "WISATA";
+													window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+														"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
+														data.nomor_transaksi, nama_jenis_tabungan, "DEBET", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+														CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(0, -1), nama_tingkat, 'www.sekolahutsman.sch.id');
+												}
+											});
+										} else {
+											Swal.fire({
+												text: data.messages,
+												icon: "error",
+												buttonsStyling: false,
+												confirmButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-danger"
+												}
+											}).then(function () {
+												KTUtil.scrollTop();
+											});
+										}
+										$("#table_transcation").DataTable().destroy();
+										datatable_init();
+									},
+								});
+							} else {
+								Swal.fire("Dibatalkan!", "Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
+								return false;
+							}
+						});
 
-					Swal.fire({
-						title: "Peringatan!",
-						text: "Apakah anda yakin Menarik Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
-						icon: "warning",
-						showCancelButton: true,
-						confirmButtonColor: "#DD6B55",
-						confirmButtonText: "Ya, Tarik!",
-						cancelButtonText: "Tidak, Batal!",
-						closeOnConfirm: false,
-						closeOnCancel: false
-					}).then(function (result) {
-						if (result.value) {
+					} else if (jenis_tabungan == "2") {
+						nama_jenis_tabungan = "QURBAN";
 
-							$("#modalDebet").modal("hide");
-							KTApp.blockPage({
-								overlayColor: '#FFA800',
-								state: 'warning',
-								size: 'lg',
-								opacity: 0.1,
-								message: 'Silahkan Tunggu...'
-							});
+						Swal.fire({
+							title: "Peringatan!",
+							text: "Apakah anda yakin Menarik Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
+							icon: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#DD6B55",
+							confirmButtonText: "Ya, Tarik!",
+							cancelButtonText: "Tidak, Batal!",
+							closeOnConfirm: false,
+							closeOnCancel: false
+						}).then(function (result) {
+							if (result.value) {
 
-							$.ajax({
-								type: "POST",
-								url: `${HOST_URL}/finance/savings/post_tour_debet`,
-								dataType: "JSON",
-								data: {
-									nis: nis,
-									nominal: nominal,
-									id_tingkat: tingkat,
-									tahun_ajaran: tahun_ajaran,
-									catatan_debet: catatan,
-									jenis_tabungan: jenis_tabungan,
-									tanggal_transaksi: tanggal_transaksi,
-									[csrfName]: csrfHash
-								},
-								success: function (data) {
-									// Update CSRF hash
-									KTApp.unblockPage();
+								$("#modalDebet").modal("hide");
+								KTApp.blockPage({
+									overlayColor: '#FFA800',
+									state: 'warning',
+									size: 'lg',
+									opacity: 0.1,
+									message: 'Silahkan Tunggu...'
+								});
 
-									$('.txt_csrfname').val(data.token);
+								$.ajax({
+									type: "POST",
+									url: `${HOST_URL}/finance/savings/post_qurban_debet`,
+									dataType: "JSON",
+									data: {
+										nis: nis,
+										nominal: nominal,
+										id_tingkat: tingkat,
+										tahun_ajaran: tahun_ajaran,
+										catatan_debet: catatan,
+										jenis_tabungan: jenis_tabungan,
+										tanggal_transaksi: tanggal_transaksi,
+										pin_verification_debet: $('[name="pin_verification_debet"]').val(),
+										[csrfName]: csrfHash
+									},
+									success: function (data) {
+										// Update CSRF hash
+										KTApp.unblockPage();
 
-									if (data.status) {
-										Swal.fire({
-											text: data.messages,
-											icon: "success",
-											buttonsStyling: false,
-											confirmButtonText: "Oke!",
-											customClass: {
-												confirmButton: "btn font-weight-bold btn-success"
-											}
-										}).then(function () {
-											KTUtil.scrollTop();
-										});
-									} else {
-										Swal.fire({
-											text: data.messages,
-											icon: "error",
-											buttonsStyling: false,
-											confirmButtonText: "Oke!",
-											customClass: {
-												confirmButton: "btn font-weight-bold btn-danger"
-											}
-										}).then(function () {
-											KTUtil.scrollTop();
-										});
-									}
-									$("#table_transcation").DataTable().destroy();
-									datatable_init();
-								},
-							});
-						} else {
-							Swal.fire("Dibatalkan!", "Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
-							return false;
-						}
-					});
+										$('.txt_csrfname').val(data.token);
 
+										if (data.status) {
+											Swal.fire({
+												html: data.messages,
+												icon: "success",
+												buttonsStyling: false,
+												showCancelButton: true,
+												confirmButtonText: "Cetak Struk?",
+												cancelButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-success mr-10",
+													cancelButton: "btn btn-danger font-weight-bold"
+												}
+											}).then(function (result) {
+												if (result.isConfirmed) {
+													var saldo_awal = (parseInt(data.saldo_akhir) + parseInt(nominal));
+													var only_name = $('#findNasabahDebet').find(":selected").text().split('(');
+
+													window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+														"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
+														data.nomor_transaksi, nama_jenis_tabungan, "DEBET", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+														CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(0, -1), nama_tingkat, 'www.sekolahutsman.sch.id');
+												}
+											});
+										} else {
+											Swal.fire({
+												text: data.messages,
+												icon: "error",
+												buttonsStyling: false,
+												confirmButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-danger"
+												}
+											}).then(function () {
+												KTUtil.scrollTop();
+											});
+										}
+										$("#table_transcation").DataTable().destroy();
+										datatable_init();
+									},
+								});
+							} else {
+								Swal.fire("Dibatalkan!", "Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
+								return false;
+							}
+						});
+
+					} else if (jenis_tabungan == "3") {
+						nama_jenis_tabungan = "WISATA";
+
+						Swal.fire({
+							title: "Peringatan!",
+							text: "Apakah anda yakin Menarik Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
+							icon: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#DD6B55",
+							confirmButtonText: "Ya, Tarik!",
+							cancelButtonText: "Tidak, Batal!",
+							closeOnConfirm: false,
+							closeOnCancel: false
+						}).then(function (result) {
+							if (result.value) {
+
+								$("#modalDebet").modal("hide");
+								KTApp.blockPage({
+									overlayColor: '#FFA800',
+									state: 'warning',
+									size: 'lg',
+									opacity: 0.1,
+									message: 'Silahkan Tunggu...'
+								});
+
+								$.ajax({
+									type: "POST",
+									url: `${HOST_URL}/finance/savings/post_tour_debet`,
+									dataType: "JSON",
+									data: {
+										nis: nis,
+										nominal: nominal,
+										id_tingkat: tingkat,
+										tahun_ajaran: tahun_ajaran,
+										catatan_debet: catatan,
+										jenis_tabungan: jenis_tabungan,
+										tanggal_transaksi: tanggal_transaksi,
+										pin_verification_debet: $('[name="pin_verification_debet"]').val(),
+										[csrfName]: csrfHash
+									},
+									success: function (data) {
+										// Update CSRF hash
+										KTApp.unblockPage();
+
+										$('.txt_csrfname').val(data.token);
+
+										if (data.status) {
+											Swal.fire({
+												html: data.messages,
+												icon: "success",
+												buttonsStyling: false,
+												showCancelButton: true,
+												confirmButtonText: "Cetak Struk?",
+												cancelButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-success mr-10",
+													cancelButton: "btn btn-danger font-weight-bold"
+												}
+											}).then(function (result) {
+												if (result.isConfirmed) {
+													var saldo_awal = (parseInt(data.saldo_akhir) + parseInt(nominal));
+													var only_name = $('#findNasabahDebet').find(":selected").text().split('(');
+
+													window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+														"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
+														data.nomor_transaksi, nama_jenis_tabungan, "DEBET", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+														CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(0, -1), nama_tingkat, 'www.sekolahutsman.sch.id');
+												}
+											});
+										} else {
+											Swal.fire({
+												text: data.messages,
+												icon: "error",
+												buttonsStyling: false,
+												confirmButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-danger"
+												}
+											}).then(function () {
+												KTUtil.scrollTop();
+											});
+										}
+										$("#table_transcation").DataTable().destroy();
+										datatable_init();
+									},
+								});
+							} else {
+								Swal.fire("Dibatalkan!", "Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
+								return false;
+							}
+						});
+
+					}
+
+					return false;
 				}
-
-				return false;
-
 			} else {
 				Swal.fire({
-					text: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 5000 dan Kosong, Silahkan input ulang.",
+					text: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 2000 dan Kosong, Silahkan input ulang.",
 					icon: "error",
 					buttonsStyling: false,
 					confirmButtonText: "Oke!",
@@ -1738,259 +1974,322 @@ $(document).ready(function () {
 		var tingkat = $('[name="tingkat_debet_edit"]').val()
 		var saldo = document.getElementById("userJumlahSaldoDebetEdit").textContent;
 
+		if (tingkat == "1") {
+			var nama_tingkat = "KB";
+		} else if (tingkat == "2") {
+			var nama_tingkat = "TK";
+		} else if (tingkat == "3") {
+			var nama_tingkat = "SD";
+		} else if (tingkat == "4") {
+			var nama_tingkat = "SMP";
+		} else if (tingkat == "6") {
+			var nama_tingkat = "DC";
+		}
+
 		nominal = parseInt(nominal.replace(/\./g, ""));
 		saldo = parseInt(saldo.replace(/\./g, ""));
 
 		if (nominal <= saldo) {
 
-			if (nominal != null && nominal >= 5000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && jenis_tabungan != null && jenis_tabungan != "") {
+			if (nominal != null && nominal >= 2000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && jenis_tabungan != null && jenis_tabungan != "") {
 
-				if (jenis_tabungan == "1") {
-					nama_jenis_tabungan = "UMUM";
-
+				if (window.bundleObj.getOTPDebetEdit() === false) {
 					Swal.fire({
-						title: "Peringatan!",
-						text: "Apakah anda yakin Update Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
-						icon: "warning",
-						showCancelButton: true,
-						confirmButtonColor: "#DD6B55",
-						confirmButtonText: "Ya, Tarik!",
-						cancelButtonText: "Tidak, Batal!",
-						closeOnConfirm: false,
-						closeOnCancel: false
-					}).then(function (result) {
-						if (result.value) {
-
-							$("#modalEditDebetTransaksi").modal("hide");
-							KTApp.blockPage({
-								overlayColor: '#FFA800',
-								state: 'warning',
-								size: 'lg',
-								opacity: 0.1,
-								message: 'Silahkan Tunggu...'
-							});
-
-							$.ajax({
-								type: "POST",
-								url: `${HOST_URL}/finance/savings/update_debet`,
-								dataType: "JSON",
-								data: {
-									id_transaksi: id_transaksi,
-									nis: nis,
-									id_tingkat: tingkat,
-									nominal: nominal,
-									tahun_ajaran: tahun_ajaran,
-									catatan_debet: catatan,
-									tanggal_transaksi: tanggal_transaksi,
-									[csrfName]: csrfHash
-								},
-								success: function (data) {
-									// Update CSRF hash
-									KTApp.unblockPage();
-
-									$('.txt_csrfname').val(data.token);
-
-									if (data.status) {
-										Swal.fire({
-											text: data.messages,
-											icon: "success",
-											buttonsStyling: false,
-											confirmButtonText: "Oke!",
-											customClass: {
-												confirmButton: "btn font-weight-bold btn-success"
-											}
-										}).then(function () {
-											KTUtil.scrollTop();
-										});
-									} else {
-										Swal.fire({
-											text: data.messages,
-											icon: "error",
-											buttonsStyling: false,
-											confirmButtonText: "Oke!",
-											customClass: {
-												confirmButton: "btn font-weight-bold btn-danger"
-											}
-										}).then(function () {
-											KTUtil.scrollTop();
-										});
-									}
-									show_transaksi(); $("#table_transcation").DataTable().destroy();
-									datatable_init();
-								},
-							});
-						} else {
-							Swal.fire("Dibatalkan!", "Edit Penarikan Tabungan" + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
-							return false;
+						html: "<b>PIN</b> Anda Salah!.",
+						icon: "error",
+						buttonsStyling: false,
+						confirmButtonText: "Oke!",
+						customClass: {
+							confirmButton: "btn font-weight-bold btn-primary"
 						}
+					}).then(function () {
+						KTUtil.scrollTop();
 					});
+
+				} else {
+
+					if (jenis_tabungan == "1") {
+						nama_jenis_tabungan = "UMUM";
+
+						Swal.fire({
+							title: "Peringatan!",
+							text: "Apakah anda yakin Update Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
+							icon: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#DD6B55",
+							confirmButtonText: "Ya, Tarik!",
+							cancelButtonText: "Tidak, Batal!",
+							closeOnConfirm: false,
+							closeOnCancel: false
+						}).then(function (result) {
+							if (result.value) {
+
+								$("#modalEditDebetTransaksi").modal("hide");
+								KTApp.blockPage({
+									overlayColor: '#FFA800',
+									state: 'warning',
+									size: 'lg',
+									opacity: 0.1,
+									message: 'Silahkan Tunggu...'
+								});
+
+								$.ajax({
+									type: "POST",
+									url: `${HOST_URL}/finance/savings/update_debet`,
+									dataType: "JSON",
+									data: {
+										id_transaksi: id_transaksi,
+										nis: nis,
+										id_tingkat: tingkat,
+										nominal: nominal,
+										tahun_ajaran: tahun_ajaran,
+										catatan_debet: catatan,
+										tanggal_transaksi: tanggal_transaksi,
+										pin_verification_debet_edit: $('[name="pin_verification_debet_edit"]').val(),
+										[csrfName]: csrfHash
+									},
+									success: function (data) {
+										// Update CSRF hash
+										KTApp.unblockPage();
+
+										$('.txt_csrfname').val(data.token);
+
+										if (data.status) {
+											Swal.fire({
+												html: data.messages,
+												icon: "success",
+												buttonsStyling: false,
+												showCancelButton: true,
+												confirmButtonText: "Cetak Struk?",
+												cancelButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-success mr-10",
+													cancelButton: "btn btn-danger font-weight-bold"
+												}
+											}).then(function (result) {
+												if (result.isConfirmed) {
+													var saldo_awal = (parseInt(data.saldo_akhir) + parseInt(nominal));
+													var only_name = $('[name="nis_debet"]').find(":selected").text().split(')');
+
+													window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+														"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
+														data.nomor_transaksi, nama_jenis_tabungan, "DEBET", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+														CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(1), nama_tingkat, 'www.sekolahutsman.sch.id');
+												}
+											});
+										} else {
+											Swal.fire({
+												text: data.messages,
+												icon: "error",
+												buttonsStyling: false,
+												confirmButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-danger"
+												}
+											}).then(function () {
+												KTUtil.scrollTop();
+											});
+										}
+										show_transaksi(); $("#table_transcation").DataTable().destroy();
+										datatable_init();
+									},
+								});
+							} else {
+								Swal.fire("Dibatalkan!", "Edit Penarikan Tabungan" + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
+								return false;
+							}
+						});
+					}
+					else if (jenis_tabungan == "2") {
+						nama_jenis_tabungan = "QURBAN";
+
+						Swal.fire({
+							title: "Peringatan!",
+							text: "Apakah anda yakin Update Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
+							icon: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#DD6B55",
+							confirmButtonText: "Ya, Tarik!",
+							cancelButtonText: "Tidak, Batal!",
+							closeOnConfirm: false,
+							closeOnCancel: false
+						}).then(function (result) {
+							if (result.value) {
+
+								$("#modalEditDebetTransaksi").modal("hide");
+								KTApp.blockPage({
+									overlayColor: '#FFA800',
+									state: 'warning',
+									size: 'lg',
+									opacity: 0.1,
+									message: 'Silahkan Tunggu...'
+								});
+
+								$.ajax({
+									type: "POST",
+									url: `${HOST_URL}/finance/savings/update_qurban_debet`,
+									dataType: "JSON",
+									data: {
+										id_transaksi: id_transaksi,
+										nis: nis,
+										id_tingkat: tingkat,
+										nominal: nominal,
+										tahun_ajaran: tahun_ajaran,
+										catatan_debet: catatan,
+										tanggal_transaksi: tanggal_transaksi,
+										pin_verification_debet_edit: $('[name="pin_verification_debet_edit"]').val(),
+										[csrfName]: csrfHash
+									},
+									success: function (data) {
+										// Update CSRF hash
+										KTApp.unblockPage();
+
+										$('.txt_csrfname').val(data.token);
+
+										if (data.status) {
+											Swal.fire({
+												html: data.messages,
+												icon: "success",
+												buttonsStyling: false,
+												showCancelButton: true,
+												confirmButtonText: "Cetak Struk?",
+												cancelButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-success mr-10",
+													cancelButton: "btn btn-danger font-weight-bold"
+												}
+											}).then(function (result) {
+												if (result.isConfirmed) {
+													var saldo_awal = (parseInt(data.saldo_akhir) + parseInt(nominal));
+													var only_name = $('[name="nis_debet"]').find(":selected").text().split(')');
+
+													window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+														"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
+														data.nomor_transaksi, nama_jenis_tabungan, "DEBET", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+														CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(1), nama_tingkat, 'www.sekolahutsman.sch.id');
+												}
+											});
+										} else {
+											Swal.fire({
+												text: data.messages,
+												icon: "error",
+												buttonsStyling: false,
+												confirmButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-danger"
+												}
+											}).then(function () {
+												KTUtil.scrollTop();
+											});
+										}
+										show_transaksi(); $("#table_transcation").DataTable().destroy();
+										datatable_init();
+									},
+								});
+							} else {
+								Swal.fire("Dibatalkan!", "Edit Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
+								return false;
+							}
+						});
+					}
+					else if (jenis_tabungan == "3") {
+						nama_jenis_tabungan = "WISATA";
+
+						Swal.fire({
+							title: "Peringatan!",
+							text: "Apakah anda yakin Update Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
+							icon: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#DD6B55",
+							confirmButtonText: "Ya, Tarik!",
+							cancelButtonText: "Tidak, Batal!",
+							closeOnConfirm: false,
+							closeOnCancel: false
+						}).then(function (result) {
+							if (result.value) {
+
+								$("#modalEditDebetTransaksi").modal("hide");
+								KTApp.blockPage({
+									overlayColor: '#FFA800',
+									state: 'warning',
+									size: 'lg',
+									opacity: 0.1,
+									message: 'Silahkan Tunggu...'
+								});
+
+								$.ajax({
+									type: "POST",
+									url: `${HOST_URL}/finance/savings/update_tour_debet`,
+									dataType: "JSON",
+									data: {
+										id_transaksi: id_transaksi,
+										nis: nis,
+										id_tingkat: tingkat,
+										nominal: nominal,
+										tahun_ajaran: tahun_ajaran,
+										catatan_debet: catatan,
+										tanggal_transaksi: tanggal_transaksi,
+										pin_verification_debet_edit: $('[name="pin_verification_debet_edit"]').val(),
+										[csrfName]: csrfHash
+									},
+									success: function (data) {
+										// Update CSRF hash
+										KTApp.unblockPage();
+
+										$('.txt_csrfname').val(data.token);
+
+										if (data.status) {
+											Swal.fire({
+												html: data.messages,
+												icon: "success",
+												buttonsStyling: false,
+												showCancelButton: true,
+												confirmButtonText: "Cetak Struk?",
+												cancelButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-success mr-10",
+													cancelButton: "btn btn-danger font-weight-bold"
+												}
+											}).then(function (result) {
+												if (result.isConfirmed) {
+													var saldo_awal = (parseInt(data.saldo_akhir) + parseInt(nominal));
+													var only_name = $('[name="nis_debet"]').find(":selected").text().split(')');
+
+													window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
+														"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
+														data.nomor_transaksi, nama_jenis_tabungan, "DEBET", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+														CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(1), nama_tingkat, 'www.sekolahutsman.sch.id');
+												}
+											});
+										} else {
+											Swal.fire({
+												text: data.messages,
+												icon: "error",
+												buttonsStyling: false,
+												confirmButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-danger"
+												}
+											}).then(function () {
+												KTUtil.scrollTop();
+											});
+										}
+										show_transaksi(); $("#table_transcation").DataTable().destroy();
+										datatable_init();
+									},
+								});
+							} else {
+								Swal.fire("Dibatalkan!", "Edit Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
+								return false;
+							}
+						});
+					}
+
+					return false;
 				}
-				else if (jenis_tabungan == "2") {
-					nama_jenis_tabungan = "QURBAN";
-
-					Swal.fire({
-						title: "Peringatan!",
-						text: "Apakah anda yakin Update Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
-						icon: "warning",
-						showCancelButton: true,
-						confirmButtonColor: "#DD6B55",
-						confirmButtonText: "Ya, Tarik!",
-						cancelButtonText: "Tidak, Batal!",
-						closeOnConfirm: false,
-						closeOnCancel: false
-					}).then(function (result) {
-						if (result.value) {
-
-							$("#modalEditDebetTransaksi").modal("hide");
-							KTApp.blockPage({
-								overlayColor: '#FFA800',
-								state: 'warning',
-								size: 'lg',
-								opacity: 0.1,
-								message: 'Silahkan Tunggu...'
-							});
-
-							$.ajax({
-								type: "POST",
-								url: `${HOST_URL}/finance/savings/update_qurban_debet`,
-								dataType: "JSON",
-								data: {
-									id_transaksi: id_transaksi,
-									nis: nis,
-									id_tingkat: tingkat,
-									nominal: nominal,
-									tahun_ajaran: tahun_ajaran,
-									catatan_debet: catatan,
-									tanggal_transaksi: tanggal_transaksi,
-									[csrfName]: csrfHash
-								},
-								success: function (data) {
-									// Update CSRF hash
-									KTApp.unblockPage();
-
-									$('.txt_csrfname').val(data.token);
-
-									if (data.status) {
-										Swal.fire({
-											text: data.messages,
-											icon: "success",
-											buttonsStyling: false,
-											confirmButtonText: "Oke!",
-											customClass: {
-												confirmButton: "btn font-weight-bold btn-success"
-											}
-										}).then(function () {
-											KTUtil.scrollTop();
-										});
-									} else {
-										Swal.fire({
-											text: data.messages,
-											icon: "error",
-											buttonsStyling: false,
-											confirmButtonText: "Oke!",
-											customClass: {
-												confirmButton: "btn font-weight-bold btn-danger"
-											}
-										}).then(function () {
-											KTUtil.scrollTop();
-										});
-									}
-									show_transaksi(); $("#table_transcation").DataTable().destroy();
-									datatable_init();
-								},
-							});
-						} else {
-							Swal.fire("Dibatalkan!", "Edit Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
-							return false;
-						}
-					});
-				}
-				else if (jenis_tabungan == "3") {
-					nama_jenis_tabungan = "WISATA";
-
-					Swal.fire({
-						title: "Peringatan!",
-						text: "Apakah anda yakin Update Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") dengan Nominal Rp." + nominal + " ?",
-						icon: "warning",
-						showCancelButton: true,
-						confirmButtonColor: "#DD6B55",
-						confirmButtonText: "Ya, Tarik!",
-						cancelButtonText: "Tidak, Batal!",
-						closeOnConfirm: false,
-						closeOnCancel: false
-					}).then(function (result) {
-						if (result.value) {
-
-							$("#modalEditDebetTransaksi").modal("hide");
-							KTApp.blockPage({
-								overlayColor: '#FFA800',
-								state: 'warning',
-								size: 'lg',
-								opacity: 0.1,
-								message: 'Silahkan Tunggu...'
-							});
-
-							$.ajax({
-								type: "POST",
-								url: `${HOST_URL}/finance/savings/update_tour_debet`,
-								dataType: "JSON",
-								data: {
-									id_transaksi: id_transaksi,
-									nis: nis,
-									id_tingkat: tingkat,
-									nominal: nominal,
-									tahun_ajaran: tahun_ajaran,
-									catatan_debet: catatan,
-									tanggal_transaksi: tanggal_transaksi,
-									[csrfName]: csrfHash
-								},
-								success: function (data) {
-									// Update CSRF hash
-									KTApp.unblockPage();
-
-									$('.txt_csrfname').val(data.token);
-
-									if (data.status) {
-										Swal.fire({
-											text: data.messages,
-											icon: "success",
-											buttonsStyling: false,
-											confirmButtonText: "Oke!",
-											customClass: {
-												confirmButton: "btn font-weight-bold btn-success"
-											}
-										}).then(function () {
-											KTUtil.scrollTop();
-										});
-									} else {
-										Swal.fire({
-											text: data.messages,
-											icon: "error",
-											buttonsStyling: false,
-											confirmButtonText: "Oke!",
-											customClass: {
-												confirmButton: "btn font-weight-bold btn-danger"
-											}
-										}).then(function () {
-											KTUtil.scrollTop();
-										});
-									}
-									show_transaksi(); $("#table_transcation").DataTable().destroy();
-									datatable_init();
-								},
-							});
-						} else {
-							Swal.fire("Dibatalkan!", "Edit Penarikan Tabungan " + nama_jenis_tabungan + " atas nama " + nama + " (" + nis + ") batal diubah.", "error");
-							return false;
-						}
-					});
-				}
-
-				return false;
-
 			} else {
 				Swal.fire({
-					text: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 5000 dan Kosong, Silahkan input ulang.",
+					text: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 2000 dan Kosong, Silahkan input ulang.",
 					icon: "error",
 					buttonsStyling: false,
 					confirmButtonText: "Oke!",
@@ -2091,6 +2390,10 @@ $(document).ready(function () {
 								data[i].id_transaksi + "' data-nis_siswa='" + data[i].nis_siswa + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-jenis_tabungan='" + data[i].jenis_tabungan + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-id_th_ajaran='" + data[i].th_ajaran + "' data-th_ajaran='" + data[i].tahun_ajaran + "' data-nominal='" + data[i].nominal + "' data-waktu_transaksi='" + data[i].tanggal_transaksi + "' data-catatan='" + data[i].catatan +
 								"' href='javascript:void(0);'><i class='nav-icon la la-pencil-ruler text-warning'></i><span class='nav-text text-warning font-weight-bold text-hover-primary'>Edit</span></a></li>" +
+								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link cetak_transaksi_kredit'" +
+								"' data-nis_siswa='" + data[i].nis_siswa + "' data-nomor_transaksi='" + data[i].nomor_transaksi + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-tingkat='" + nama_tingkat + "' data-jenis_tabungan='" + jenis_tabungan +
+								"' data-jenis_transaksi='" + jenis_transaksi + "' data-saldo='" + saldo + "' data-nominal='" + CurrencyID(data[i].nominal) + "' data-waktu_transaksi='" + data[i].waktu_transaksi +
+								"' href='javascript:void(0);'><i class='nav-icon la la-print text-success'></i><span class='nav-text text-success font-weight-bold text-hover-primary'>Cetak</span></a></li>" +
 								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link delete_transaksi_kredit' data-id_transaksi='" +
 								data[i].id_transaksi + "' data-nis_siswa='" + data[i].nis_siswa + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-jenis_tabungan='" + data[i].jenis_tabungan + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-nominal='" + data[i].nominal + "'><i class='nav-icon la la-trash text-danger'></i><span class='nav-text text-danger font-weight-bold text-hover-primary'>Hapus</span></a></li>" +
@@ -2108,6 +2411,10 @@ $(document).ready(function () {
 								data[i].id_transaksi + "' data-nis_siswa='" + data[i].nis_siswa + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-jenis_tabungan='" + data[i].jenis_tabungan + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-id_th_ajaran='" + data[i].th_ajaran + "' data-th_ajaran='" + data[i].tahun_ajaran + "' data-nominal='" + data[i].nominal + "' data-waktu_transaksi='" + data[i].tanggal_transaksi + "' data-catatan='" + data[i].catatan +
 								"' href='javascript:void(0);'><i class='nav-icon la la-pencil-ruler text-warning'></i><span class='nav-text text-warning font-weight-bold text-hover-primary'>Edit</span></a></li>" +
+								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link cetak_transaksi_debet'" +
+								"' data-nis_siswa='" + data[i].nis_siswa + "' data-nomor_transaksi='" + data[i].nomor_transaksi + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-tingkat='" + nama_tingkat + "' data-jenis_tabungan='" + jenis_tabungan +
+								"' data-jenis_transaksi='" + jenis_transaksi + "' data-saldo='" + saldo + "' data-nominal='" + CurrencyID(data[i].nominal) + "' data-waktu_transaksi='" + data[i].waktu_transaksi +
+								"' href='javascript:void(0);'><i class='nav-icon la la-print text-success'></i><span class='nav-text text-success font-weight-bold text-hover-primary'>Cetak</span></a></li>" +
 								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link delete_transaksi_debet' data-id_transaksi='" +
 								data[i].id_transaksi + "' data-nis_siswa='" + data[i].nis_siswa + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-jenis_tabungan='" + data[i].jenis_tabungan + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-nominal='" + data[i].nominal + "'><i class='nav-icon la la-trash text-danger'></i><span class='nav-text text-danger font-weight-bold text-hover-primary'>Hapus</span></a></li>" +
@@ -2218,11 +2525,11 @@ $(document).ready(function () {
 		});
 		$('#inputTingkatKredit option:selected').remove();
 		$('#inputTingkatKredit').prepend($("<option selected></option>").attr("value", id_tingkat).text(nama_tingkat));
-		
+
 		$("#userNisKredit").html(nis);
 		$("#userNamaKredit").html(nama);
 		$("#userTingkatKredit").html(nama_tingkat);
-		
+
 	}
 
 	function get_student_debet() {
@@ -2292,14 +2599,24 @@ $(document).ready(function () {
 
 			Swal.fire({
 				title: "Peringatan!",
-				text: "",
 				icon: "warning",
+				input: 'password',
+				inputLabel: 'Password Anda',
+				inputPlaceholder: 'Masukkan password Anda',
+				inputAttributes: {
+					'aria-label': 'Masukkan password Anda'
+				},
+				inputValidator: (value) => {
+					if (!value) {
+						return 'Password Anda diperlukan!'
+					}
+				},
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
 				confirmButtonText: "Ya, hapus!",
 				cancelButtonText: "Tidak, batal!",
 				closeOnConfirm: false,
-				closeOnCancel: false,
+				closeOnCancel: true,
 				html: "Apakah anda yakin ingin menghapus Transaksi (" + jenis_transaksi + ") di Tabungan " + nama_jenis_tabungan + " atas nama '" +
 					nama_siswa + "' (" + nis_siswa + ") dengan nominal Kredit (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 				didOpen: () => {
@@ -2320,6 +2637,7 @@ $(document).ready(function () {
 						data: {
 							id_transaksi: id_transaksi,
 							nis: nis_siswa,
+							password: result.value,
 							[csrfName]: csrfHash
 						},
 						dataType: 'JSON',
@@ -2327,19 +2645,34 @@ $(document).ready(function () {
 
 							$('.txt_csrfname').val(data.token);
 
-							Swal.fire({
-								text: data.messages,
-								icon: "success",
-								buttonsStyling: false,
-								confirmButtonText: "Oke!",
-								customClass: {
-									confirmButton: "btn font-weight-bold btn-success"
-								}
-							}).then(function () {
-								KTUtil.scrollTop();
-							});
-							$("#table_transcation").DataTable().destroy();
-							datatable_init();
+							if (data.status == true) {
+								Swal.fire({
+									html: data.messages,
+									icon: "success",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-success"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
+
+								$("#table_transcation").DataTable().destroy();
+								datatable_init();
+							} else {
+								Swal.fire({
+									html: data.messages,
+									icon: "error",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-danger"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
+							}
 						},
 						error: function (result) {
 							console.log(result);
@@ -2360,14 +2693,24 @@ $(document).ready(function () {
 
 			Swal.fire({
 				title: "Peringatan!",
-				text: "",
 				icon: "warning",
+				input: 'password',
+				inputLabel: 'Password Anda',
+				inputPlaceholder: 'Masukkan password Anda',
+				inputAttributes: {
+					'aria-label': 'Masukkan password Anda'
+				},
+				inputValidator: (value) => {
+					if (!value) {
+						return 'Password Anda diperlukan!'
+					}
+				},
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
 				confirmButtonText: "Ya, hapus!",
 				cancelButtonText: "Tidak, batal!",
 				closeOnConfirm: false,
-				closeOnCancel: false,
+				closeOnCancel: true,
 				html: "Apakah anda yakin ingin menghapus Transaksi (" + jenis_transaksi + ") di Tabungan " + nama_jenis_tabungan + " atas nama '" +
 					nama_siswa + "' (" + nis_siswa + ") dengan nominal Kredit (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 				didOpen: () => {
@@ -2388,6 +2731,7 @@ $(document).ready(function () {
 						data: {
 							id_transaksi: id_transaksi,
 							nis: nis_siswa,
+							password: result.value,
 							[csrfName]: csrfHash
 						},
 						dataType: 'JSON',
@@ -2395,19 +2739,34 @@ $(document).ready(function () {
 
 							$('.txt_csrfname').val(data.token);
 
-							Swal.fire({
-								text: data.messages,
-								icon: "success",
-								buttonsStyling: false,
-								confirmButtonText: "Oke!",
-								customClass: {
-									confirmButton: "btn font-weight-bold btn-success"
-								}
-							}).then(function () {
-								KTUtil.scrollTop();
-							});
-							$("#table_transcation").DataTable().destroy();
-							datatable_init();
+							if (data.status == true) {
+								Swal.fire({
+									html: data.messages,
+									icon: "success",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-success"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
+
+								$("#table_transcation").DataTable().destroy();
+								datatable_init();
+							} else {
+								Swal.fire({
+									html: data.messages,
+									icon: "error",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-danger"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
+							}
 						},
 						error: function (result) {
 							console.log(result);
@@ -2429,14 +2788,24 @@ $(document).ready(function () {
 
 			Swal.fire({
 				title: "Peringatan!",
-				text: "",
 				icon: "warning",
+				input: 'password',
+				inputLabel: 'Password Anda',
+				inputPlaceholder: 'Masukkan password Anda',
+				inputAttributes: {
+					'aria-label': 'Masukkan password Anda'
+				},
+				inputValidator: (value) => {
+					if (!value) {
+						return 'Password Anda diperlukan!'
+					}
+				},
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
 				confirmButtonText: "Ya, hapus!",
 				cancelButtonText: "Tidak, batal!",
 				closeOnConfirm: false,
-				closeOnCancel: false,
+				closeOnCancel: true,
 				html: "Apakah anda yakin ingin menghapus Transaksi (" + jenis_transaksi + ") di Tabungan " + nama_jenis_tabungan + " atas nama '" +
 					nama_siswa + "' (" + nis_siswa + ") dengan nominal Kredit (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 				didOpen: () => {
@@ -2457,6 +2826,7 @@ $(document).ready(function () {
 						data: {
 							id_transaksi: id_transaksi,
 							nis: nis_siswa,
+							password: result.value,
 							[csrfName]: csrfHash
 						},
 						dataType: 'JSON',
@@ -2464,19 +2834,34 @@ $(document).ready(function () {
 
 							$('.txt_csrfname').val(data.token);
 
-							Swal.fire({
-								text: data.messages,
-								icon: "success",
-								buttonsStyling: false,
-								confirmButtonText: "Oke!",
-								customClass: {
-									confirmButton: "btn font-weight-bold btn-success"
-								}
-							}).then(function () {
-								KTUtil.scrollTop();
-							});
-							$("#table_transcation").DataTable().destroy();
-							datatable_init();
+							if (data.status == true) {
+								Swal.fire({
+									html: data.messages,
+									icon: "success",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-success"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
+
+								$("#table_transcation").DataTable().destroy();
+								datatable_init();
+							} else {
+								Swal.fire({
+									html: data.messages,
+									icon: "error",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-danger"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
+							}
 						},
 						error: function (result) {
 							console.log(result);
@@ -2513,14 +2898,24 @@ $(document).ready(function () {
 
 			Swal.fire({
 				title: "Peringatan!",
-				text: "",
 				icon: "warning",
+				input: 'password',
+				inputLabel: 'Password Anda',
+				inputPlaceholder: 'Masukkan password Anda',
+				inputAttributes: {
+					'aria-label': 'Masukkan password Anda'
+				},
+				inputValidator: (value) => {
+					if (!value) {
+						return 'Password Anda diperlukan!'
+					}
+				},
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
 				confirmButtonText: "Ya, hapus!",
 				cancelButtonText: "Tidak, batal!",
 				closeOnConfirm: false,
-				closeOnCancel: false,
+				closeOnCancel: true,
 				html: "Apakah anda yakin ingin menghapus Transaksi (" + jenis_transaksi + ") di Tabungan " + nama_jenis_tabungan + " atas nama '" +
 					nama_siswa + "' (" + nis_siswa + ") dengan nominal Debet (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 				didOpen: () => {
@@ -2541,26 +2936,41 @@ $(document).ready(function () {
 						data: {
 							id_transaksi: id_transaksi,
 							nis: nis_siswa,
+							password: result.value,
 							[csrfName]: csrfHash
 						},
 						dataType: 'JSON',
 						success: function (data) {
 
 							$('.txt_csrfname').val(data.token);
+							if (data.status == true) {
+								Swal.fire({
+									html: data.messages,
+									icon: "success",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-success"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
 
-							Swal.fire({
-								text: data.messages,
-								icon: "success",
-								buttonsStyling: false,
-								confirmButtonText: "Oke!",
-								customClass: {
-									confirmButton: "btn font-weight-bold btn-success"
-								}
-							}).then(function () {
-								KTUtil.scrollTop();
-							});
-							$("#table_transcation").DataTable().destroy();
-							datatable_init();
+								$("#table_transcation").DataTable().destroy();
+								datatable_init();
+							} else {
+								Swal.fire({
+									html: data.messages,
+									icon: "error",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-danger"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
+							}
 						},
 						error: function (result) {
 							console.log(result);
@@ -2581,14 +2991,24 @@ $(document).ready(function () {
 
 			Swal.fire({
 				title: "Peringatan!",
-				text: "",
 				icon: "warning",
+				input: 'password',
+				inputLabel: 'Password Anda',
+				inputPlaceholder: 'Masukkan password Anda',
+				inputAttributes: {
+					'aria-label': 'Masukkan password Anda'
+				},
+				inputValidator: (value) => {
+					if (!value) {
+						return 'Password Anda diperlukan!'
+					}
+				},
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
 				confirmButtonText: "Ya, hapus!",
 				cancelButtonText: "Tidak, batal!",
 				closeOnConfirm: false,
-				closeOnCancel: false,
+				closeOnCancel: true,
 				html: "Apakah anda yakin ingin menghapus Transaksi (" + jenis_transaksi + ") di Tabungan " + nama_jenis_tabungan + " atas nama '" +
 					nama_siswa + "' (" + nis_siswa + ") dengan nominal Debet (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 				didOpen: () => {
@@ -2609,6 +3029,7 @@ $(document).ready(function () {
 						data: {
 							id_transaksi: id_transaksi,
 							nis: nis_siswa,
+							password: result.value,
 							[csrfName]: csrfHash
 						},
 						dataType: 'JSON',
@@ -2616,19 +3037,34 @@ $(document).ready(function () {
 
 							$('.txt_csrfname').val(data.token);
 
-							Swal.fire({
-								text: data.messages,
-								icon: "success",
-								buttonsStyling: false,
-								confirmButtonText: "Oke!",
-								customClass: {
-									confirmButton: "btn font-weight-bold btn-success"
-								}
-							}).then(function () {
-								KTUtil.scrollTop();
-							});
-							$("#table_transcation").DataTable().destroy();
-							datatable_init();
+							if (data.status == true) {
+								Swal.fire({
+									html: data.messages,
+									icon: "success",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-success"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
+
+								$("#table_transcation").DataTable().destroy();
+								datatable_init();
+							} else {
+								Swal.fire({
+									html: data.messages,
+									icon: "error",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-danger"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
+							}
 						},
 						error: function (result) {
 							console.log(result);
@@ -2649,14 +3085,24 @@ $(document).ready(function () {
 
 			Swal.fire({
 				title: "Peringatan!",
-				text: "",
 				icon: "warning",
+				input: 'password',
+				inputLabel: 'Password Anda',
+				inputPlaceholder: 'Masukkan password Anda',
+				inputAttributes: {
+					'aria-label': 'Masukkan password Anda'
+				},
+				inputValidator: (value) => {
+					if (!value) {
+						return 'Password Anda diperlukan!'
+					}
+				},
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
 				confirmButtonText: "Ya, hapus!",
 				cancelButtonText: "Tidak, batal!",
 				closeOnConfirm: false,
-				closeOnCancel: false,
+				closeOnCancel: true,
 				html: "Apakah anda yakin ingin menghapus Transaksi (" + jenis_transaksi + ") di Tabungan " + nama_jenis_tabungan + " atas nama '" +
 					nama_siswa + "' (" + nis_siswa + ") dengan nominal Debet (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 				didOpen: () => {
@@ -2677,6 +3123,7 @@ $(document).ready(function () {
 						data: {
 							id_transaksi: id_transaksi,
 							nis: nis_siswa,
+							password: result.value,
 							[csrfName]: csrfHash
 						},
 						dataType: 'JSON',
@@ -2684,19 +3131,34 @@ $(document).ready(function () {
 
 							$('.txt_csrfname').val(data.token);
 
-							Swal.fire({
-								text: data.messages,
-								icon: "success",
-								buttonsStyling: false,
-								confirmButtonText: "Oke!",
-								customClass: {
-									confirmButton: "btn font-weight-bold btn-success"
-								}
-							}).then(function () {
-								KTUtil.scrollTop();
-							});
-							$("#table_transcation").DataTable().destroy();
-							datatable_init();
+							if (data.status == true) {
+								Swal.fire({
+									html: data.messages,
+									icon: "success",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-success"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
+
+								$("#table_transcation").DataTable().destroy();
+								datatable_init();
+							} else {
+								Swal.fire({
+									html: data.messages,
+									icon: "error",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-danger"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
+							}
 						},
 						error: function (result) {
 							console.log(result);

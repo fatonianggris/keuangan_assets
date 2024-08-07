@@ -4,78 +4,20 @@
 
 	// Class Definition
 	var KTLogin = function () {
-		var _jointsave;
+		var _edit_employee;
 
-		var _handleJointForm = function () {
+		var _handleEmployeeForm = function () {
 			var validation;
-			var form = KTUtil.getById('kt_add_joint_saving')
+			var form = KTUtil.getById('kt_form_edit_employee')
 			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
 			validation = FormValidation.formValidation(
 				form,
 				{
 					fields: {
-						input_nomor_rekening_bersama: {
+						nama_pegawai: {
 							validators: {
 								notEmpty: {
-									message: 'Nomor Rekening Bersama diperlukan'
-								},
-								integer: {
-									message: 'Inputan harus Angka',
-									// The default separators
-								},
-								remote: {
-									message: 'Nomor Rekening telah digunakan, inputkan Nomor Rekening lain',
-									method: 'POST',
-									url: HOST_URL + 'finance/savings/check_number_joint_saving',
-								},
-								stringLength: {
-									max: 7,
-									min: 7,
-									message: 'Nomor Rekening harus memiliki 7 karakter'
-								}
-							}
-						},
-						input_nama_tabungan_bersama: {
-							validators: {
-								notEmpty: {
-									message: 'Nama Tabungan Bersama diperlukan'
-								},
-							}
-						},
-						input_nominal_saldo: {
-							validators: {
-								notEmpty: {
-									message: 'Nominal Saldo Awal diperlukan'
-								},
-								integer: {
-									message: 'Inputan harus Angka',
-									// The default separators
-									thousandsSeparator: ''
-								},
-								greaterThan: {
-									message: 'Nominal Saldo harus lebih dari Rp. 2.000',
-									min: 2000,
-								},
-							}
-						},
-						input_tahun_ajaran: {
-							validators: {
-								notEmpty: {
-									message: 'Tahun Ajaran diperlukan'
-								},
-							}
-						},
-						input_tingkat: {
-							validators: {
-								notEmpty: {
-									message: 'Tingkat diperlukan'
-								},
-							}
-						},
-						input_nama_wali: {
-							validators: {
-								notEmpty: {
-									message: 'Nama Wali Penanggung Jawab diperlukan'
+									message: 'Nama Pegawai diperlukan'
 								},
 								regexp: {
 									regexp: /^[a-zs\s.()-]+$/i,
@@ -83,27 +25,55 @@
 								}
 							}
 						},
-						input_nomor_hp_wali: {
+						level_tingkat: {
 							validators: {
 								notEmpty: {
-									message: 'Nomor Wali Penanggung Jawab diperlukan'
+									message: 'Tingkat diperlukan'
 								},
+							}
+						},
+						email_nasabah: {
+							validators: {
+								emailAddress: {
+									message: 'Email Anda tidak valid'
+								}
+							}
+						},
+						nama_wali: {
+							validators: {
+								regexp: {
+									regexp: /^[a-zs\s.()-]+$/i,
+									message: 'Inputan harus berupa huruf'
+								}
+							}
+						},
+						nomor_handphone_pegawai: {
+							validators: {
 								integer: {
 									message: 'Inputan harus Angka',
+									// The default separators
+									thousandsSeparator: ''
 								},
 							}
 						},
-						input_tanggal_transaksi: {
+						jenis_kelamin: {
 							validators: {
 								notEmpty: {
-									message: 'Tanggal Transaksi diperlukan'
+									message: 'Jenis Kelamin diperlukan'
 								},
 							}
 						},
-						input_nama_siswa_penanggungjawab: {
+						th_ajaran: {
 							validators: {
 								notEmpty: {
-									message: 'Nama Siswa Penanggung Jawab diperlukan'
+									message: 'Tahun Ajaran diperlukan'
+								},
+							}
+						},
+						status_pegawai: {
+							validators: {
+								notEmpty: {
+									message: 'Status Pegawai diperlukan'
 								},
 							}
 						},
@@ -118,7 +88,7 @@
 				}
 			);
 
-			_jointsave.on('submit', function (wizard) {
+			_edit_employee.on('submit', function (wizard) {
 				if (validation) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
@@ -141,12 +111,12 @@
 			});
 		};
 
-
 		// Public Functions
 		return {
 			// public functions
 			init: function () {
-				_handleJointForm();
+				_edit_employee = $('#kt_form_edit_employee');
+				_handleEmployeeForm();
 			}
 		};
 	}();

@@ -37,7 +37,7 @@
 				todayHighlight: true,
 				orientation: "bottom left",
 				templates: arrows,
-				format: 'yyyy-mm-dd'
+				format: 'dd/mm/yyyy'
 			});
 
 			$('#kt_datepicker_invoice').datepicker({

@@ -73,7 +73,11 @@
                                 validators: {
                                     notEmpty: {
                                         message: 'Nama Siswa diperlukan'
-                                    }
+                                    },
+									regexp: {
+										regexp: /^[a-zs\s.()-]+$/i,
+										message: 'Inputan harus berupa huruf'
+									}
                                 }
                             },
                             tanggal_invoice: {
@@ -98,7 +102,7 @@
                         if (status == 'Valid') {
                             Swal.fire({
                                 title: "Peringatan!",
-                                text: "Apakah anda yakin ingin MENYETUJUI Update Data Tagihan ini?",
+                                html: "Apakah anda yakin ingin <b>MENYETUJUI</b> Update Data Tagihan DPB ini?",
                                 icon: "warning",
                                 input: 'password',
                                 inputLabel: 'Password Anda',
@@ -121,12 +125,12 @@
                                 preConfirm: (text) => {
                                     return $.ajax({
                                         type: "post",
-                                        url: url_confirm,
+                                        url: `${HOST_URL}/finance/income/income/confirm_update_income`,
                                         data: {password: text},
                                         dataType: 'html',
                                         success: function (result) {
                                             if (result == 1) {
-                                                Swal.fire("Berhasil!", "Persetujuan Update Data Tagihan telah dilakukan.", "success");
+                                                Swal.fire("Berhasil!", "Persetujuan Update Data Tagihan DPB telah dilakukan.", "success");
                                                 setTimeout(function () {
                                                     KTApp.blockPage({
                                                         overlayColor: '#FFA800',
@@ -150,7 +154,7 @@
                                 allowOutsideClick: () => !Swal.isLoading()
                             }).then(function (result) {
                                 if (!result.isConfirm) {
-                                    Swal.fire("Dibatalkan!", "Persetujuan Update Data Tagihan telah dibatalkan.", "error");
+                                    Swal.fire("Dibatalkan!", "Persetujuan Update Data Tagihan DPB telah dibatalkan.", "error");
                                 }
                             });
 

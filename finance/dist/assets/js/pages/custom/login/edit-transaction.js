@@ -9,6 +9,7 @@
 
 		var _handleCreditFormEdit = function () {
 			var validation;
+			var edit_button = document.querySelectorAll('.edit_transaksi_kredit');
 			var form = KTUtil.getById('kt_add_transaction_credit_edit')
 			var submitButton = form.querySelector('[type="submit"]');
 			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
@@ -23,8 +24,8 @@
 								},
 								stringLength: {
 									max: 6,
-									min: 6,
-									message: 'Nomor Rekening harus memiliki 6 karakter'
+									min: 5,
+									message: 'Nomor Rekening harus memiliki 5 sampai 6 karakter'
 								}
 							}
 						},
@@ -39,8 +40,8 @@
 									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Setoran harus lebih atau sama dengan Rp. 5.000',
-									min: 5000,
+									message: 'Nominal Setoran harus lebih atau sama dengan Rp. 2.000',
+									min: 2000,
 								},
 							}
 						},
@@ -84,8 +85,15 @@
 				}
 			);
 
+			for (let i = 0; i < edit_button.length; i++) {
+				edit_button[i].addEventListener('click', function () {
+					validation.resetForm(true);
+				});
+			}
+
 			_credit_edit.on('submit', function (wizard) {
-				if (validation) {
+				wizard.preventDefault();
+				if (validation && window.bundleObj.getOTPSKreditEdit() === true) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
 							form.submit(); // Submit form
@@ -109,6 +117,7 @@
 
 		var _handleDebitFormEdit = function () {
 			var validation;
+			var edit_button = document.querySelectorAll('.edit_transaksi_debet');
 			var form = KTUtil.getById('kt_add_transaction_debet_edit')
 			var submitButton = form.querySelector('[type="submit"]');
 			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
@@ -121,6 +130,11 @@
 								notEmpty: {
 									message: 'NIS/Rekening Siswa diperlukan'
 								},
+								stringLength: {
+									max: 6,
+									min: 5,
+									message: 'Nomor Rekening harus memiliki 5 sampai 6 karakter'
+								}
 							}
 						},
 						nominal_debet: {
@@ -134,8 +148,8 @@
 									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Penarikan harus lebih atau sama dengan Rp. 5.000',
-									min: 5000,
+									message: 'Nominal Penarikan harus lebih atau sama dengan Rp. 2.000',
+									min: 2000,
 								},
 							}
 						},
@@ -179,8 +193,15 @@
 				}
 			);
 
+			for (let i = 0; i < edit_button.length; i++) {
+				edit_button[i].addEventListener('click', function () {
+					validation.resetForm(true);
+				});
+			}
+
 			_debet_edit.on('submit', function (wizard) {
-				if (validation) {
+				wizard.preventDefault();
+				if (validation && window.bundleObj.getOTPDebetEdit() === true) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
 							form.submit(); // Submit form

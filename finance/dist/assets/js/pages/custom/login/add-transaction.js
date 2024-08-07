@@ -25,7 +25,7 @@
 								stringLength: {
 									max: 6,
 									min: 5,
-									message: 'Nomor Rekening harus memiliki 6 karakter'
+									message: 'Nomor Rekening harus memiliki 5 sampai 6 karakter'
 								}
 							}
 						},
@@ -40,8 +40,8 @@
 									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Setoran harus lebih atau sama dengan Rp. 5.000',
-									min: 5000,
+									message: 'Nominal Setoran harus lebih atau sama dengan Rp. 2.000',
+									min: 2000,
 								},
 							}
 						},
@@ -105,7 +105,6 @@
 								}
 							}
 						},
-
 					},
 					plugins: {
 						trigger: new FormValidation.plugins.Trigger(),
@@ -125,7 +124,8 @@
 			);
 
 			_credit.on('submit', function (wizard) {
-				if (validation) {
+				wizard.preventDefault();
+				if (validation && window.bundleObj.getOTPKredit() === true) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
 							form.submit(); // Submit form
@@ -145,6 +145,7 @@
 					});
 				}
 			});
+
 		};
 
 		var _handleDebitForm = function () {
@@ -163,8 +164,8 @@
 								},
 								stringLength: {
 									max: 6,
-									min: 6,
-									message: 'Nomor Rekening harus memiliki 6 karakter'
+									min: 5,
+									message: 'Nomor Rekening harus memiliki 5 sampai 6 karakter'
 								}
 							}
 						},
@@ -179,8 +180,8 @@
 									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Penarikan harus lebih atau sama dengan Rp. 5.000',
-									min: 5000,
+									message: 'Nominal Penarikan harus lebih atau sama dengan Rp. 2.000',
+									min: 2000,
 								},
 							}
 						},
@@ -225,7 +226,8 @@
 			);
 
 			_debet.on('submit', function (wizard) {
-				if (validation) {
+				wizard.preventDefault();
+				if (validation && window.bundleObj.getOTPDebet() === true) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
 							form.submit(); // Submit form
@@ -260,6 +262,11 @@
 								notEmpty: {
 									message: 'NIS Siswa diperlukan'
 								},
+								stringLength: {
+									max: 6,
+									min: 5,
+									message: 'Nomor Rekening harus memiliki 5 sampai 6 karakter'
+								}
 							}
 						},
 					},

@@ -4,20 +4,20 @@
 
 	// Class Definition
 	var KTLogin = function () {
-		var _jointsave;
+		var _employee_saving;
 
-		var _handleJointForm = function () {
+		var _handlePersonalForm = function () {
 			var validation;
-			var form = KTUtil.getById('kt_add_joint_saving')
+			var form = KTUtil.getById('kt_add_employee_saving')
 			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
 			validation = FormValidation.formValidation(
 				form,
 				{
 					fields: {
-						input_nomor_rekening_bersama: {
+						input_nomor_rekening: {
 							validators: {
 								notEmpty: {
-									message: 'Nomor Rekening Bersama diperlukan'
+									message: 'Nomor Rekening Nasabah diperlukan'
 								},
 								integer: {
 									message: 'Inputan harus Angka',
@@ -26,7 +26,7 @@
 								remote: {
 									message: 'Nomor Rekening telah digunakan, inputkan Nomor Rekening lain',
 									method: 'POST',
-									url: HOST_URL + 'finance/savings/check_number_joint_saving',
+									url: HOST_URL + 'finance/savings/check_number_personal_saving',
 								},
 								stringLength: {
 									max: 7,
@@ -35,27 +35,22 @@
 								}
 							}
 						},
-						input_nama_tabungan_bersama: {
+						input_nama_nasabah: {
 							validators: {
 								notEmpty: {
-									message: 'Nama Tabungan Bersama diperlukan'
+									message: 'Nama Nasabah diperlukan'
 								},
+								regexp: {
+									regexp: /^[a-zs\s.()-]+$/i,
+									message: 'Inputan harus berupa huruf'
+								}
 							}
 						},
-						input_nominal_saldo: {
+						input_email_nasabah: {
 							validators: {
-								notEmpty: {
-									message: 'Nominal Saldo Awal diperlukan'
-								},
-								integer: {
-									message: 'Inputan harus Angka',
-									// The default separators
-									thousandsSeparator: ''
-								},
-								greaterThan: {
-									message: 'Nominal Saldo harus lebih dari Rp. 2.000',
-									min: 2000,
-								},
+								emailAddress: {
+									message: 'Email anda tidak valid'
+								}
 							}
 						},
 						input_tahun_ajaran: {
@@ -72,24 +67,23 @@
 								},
 							}
 						},
-						input_nama_wali: {
+						input_saldo_tabungan_umum: {
 							validators: {
-								notEmpty: {
-									message: 'Nama Wali Penanggung Jawab diperlukan'
-								},
-								regexp: {
-									regexp: /^[a-zs\s.()-]+$/i,
-									message: 'Inputan harus berupa huruf'
-								}
-							}
-						},
-						input_nomor_hp_wali: {
-							validators: {
-								notEmpty: {
-									message: 'Nomor Wali Penanggung Jawab diperlukan'
-								},
 								integer: {
 									message: 'Inputan harus Angka',
+									// The default separators
+									thousandsSeparator: ''
+								},
+								greaterThan: {
+									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 2.000',
+									min: 2000,
+								},
+							}
+						},
+						jenis_kelamin: {
+							validators: {
+								notEmpty: {
+									message: 'Jenis Kelamin diperlukan'
 								},
 							}
 						},
@@ -100,14 +94,20 @@
 								},
 							}
 						},
-						input_nama_siswa_penanggungjawab: {
+						input_nomor_hp_pegawai: {
 							validators: {
-								notEmpty: {
-									message: 'Nama Siswa Penanggung Jawab diperlukan'
+								integer: {
+									message: 'Inputan harus Angka',
 								},
 							}
 						},
-
+						status_pegawai: {
+							validators: {
+								notEmpty: {
+									message: 'Status Pegawai diperlukan'
+								},
+							}
+						},
 					},
 					plugins: {
 						trigger: new FormValidation.plugins.Trigger(),
@@ -118,7 +118,7 @@
 				}
 			);
 
-			_jointsave.on('submit', function (wizard) {
+			_employee_saving.on('submit', function (wizard) {
 				if (validation) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
@@ -146,7 +146,7 @@
 		return {
 			// public functions
 			init: function () {
-				_handleJointForm();
+				_handlePersonalForm();
 			}
 		};
 	}();

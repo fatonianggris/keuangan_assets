@@ -9,6 +9,7 @@
 
 		var _handleCreditFormEdit = function () {
 			var validation;
+			var edit_button = document.querySelectorAll('.edit_transaksi_kredit');
 			var form = KTUtil.getById('kt_add_transaction_credit_edit');
 			var submitButton = form.querySelector('[type="submit"]');
 			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
@@ -21,6 +22,11 @@
 								notEmpty: {
 									message: 'Nomor Rekening Tabungan diperlukan'
 								},
+								stringLength: {
+									max: 7,
+									min: 7,
+									message: 'Nomor Rekening harus memiliki 7 karakter'
+								}
 							}
 						},
 						nominal_kredit_edit: {
@@ -32,8 +38,8 @@
 									message: 'Inputan harus Angka',
 								},
 								greaterThan: {
-									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 5000',
-									min: 5000,
+									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 2.000',
+									min: 2000,
 								},
 							}
 						},
@@ -77,8 +83,15 @@
 				}
 			);
 
+			for (let i = 0; i < edit_button.length; i++) {
+				edit_button[i].addEventListener('click', function () {
+					validation.resetForm(true);
+				});
+			}
+
 			_credit_edit.on('submit', function (wizard) {
-				if (validation) {
+				wizard.preventDefault();
+				if (validation && window.bundleObj.getOTPDebetEdit() === true) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
 							form.submit(); // Submit form
@@ -102,6 +115,7 @@
 
 		var _handleDebitFormEdit = function () {
 			var validation;
+			var edit_button = document.querySelectorAll('.edit_transaksi_debet');
 			var form = KTUtil.getById('kt_add_transaction_debet_edit');
 			var submitButton = form.querySelector('[type="submit"]');
 			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
@@ -114,6 +128,11 @@
 								notEmpty: {
 									message: 'Nomor Rekening Tabungan diperlukan'
 								},
+								stringLength: {
+									max: 7,
+									min: 7,
+									message: 'Nomor Rekening harus memiliki 7 karakter'
+								}
 							}
 						},
 						nominal_debet_edit: {
@@ -125,8 +144,8 @@
 									message: 'Inputan harus Angka',
 								},
 								greaterThan: {
-									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 5000',
-									min: 5000,
+									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 2.000',
+									min: 2000,
 								},
 							}
 						},
@@ -170,8 +189,15 @@
 				}
 			);
 
+			for (let i = 0; i < edit_button.length; i++) {
+				edit_button[i].addEventListener('click', function () {
+					validation.resetForm(true);
+				});
+			}
+
 			_debet_edit.on('submit', function (wizard) {
-				if (validation) {
+				wizard.preventDefault();
+				if (validation && window.bundleObj.getOTPDebetEdit() === true) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
 							form.submit(); // Submit form

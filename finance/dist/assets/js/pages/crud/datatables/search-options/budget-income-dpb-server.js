@@ -33,7 +33,7 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 			},
 			footerCallback: function (row, data, start, end, display) {
 
-				var column_da = 7;
+				var column_da = 12;
 				var api_da = this.api(), data;
 
 				// Remove the formatting to get integer data for summation
@@ -62,8 +62,8 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 				data: {
 					// parameters for custom backend script demo
 					columnsDef: [
-						'id_tagihan_pembayaran_dpb', 'id_invoice', 'tanggal_invoice', 'nama_lengkap', 'nomor_pembayaran_dpb', 'informasi', 'informasi',
-						'nominal_tagihan', 'status_pembayaran', 'tahun_ajaran', 'semester', 'bulan_invoice', 'tanggal_transaksi', 'nis', 'id_encrypt', 'status_pembayaran'],
+						'id_tagihan_pembayaran_db', 'id_invoice', 'tanggal_invoice', 'nama_lengkap', 'nomor_pembayaran_dpb', 'level_tingkat', 'nama_kelas',
+						'status_pembayaran', 'tahun_ajaran', 'rincian', 'bulan_invoice', 'tanggal_transaksi', 'nominal_tagihan', 'nis', 'id_encrypt', 'status_pembayaran'],
 				},
 			},
 			columns: [
@@ -72,14 +72,14 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 				{ data: 'tanggal_invoice' },
 				{ data: 'nama_lengkap' },
 				{ data: 'nomor_pembayaran_dpb' },
-				{ data: 'informasi' },
-				{ data: 'informasi' },
-				{ data: 'nominal_tagihan' },
+				{ data: 'level_tingkat' },
+				{ data: 'nama_kelas' },
 				{ data: 'status_pembayaran' },
 				{ data: 'tahun_ajaran' },
-				{ data: 'semester' },
+				{ data: 'rincian' },
 				{ data: 'bulan_invoice' },
 				{ data: 'tanggal_transaksi' },
+				{ data: 'nominal_tagihan' },
 				{ data: 'nis' },
 			],
 			columnDefs: [
@@ -144,33 +144,32 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 				{
 					targets: 5,
 					render: function (data, type, full, meta) {
-						const tingkat = data.split(" ");
 						var status = {
-							'KB': {
+							'1': {
 								'title': 'KB',
 								'class': 'label-light-info'
 							},
-							'TK': {
+							'2': {
 								'title': 'TK',
 								'class': 'label-light-primary'
 							},
-							'SD': {
+							'3': {
 								'title': 'SD',
 								'class': 'label-light-success'
 							},
-							'SMP': {
+							'4': {
 								'title': 'SMP',
 								'class': 'label-light-warning'
 							},
-							'SMA': {
-								'title': 'SMA',
+							'6': {
+								'title': 'DC',
 								'class': 'label-light-danger'
 							},
 						};
 						if (data === '' || data === null || data === '0') {
 							return 'UNKNOWN';
 						} else {
-							return '<span class="label label-lg font-weight-bold ' + status[tingkat[0]].class + ' label-inline">' + status[tingkat[0]].title + '</span>';
+							return '<span class="label label-lg font-weight-bold ' + status[data].class + ' label-inline">' + status[data].title + '</span>';
 						}
 					}
 				},
@@ -187,17 +186,6 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 				},
 				{
 					targets: 7,
-					render: function (data, type, full, meta) {
-
-						if (data === '' || data === null ) {
-							return 'UNKNOWN';
-						} else {
-							return '<span class="font-weight-bolder">' + String(data).replace(/(.)(?=(\d{3})+$)/g, '$1,') + '</span>';
-						}
-					},
-				},
-				{
-					targets: 8,
 					render: function (data, type, full, meta) {
 						var status = {
 							MENUNGGU: {
@@ -224,7 +212,7 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 					},
 				},
 				{
-					targets: 9,
+					targets: 8,
 					render: function (data, type, full, meta) {
 
 						if (data === '' || data === null || data === '0') {
@@ -235,22 +223,25 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 					},
 				},
 				{
+					targets: 9,
+					render: function (data, type, full, meta) {
+
+						if (data === '' || data === null || data === '0') {
+							return 'Kosong';
+						} else {
+							return '<span class="font-weight-bold">' + data.substring(0, data.length - 1) + '</span>';
+						}
+					},
+				},
+				{
 					targets: 10,
 					render: function (data, type, full, meta) {
-						var status = {
-							ganjil: {
-								'title': 'GANJIL',
-								'class': 'label-light-warning'
-							},
-							genap: {
-								'title': 'GENAP',
-								'class': 'label-light-success'
-							},
-						};
-						if (typeof status[data] === 'undefined') {
-							return data;
+
+						if (data === '' || data === null || data === '0') {
+							return 'Kosong';
+						} else {
+							return '<span class="font-weight-bolder">' + months[data].toUpperCase() + '</span>';
 						}
-						return '<span class="label label-lg font-weight-bold ' + status[data].class + ' label-inline">' + status[data].title + '</span>';
 					},
 				},
 				{
@@ -258,9 +249,9 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 					render: function (data, type, full, meta) {
 
 						if (data === '' || data === null || data === '0') {
-							return 'Kosong';
+							return '<span class="font-weight-bolder text-info">00/00/0000</span>';
 						} else {
-							return '<span class="font-weight-bolder">' + months[data] + '</span>';
+							return '<span class="font-weight-bolder text-success">' + data + '</span>';
 						}
 					},
 				},
@@ -268,10 +259,10 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 					targets: 12,
 					render: function (data, type, full, meta) {
 
-						if (data === '' || data === null || data === '0') {
-							return '<span class="font-weight-bolder text-info">00/00/0000</span>';
+						if (data === '' || data === null) {
+							return 'UNKNOWN';
 						} else {
-							return '<span class="font-weight-bolder text-success">' + data + '</span>';
+							return '<span class="font-weight-bolder">' + String(data).replace(/(.)(?=(\d{3})+$)/g, '$1,') + '</span>';
 						}
 					},
 				},
@@ -359,7 +350,6 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 					params[i] = $(this).val();
 				}
 			});
-
 			$.each(params, function (i, val) {
 				// apply search params to datatable
 				table.column(i).search(val ? val : '', false, false);

@@ -6,7 +6,6 @@
 	var KTLogin = function () {
 		var _credit;
 		var _debet;
-		var _recap;
 
 		var _handleCreditForm = function () {
 			var validation;
@@ -40,8 +39,8 @@
 									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Setoran harus lebih atau sama dengan Rp. 5.000',
-									min: 5000,
+									message: 'Nominal Setoran harus lebih atau sama dengan Rp. 2.000',
+									min: 2000,
 								},
 							}
 						},
@@ -125,7 +124,8 @@
 			);
 
 			_credit.on('submit', function (wizard) {
-				if (validation) {
+				wizard.preventDefault();
+				if (validation && window.bundleObj.getOTPKredit() === true) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
 							form.submit(); // Submit form
@@ -179,8 +179,8 @@
 									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Penarikan harus lebih atau sama dengan Rp. 5.000',
-									min: 5000,
+									message: 'Nominal Penarikan harus lebih atau sama dengan Rp. 2.000',
+									min: 2000,
 								},
 							}
 						},
@@ -225,7 +225,8 @@
 			);
 
 			_debet.on('submit', function (wizard) {
-				if (validation) {
+				wizard.preventDefault();
+				if (validation && window.bundleObj.getOTPDebet() === true) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
 							form.submit(); // Submit form
@@ -247,63 +248,14 @@
 			});
 		};
 
-		var _handleRecapForm = function () {
-			var validation;
-			var form = KTUtil.getById('kt_add_transaction_recap')
-			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
-			validation = FormValidation.formValidation(
-				form,
-				{
-					fields: {
-						nis_siswa: {
-							validators: {
-								notEmpty: {
-									message: 'NIS Siswa diperlukan'
-								},
-							}
-						},
-					},
-					plugins: {
-						trigger: new FormValidation.plugins.Trigger(),
-						submitButton: new FormValidation.plugins.SubmitButton(),
-						defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
-						bootstrap: new FormValidation.plugins.Bootstrap()
-					}
-				}
-			);
-
-			_recap.on('submit', function (wizard) {
-				if (validation) {
-					validation.validate().then(function (status) {
-						if (status == 'Valid') {
-							form.submit(); // Submit form
-						} else {
-							Swal.fire({
-								text: "Mohon Maaf, kemungkinan terjadi kesalahan pada pengisian Anda, Mohon menginputkan dengan benar.",
-								icon: "error",
-								buttonsStyling: false,
-								confirmButtonText: "Oke!",
-								customClass: {
-									confirmButton: "btn font-weight-bold btn-primary"
-								}
-							}).then(function () {
-								KTUtil.scrollTop();
-							});
-						}
-					});
-				}
-			});
-		};
 		// Public Functions
 		return {
 			// public functions
 			init: function () {
 				_credit = $('#kt_form_credit');
 				_debet = $('#kt_form_debet');
-				_recap = $('#kt_form_recap');
 				_handleCreditForm();
 				_handleDebitForm();
-				_handleRecapForm();
 			}
 		};
 	}();

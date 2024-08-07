@@ -38,8 +38,8 @@
 									message: 'Inputan harus Angka',
 								},
 								greaterThan: {
-									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 5000',
-									min: 5000,
+									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 2.000',
+									min: 2000,
 								},
 							}
 						},
@@ -83,7 +83,8 @@
 			);
 
 			_credit.on('submit', function (wizard) {
-				if (validation) {
+				wizard.preventDefault();
+				if (validation && window.bundleObj.getOTPDebet() === true) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
 							form.submit(); // Submit form
@@ -119,6 +120,11 @@
 								notEmpty: {
 									message: 'Nomor Rekening Tabungan diperlukan'
 								},
+								stringLength: {
+									max: 7,
+									min: 7,
+									message: 'Nomor Rekening harus memiliki 7 karakter'
+								}
 							}
 						},
 						inputNominalDebet: {
@@ -130,8 +136,8 @@
 									message: 'Inputan harus Angka',
 								},
 								greaterThan: {
-									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 5000',
-									min: 5000,
+									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 2.000',
+									min: 2000,
 								},
 							}
 						},
@@ -176,7 +182,8 @@
 			);
 
 			_debet.on('submit', function (wizard) {
-				if (validation) {
+				wizard.preventDefault();
+				if (validation && window.bundleObj.getOTPDebet() === true) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
 							form.submit(); // Submit form
@@ -211,6 +218,11 @@
 								notEmpty: {
 									message: 'Nomor Rekening Tabungan Bersama diperlukan'
 								},
+								stringLength: {
+									max: 7,
+									min: 7,
+									message: 'Nomor Rekening harus memiliki 7 karakter'
+								}
 							}
 						},
 					},

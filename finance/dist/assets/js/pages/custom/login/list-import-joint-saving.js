@@ -106,7 +106,7 @@ $(document).ready(function () {
 
 		Swal.fire({
 			title: "Peringatan!",
-			html: `Apakah anda yakin ingin <b>MENYETUJUI</b> impor data Nasabah Bersama sekarang juga?`,
+			html: `Apakah anda yakin ingin <b>MENYETUJUI</b> impor data Nasabah Tabungan Bersama sekarang juga?`,
 			icon: "warning",
 			input: 'password',
 			inputLabel: 'Password Anda',
@@ -177,7 +177,7 @@ $(document).ready(function () {
 			allowOutsideClick: () => !Swal.isLoading()
 		}).then(function (result) {
 			if (!result.isConfirm) {
-				Swal.fire("Dibatalkan!", "Persetujuan Impor Data Nasabah Bersama telah dibatalkan.", "error");
+				Swal.fire("Dibatalkan!", "Persetujuan Impor Data Nasabah Tabungan Bersama telah dibatalkan.", "error");
 			}
 		});
 		e.preventDefault();
@@ -189,7 +189,7 @@ $(document).ready(function () {
 
 		Swal.fire({
 			title: "Peringatan!",
-			html: "Apakah anda yakin ingin <b>MEMBATALKAN</b> impor data Nasabah Bersama sekarang juga?",
+			html: "Apakah anda yakin ingin <b>MEMBATALKAN</b> impor data Nasabah Tabungan Bersama sekarang juga?",
 			icon: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#DD6B55",
@@ -244,7 +244,7 @@ $(document).ready(function () {
 			allowOutsideClick: () => !Swal.isLoading()
 		}).then(function (result) {
 			if (!result.isConfirm) {
-				Swal.fire("Dibatalkan!", "Pembatalan Impor Data Nasabah Bersama telah dibatalkan.", "error");
+				Swal.fire("Dibatalkan!", "Pembatalan Impor Data Nasabah Tabungan Bersama telah dibatalkan.", "error");
 			}
 		});
 		e.preventDefault();
@@ -347,7 +347,13 @@ $(document).ready(function () {
 		$('[name="nomor_handphone_wali"]').val(nomor_handphone);
 		$('[name="tanggal_transaksi"]').val(tanggal_transaksi);
 		$('[name="id_siswa_penanggung_jawab"] option:selected').remove();
-		$('[name="id_siswa_penanggung_jawab"]').prepend($("<option selected></option>").attr("value", id_pj).text(`${nama_siswa.toUpperCase()} ` + `(${id_pj})`));
+		if (nama_siswa != null && nama_siswa != "") {
+			var nama_lengkap = nama_siswa.toUpperCase();
+			$('[name="id_siswa_penanggung_jawab"]').prepend($("<option selected></option>").attr("value", id_pj).text(`${nama_lengkap} ` + `(${id_pj})`));
+		} else {
+			var nama_lengkap = "TIDAK TERDAFTAR";
+			$('[name="id_siswa_penanggung_jawab"]').prepend($("<option value='0' selected></option>").text(`${nama_lengkap}`));
+		}
 		$('[name="id_tingkat"] option:selected').remove();
 		$('[name="id_tingkat"]').prepend($("<option selected></option>").attr("value", id_tingkat).text(nama_tingkat));
 		$('[name="id_th_ajaran"] option:selected').remove();
@@ -383,17 +389,19 @@ $(document).ready(function () {
 
 		var id_tabungan = $('[name="id_nasabah_bersama"]').val();
 		var nomor_rekening = $('[name="nomor_rekening_bersama"]').val();
+		var old_nomor_rekening = $('[name="old_nomor_rekening_bersama"]').val();
 		var nama_tabungan = $('[name="nama_tabungan_bersama"]').val();
 		var id_pj = $('[name="id_siswa_penanggung_jawab"]').val();
 		var id_tingkat = $('[name="id_tingkat"]').val();
 		var id_ta = $('[name="id_th_ajaran"]').val();
 		var nama_wali = $('[name="nama_wali"]').val();
+		var tanggal_transaksi = $('[name="tanggal_transaksi"]').val();
 		var nomor_hp = $('[name="nomor_handphone_wali"]').val()
 		var saldo_bersama = $('[name="saldo_bersama"]').val()
 
 		if (saldo_bersama >= 0) {
 
-			if (id_tabungan != null && id_tabungan != "" && nomor_rekening != null && nomor_rekening != "" && nama_tabungan != null && nama_tabungan != "" && id_pj != null && id_pj != "" && id_tingkat != null && id_tingkat != "") {
+			if (id_tabungan != null && id_tabungan != "" && nomor_rekening != null && nomor_rekening != "" && nama_tabungan != null && nama_tabungan != "" && id_pj != null && id_pj != "" && id_pj != "0" && id_tingkat != null && id_tingkat != "" && tanggal_transaksi != null && tanggal_transaksi != "") {
 
 				Swal.fire({
 					title: "Peringatan!",
@@ -424,6 +432,7 @@ $(document).ready(function () {
 							data: {
 								id_nasabah_bersama: id_tabungan,
 								nomor_rekening_bersama: nomor_rekening,
+								old_nomor_rekening_bersama: old_nomor_rekening,
 								nama_tabungan_bersama: nama_tabungan,
 								id_siswa_penanggung_jawab: id_pj,
 								id_tingkat: id_tingkat,
@@ -431,6 +440,7 @@ $(document).ready(function () {
 								nama_wali: nama_wali,
 								nomor_handphone: nomor_hp,
 								saldo_bersama: saldo_bersama,
+								tanggal_transaksi: tanggal_transaksi,
 								[csrfName]: csrfHash
 							},
 							success: function (data) {

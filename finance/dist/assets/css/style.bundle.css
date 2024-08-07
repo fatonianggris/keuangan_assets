@@ -63539,6 +63539,11 @@ code {
   height: 4px;
   width: 4px;
 }
+.label.label-over {
+  height: auto;
+  width: auto;
+  font-size: 0.9rem;
+}
 .label.label-lg {
   height: 24px;
   width: 24px;

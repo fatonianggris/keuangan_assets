@@ -85,9 +85,18 @@
 		}
 		return status;
 	}
+	function OTPclear() {
+		status = false;
+		$('#first').val("");
+		$('#second').val("");
+		$('#third').val("");
+		$('#fourth').val("");
+		$('#fifth').val("");
+	}
 
 	global.bundleObj = {
-		getOTP: OTPInput
+		getOTP: OTPInput,
+		resetOTP: OTPclear
 	}
 
 })(window)
