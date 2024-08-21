@@ -282,12 +282,12 @@ $(document).ready(function () {
 								a.download = filename;
 								document.body.appendChild(a);
 								a.click();
+								document.body.removeChild(a); // Cle
 							}
 						} else {
 							window.open(downloadUrl, '_blank');
 						}
 
-						setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
 					}
 
 					Swal.fire({
@@ -335,29 +335,29 @@ $(document).ready(function () {
 
 	$(".findNasabahKredit").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 5,
-		maximumInputLength: 6,
+		minimumInputLength: 6,
+		maximumInputLength: 7,
 		allowClear: false,
 	});
 
 	$(".findNasabahDebet").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 5,
-		maximumInputLength: 6,
+		minimumInputLength: 6,
+		maximumInputLength: 7,
 		allowClear: false,
 	});
 
 	$(".findNasabahKreditEdit").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 5,
-		maximumInputLength: 6,
+		minimumInputLength: 6,
+		maximumInputLength: 7,
 		allowClear: false,
 	});
 
 	$(".findNasabahDebetEdit").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 5,
-		maximumInputLength: 6,
+		minimumInputLength: 6,
+		maximumInputLength: 7,
 		allowClear: false,
 	});
 
@@ -2586,6 +2586,7 @@ $(document).ready(function () {
 	$("#tb_transaksi").on("click", ".delete_transaksi_kredit", function () {
 		var id_transaksi = $(this).data("id_transaksi");
 		var nis_siswa = $(this).data("nis_siswa");
+		var nomor_transaksi = $(this).data("nomor_transaksi");
 		var nama_siswa = $(this).data("nama_lengkap");
 		var jenis_transaksi = $(this).data("jenis_transaksi");
 		var jenis_tabungan = $(this).data("jenis_tabungan");
@@ -2636,6 +2637,7 @@ $(document).ready(function () {
 						url: `${HOST_URL}/finance/savings/delete_credit_transaction`,
 						data: {
 							id_transaksi: id_transaksi,
+							nomor_transaksi: nomor_transaksi,
 							nis: nis_siswa,
 							password: result.value,
 							[csrfName]: csrfHash

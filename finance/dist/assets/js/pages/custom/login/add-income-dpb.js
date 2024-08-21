@@ -9,7 +9,7 @@
 		var _handleSignInForm = function () {
 			var validation;
 			var status = true;
-			var form = KTUtil.getById('kt_edit_income_dpb_form')
+			var form = KTUtil.getById('kt_add_income_dpb_form');
 			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
 			validation = FormValidation.formValidation(
 				form,
@@ -23,11 +23,10 @@
 								remote: {
 									message: 'Nomor Invoice telah digunakan',
 									method: 'POST',
-									url: HOST_URL + 'finance/income/income/check_invoice_number_dpb',
+									url: HOST_URL + 'finance/income/income/check_invoice_number_dpb_add',
 									data: function () {
 										return {
-											nomor_invoice: form.querySelector('[name="nomor_invoice"]').value,
-											id_tagihan: form.querySelector('[name="id_tagihan"]').value,
+											nomor_invoice: form.querySelector('[name="nomor_invoice"]').value
 										};
 									},
 								},
@@ -47,15 +46,13 @@
 								remote: {
 									message: 'Nomor Pembayaran telah digunakan',
 									method: 'POST',
-									url: HOST_URL + 'finance/income/income/check_payment_number_dpb',
+									url: HOST_URL + 'finance/income/income/check_payment_number_dpb_add',
 									data: function () {
 										return {
-											nomor_pembayaran: form.querySelector('[name="nomor_pembayaran"]').value,
-											nomor_pembayaran_old: form.querySelector('[name="nomor_pembayaran_old"]').value,
 											nama: form.querySelector('[name="nama_siswa"]').value
 										};
-									},
-								},
+									}
+								}
 							}
 						},
 						nominal_tagihan: {
@@ -71,6 +68,13 @@
 								},
 							}
 						},
+						tahun_ajaran: {
+							validators: {
+								notEmpty: {
+									message: 'Tahun Ajaran diperlukan'
+								},
+							}
+						},
 						nama_siswa: {
 							validators: {
 								notEmpty: {
@@ -80,14 +84,7 @@
 									regexp: /^[a-zs\s.()-]+$/i,
 									message: 'Inputan harus berupa huruf'
 								}
-							}
-						},
-						tahun_ajaran: {
-							validators: {
-								notEmpty: {
-									message: 'Tahun Ajaran diperlukan'
-								},
-							}
+							},
 						},
 						nis: {
 							validators: {
@@ -137,6 +134,21 @@
 
 			validation.on('core.validator.validated', function (data) {
 
+				if (data.field === 'nomor_invoice' && (data.validator === 'notEmpty' || data.validator === 'regexp')) {
+					if (data.result.valid === true) {
+						setTimeout(function() {
+							//your code to be executed after 1 second
+							validation.validateField('nomor_pembayaran');
+						  }, 1000);
+					}
+				}
+
+				if (data.field === 'nama_siswa' && (data.validator === 'notEmpty' || data.validator === 'regexp')) {
+					if (data.result.valid === true) {
+						validation.validateField('nomor_pembayaran');
+					}
+				}
+
 				if (data.field === 'nomor_pembayaran' && data.validator === 'integer') {
 					if (data.result.valid === false) {
 						status = false;
@@ -152,7 +164,7 @@
 							if (status == true) {
 								validation
 									// Update the message option
-									.updateValidatorOption('nomor_pembayaran', 'remote', 'message', data.result.message)
+									.updateValidatorOption('nomor_pembayaran', 'remote', 'message', data.result.message);
 							}
 
 						} else if (data.result.meta.status === true) {
@@ -168,71 +180,21 @@
 
 					}
 				}
-
 			})
+
 
 			_login.on('submit', function (wizard) {
 				if (validation) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
-							Swal.fire({
-								title: "Peringatan!",
-								html: "Apakah anda yakin ingin <b>MENYETUJUI</b> Update Data Tagihan DPB ini?",
-								icon: "warning",
-								input: 'password',
-								inputLabel: 'Password Anda',
-								inputPlaceholder: 'Masukkan password Anda',
-								inputAttributes: {
-									'aria-label': 'Masukkan password Anda'
-								},
-								inputValidator: (value) => {
-									if (!value) {
-										return 'Password Anda diperlukan!'
-									}
-								},
-								showCancelButton: true,
-								confirmButtonColor: "#1BC5BD",
-								confirmButtonText: "Ya, Setuju!",
-								cancelButtonText: "Tidak, Nanti saja!",
-								showLoaderOnConfirm: true,
-								closeOnConfirm: false,
-								closeOnCancel: true,
-								preConfirm: (text) => {
-									return $.ajax({
-										type: "post",
-										url: `${HOST_URL}/finance/income/income/confirm_update_income`,
-										data: { password: text },
-										dataType: 'html',
-										success: function (result) {
-											if (result == 1) {
-												Swal.fire("Berhasil!", "Persetujuan Update Data Tagihan DPB telah dilakukan.", "success");
-												setTimeout(function () {
-													KTApp.blockPage({
-														overlayColor: '#FFA800',
-														state: 'warning',
-														size: 'lg',
-														opacity: 0.1,
-														message: 'Silahkan Tunggu...'
-													});
-													form.submit(); // Submit form
-												}, 1000);
-											} else {
-												Swal.fire("Opsss!", "Password Anda Salah. Ulangi kembali", "error");
-											}
-										},
-										error: function (result) {
-											console.log(result);
-											Swal.fire("Opsss!", "Koneksi Internet Bermasalah.", "error");
-										}
-									});
-								},
-								allowOutsideClick: () => !Swal.isLoading()
-							}).then(function (result) {
-								if (!result.isConfirm) {
-									Swal.fire("Dibatalkan!", "Persetujuan Update Data Tagihan DPB telah dibatalkan.", "error");
-								}
+							KTApp.blockPage({
+								overlayColor: '#FFA800',
+								state: 'warning',
+								size: 'lg',
+								opacity: 0.1,
+								message: 'Silahkan Tunggu...'
 							});
-
+							form.submit(); // Submit form
 						} else {
 							Swal.fire({
 								text: "Mohon Maaf, kemungkinan terjadi kesalahan pada pengisian Anda, Mohon menginputkan dengan benar.",
@@ -256,7 +218,6 @@
 			// public functions
 			init: function () {
 				_login = $('#kt_form');
-
 				_handleSignInForm();
 			}
 		};
@@ -271,3 +232,4 @@
 })()
 	;
 //# sourceMappingURL=login-general.js.map
+

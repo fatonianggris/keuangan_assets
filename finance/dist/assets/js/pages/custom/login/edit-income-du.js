@@ -1,198 +1,274 @@
 /******/ (() => { // webpackBootstrap
     /******/ 	"use strict";
-    var __webpack_exports__ = {};
+	var __webpack_exports__ = {};
 
-// Class Definition
-    var KTLogin = function () {
-        var _login;
+	// Class Definition
+	var KTLogin = function () {
+		var _login;
 
-        var _handleSignInForm = function () {
-            var validation;
-            var form = KTUtil.getById('kt_edit_income_du_form');
-            // Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
-            validation = FormValidation.formValidation(
-                    form,
-                    {
-                        fields: {
-                            nomor_invoice: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Nomor Invoice Tagihan diperlukan'
-                                    },
-                                    remote: {
-                                        message: 'Nomor Invoice telah digunakan',
-                                        method: 'POST',
-                                        url: HOST_URL + 'finance/income/income/check_invoice_number_du',
-                                        data: function () {
-                                            return {
-                                                nomor_invoice: form.querySelector('[name="nomor_invoice"]').value,
-                                                id_tagihan: form.querySelector('[name="id_tagihan"]').value,
-                                            };
-                                        },
-                                    },
-                                }
-                            },
-                            nomor_pembayaran: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Nomor Pembayaran diperlukan'
-                                    },
-                                    integer: {
-                                        message: 'Inputan harus Angka',
-                                        // The default separators
-                                        thousandsSeparator: '',
-                                        decimalSeparator: ''
-                                    },
-                                    remote: {
-                                        message: 'Nomor Pembayaran telah digunakan',
-                                        method: 'POST',
-                                        url: HOST_URL + 'finance/income/income/check_payment_number_du',
-                                        data: function () {
-                                            return {
-                                                nomor_pembayaran: form.querySelector('[name="nomor_pembayaran"]').value,
-                                                id_tagihan: form.querySelector('[name="id_tagihan"]').value,
-                                            };
-                                        },
-                                    },
-                                }
-                            },
-                            nominal_tagihan: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Total Nominal diperlukan'
-                                    },
-                                    integer: {
-                                        message: 'Inputan harus Angka',
-                                        // The default separators
-                                        thousandsSeparator: '',
-                                        decimalSeparator: ''
-                                    },
-                                }
-                            },
-                            nama_siswa: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Nama Siswa diperlukan'
-                                    },
-									regexp: {
-										regexp: /^[a-zs\s.()-]+$/i,
-										message: 'Inputan harus berupa huruf'
+		var _handleSignInForm = function () {
+			var validation;
+			var status = true;
+			var form = KTUtil.getById('kt_edit_income_du_form');
+			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
+			validation = FormValidation.formValidation(
+				form,
+				{
+					fields: {
+						nomor_invoice: {
+							validators: {
+								notEmpty: {
+									message: 'Nomor Invoice Tagihan diperlukan'
+								},
+								remote: {
+									message: 'Nomor Invoice telah digunakan',
+									method: 'POST',
+									url: HOST_URL + 'finance/income/income/check_invoice_number_du',
+									data: function () {
+										return {
+											nomor_invoice: form.querySelector('[name="nomor_invoice"]').value,
+											id_tagihan: form.querySelector('[name="id_tagihan"]').value,
+										};
+									},
+								},
+							}
+						},
+						nomor_pembayaran: {
+							validators: {
+								notEmpty: {
+									message: 'Nomor Pembayaran diperlukan'
+								},
+								integer: {
+									message: 'Inputan harus Angka',
+									// The default separators
+									thousandsSeparator: '',
+									decimalSeparator: ''
+								},
+								remote: {
+									message: 'Nomor Pembayaran telah digunakan',
+									method: 'POST',
+									url: HOST_URL + 'finance/income/income/check_payment_number_du',
+									data: function () {
+										return {
+											nomor_pembayaran: form.querySelector('[name="nomor_pembayaran"]').value,
+											nomor_pembayaran_old: form.querySelector('[name="nomor_pembayaran_old"]').value,
+											nama: form.querySelector('[name="nama_siswa"]').value
+										};
 									}
-                                },
-                            },
-                            tanggal_invoice: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'Tanggal Invoice diperlukan'
-                                    }
-                                }
-                            },
-                        },
-                        plugins: {
-                            trigger: new FormValidation.plugins.Trigger(),
-                            submitButton: new FormValidation.plugins.SubmitButton(),
-                            bootstrap: new FormValidation.plugins.Bootstrap()
-                        }
-                    }
-            );
+								}
+							}
+						},
+						nominal_tagihan: {
+							validators: {
+								notEmpty: {
+									message: 'Total Nominal diperlukan'
+								},
+								integer: {
+									message: 'Inputan harus Angka',
+									// The default separators
+									thousandsSeparator: '',
+									decimalSeparator: ''
+								},
+							}
+						},
+						nama_siswa: {
+							validators: {
+								notEmpty: {
+									message: 'Nama Siswa diperlukan'
+								},
+								regexp: {
+									regexp: /^[a-zs\s.()-]+$/i,
+									message: 'Inputan harus berupa huruf'
+								}
+							},
+						},
+						tahun_ajaran: {
+							validators: {
+								notEmpty: {
+									message: 'Tahun Ajaran diperlukan'
+								},
+							}
+						},
+						nis: {
+							validators: {
+								notEmpty: {
+									message: 'NIS Siswa diperlukan'
+								},
+							}
+						},
+						email: {
+							validators: {
+								emailAddress: {
+									message: 'Email anda tidak valid'
+								}
+							}
+						},
+						level_tingkat: {
+							validators: {
+								notEmpty: {
+									message: 'Tingkat diperlukan'
+								},
+							}
+						},
+						nomor_hp: {
+							validators: {
+								integer: {
+									message: 'Inputan harus Angka',
+									// The default separators
+									thousandsSeparator: ''
+								},
+							}
+						},
+						tanggal_invoice: {
+							validators: {
+								notEmpty: {
+									message: 'Tanggal Invoice diperlukan'
+								}
+							}
+						},
+					},
+					plugins: {
+						trigger: new FormValidation.plugins.Trigger(),
+						submitButton: new FormValidation.plugins.SubmitButton(),
+						bootstrap: new FormValidation.plugins.Bootstrap()
+					}
+				}
+			);
 
-            _login.on('submit', function (wizard) {
-                if (validation) {
-                    validation.validate().then(function (status) {
-                        if (status == 'Valid') {
-                            Swal.fire({
-                                title: "Peringatan!",
-                                html: "Apakah anda yakin ingin <b>MENYETUJUI</b> Update Data Tagihan DU ini?",
-                                icon: "warning",
-                                input: 'password',
-                                inputLabel: 'Password Anda',
-                                inputPlaceholder: 'Masukkan password Anda',
-                                inputAttributes: {
-                                    'aria-label': 'Masukkan password Anda'
-                                },
-                                inputValidator: (value) => {
-                                    if (!value) {
-                                        return 'Password Anda diperlukan!'
-                                    }
-                                },
-                                showCancelButton: true,
-                                confirmButtonColor: "#1BC5BD",
-                                confirmButtonText: "Ya, Setuju!",
-                                cancelButtonText: "Tidak, Nanti saja!",
-                                showLoaderOnConfirm: true,
-                                closeOnConfirm: false,
-                                closeOnCancel: true,
-                                preConfirm: (text) => {
-                                    return $.ajax({
-                                        type: "post",
+			validation.on('core.validator.validated', function (data) {
+
+				if (data.field === 'nomor_pembayaran' && data.validator === 'integer') {
+					if (data.result.valid === false) {
+						status = false;
+					} else {
+						status = true;
+					}
+				}
+
+				if (data.field === 'nomor_pembayaran' && data.validator === 'remote') {
+					if (data.result.valid === false) {
+
+						if (data.result.meta.status === false) {
+							if (status == true) {
+								validation
+									// Update the message option
+									.updateValidatorOption('nomor_pembayaran', 'remote', 'message', data.result.message)
+							}
+
+						} else if (data.result.meta.status === true) {
+							if (status == true) {
+								validation
+									// Update the message option
+									.updateValidatorOption('nomor_pembayaran', 'remote', 'message', data.result.message)
+									// Set the field as invalid
+									.updateFieldStatus('nomor_pembayaran', 'Invalid', 'remote');
+							}
+
+						}
+
+					}
+				}
+
+			})
+
+			_login.on('submit', function (wizard) {
+				if (validation) {
+					validation.validate().then(function (status) {
+						if (status == 'Valid') {
+							Swal.fire({
+								title: "Peringatan!",
+								html: "Apakah anda yakin ingin <b>MENYETUJUI</b> Update Data Tagihan DU ini?",
+								icon: "warning",
+								input: 'password',
+								inputLabel: 'Password Anda',
+								inputPlaceholder: 'Masukkan password Anda',
+								inputAttributes: {
+									'aria-label': 'Masukkan password Anda'
+								},
+								inputValidator: (value) => {
+									if (!value) {
+										return 'Password Anda diperlukan!'
+									}
+								},
+								showCancelButton: true,
+								confirmButtonColor: "#1BC5BD",
+								confirmButtonText: "Ya, Setuju!",
+								cancelButtonText: "Tidak, Nanti saja!",
+								showLoaderOnConfirm: true,
+								closeOnConfirm: false,
+								closeOnCancel: true,
+								preConfirm: (text) => {
+									return $.ajax({
+										type: "post",
 										url: `${HOST_URL}/finance/income/income/confirm_update_income`,
-                                        data: {password: text},
-                                        dataType: 'html',
-                                        success: function (result) {
-                                            if (result == 1) {
-                                                Swal.fire("Berhasil!", "Persetujuan Update Data Tagihan DU telah dilakukan.", "success");
-                                                setTimeout(function () {
-                                                    KTApp.blockPage({
-                                                        overlayColor: '#FFA800',
-                                                        state: 'warning',
-                                                        size: 'lg',
-                                                        opacity: 0.1,
-                                                        message: 'Silahkan Tunggu...'
-                                                    });
-                                                    form.submit(); // Submit form
-                                                }, 1000);
-                                            } else {
-                                                Swal.fire("Opsss!", "Password Anda Salah. Ulangi kembali", "error");
-                                            }
-                                        },
-                                        error: function (result) {
-                                            console.log(result);
-                                            Swal.fire("Opsss!", "Koneksi Internet Bermasalah.", "error");
-                                        }
-                                    });
-                                },
-                                allowOutsideClick: () => !Swal.isLoading()
-                            }).then(function (result) {
-                                if (!result.isConfirm) {
-                                    Swal.fire("Dibatalkan!", "Persetujuan Update Data Tagihan DU telah dibatalkan.", "error");
-                                }
-                            });
+										data: { password: text },
+										dataType: 'html',
+										success: function (result) {
+											if (result == 1) {
+												Swal.fire("Berhasil!", "Persetujuan Update Data Tagihan DU telah dilakukan.", "success");
+												setTimeout(function () {
+													KTApp.blockPage({
+														overlayColor: '#FFA800',
+														state: 'warning',
+														size: 'lg',
+														opacity: 0.1,
+														message: 'Silahkan Tunggu...'
+													});
+													form.submit(); // Submit form
+												}, 1000);
+											} else {
+												Swal.fire("Opsss!", "Password Anda Salah. Ulangi kembali", "error");
+											}
+										},
+										error: function (result) {
+											console.log(result);
+											Swal.fire("Opsss!", "Koneksi Internet Bermasalah.", "error");
+										}
+									});
+								},
+								allowOutsideClick: () => !Swal.isLoading()
+							}).then(function (result) {
+								if (!result.isConfirm) {
+									Swal.fire("Dibatalkan!", "Persetujuan Update Data Tagihan DU telah dibatalkan.", "error");
+								}
+							});
 
-                        } else {
-                            Swal.fire({
-                                text: "Mohon Maaf, kemungkinan terjadi kesalahan pada pengisian Anda, Mohon menginputkan dengan benar.",
-                                icon: "error",
-                                buttonsStyling: false,
-                                confirmButtonText: "Oke!",
-                                customClass: {
-                                    confirmButton: "btn font-weight-bold btn-primary"
-                                }
-                            }).then(function () {
-                                KTUtil.scrollTop();
-                            });
-                        }
-                    });
-                }
-            });
-        };
+						} else {
+							Swal.fire({
+								text: "Mohon Maaf, kemungkinan terjadi kesalahan pada pengisian Anda, Mohon menginputkan dengan benar.",
+								icon: "error",
+								buttonsStyling: false,
+								confirmButtonText: "Oke!",
+								customClass: {
+									confirmButton: "btn font-weight-bold btn-primary"
+								}
+							}).then(function () {
+								KTUtil.scrollTop();
+							});
+						}
+					});
+				}
+			});
+		};
 
-        // Public Functions
-        return {
-            // public functions
-            init: function () {
-                _login = $('#kt_form');
+		// Public Functions
+		return {
+			// public functions
+			init: function () {
+				_login = $('#kt_form');
 
-                _handleSignInForm();
-            }
-        };
-    }();
+				_handleSignInForm();
+			}
+		};
+	}();
 
-// Class Initialization
-    jQuery(document).ready(function () {
-        KTLogin.init();
-    });
+	// Class Initialization
+	jQuery(document).ready(function () {
+		KTLogin.init();
+	});
 
-    /******/ })()
-        ;
+	/******/
+})()
+	;
 //# sourceMappingURL=login-general.js.map
 

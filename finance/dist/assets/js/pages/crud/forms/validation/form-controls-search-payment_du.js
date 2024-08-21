@@ -54,7 +54,7 @@
                                     },
                                     file: {
                                         maxSize: 10097152,
-                                        message: 'Foto harus berekstensi xls, xlsx dan < 10Mb'
+                                        message: 'File harus berekstensi xls, xlsx dan < 10Mb'
                                     }
                                 }
                             },

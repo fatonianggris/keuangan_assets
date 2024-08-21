@@ -307,12 +307,11 @@ $(document).ready(function () {
 								a.download = filename;
 								document.body.appendChild(a);
 								a.click();
+								document.body.removeChild(a); // Cleanup
 							}
 						} else {
 							window.open(downloadUrl, '_blank');
 						}
-
-						setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
 					}
 
 					Swal.fire({
@@ -358,7 +357,7 @@ $(document).ready(function () {
 	$(".findRekapTabungan").select2({
 		placeholder: "Input No Rekening Tabungan Bersama",
 		minimumInputLength: 7,
-		maximumInputLength: 7,
+		maximumInputLength: 8,
 		allowClear: true,
 	});
 

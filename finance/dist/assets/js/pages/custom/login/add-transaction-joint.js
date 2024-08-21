@@ -23,9 +23,9 @@
 									message: 'Nomor Rekening Tabungan diperlukan'
 								},
 								stringLength: {
-									max: 7,
+									max: 8,
 									min: 7,
-									message: 'Nomor Rekening harus memiliki 7 karakter'
+									message: 'Nomor Rekening harus memiliki 7-8 karakter'
 								}
 							}
 						},
@@ -121,9 +121,9 @@
 									message: 'Nomor Rekening Tabungan diperlukan'
 								},
 								stringLength: {
-									max: 7,
+									max: 8,
 									min: 7,
-									message: 'Nomor Rekening harus memiliki 7 karakter'
+									message: 'Nomor Rekening harus memiliki 7-8 karakter'
 								}
 							}
 						},
@@ -219,9 +219,9 @@
 									message: 'Nomor Rekening Tabungan Bersama diperlukan'
 								},
 								stringLength: {
-									max: 7,
+									max: 8,
 									min: 7,
-									message: 'Nomor Rekening harus memiliki 7 karakter'
+									message: 'Nomor Rekening harus memiliki 7-8 karakter'
 								}
 							}
 						},

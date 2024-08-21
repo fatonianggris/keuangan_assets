@@ -4,6 +4,27 @@ $(document).ready(function () {
 
 		$("#modal_dpb").html("");
 
+		$('[name="id_tagihan"]').val('');
+		$('[name="id_invoice"]').val('');
+		$('[name="old_id_invoice"]').val('');
+		$('[name="nomor_bayar"]').val('');
+		$('[name="old_nomor_bayar"]').val('');
+		$('[name="nama"]').val('');
+		$('[name="old_nama"]').val('');
+		$('[name="tanggal_invoice"]').val('');
+		$('[name="informasi"]').text('');
+		$('[name="rincian"]').text('');
+		$('[name="nominal_tagihan"]').val('');
+		$('[name="email"]').val('');
+		$('[name="nomor_hp"]').val('');
+		$('[name="catatan"]').text('');
+		$('[name="tahun_ajaran"] option:selected').remove();
+		$('[name="level_tingkat"] option:selected').remove();
+		
+		$("#status_nomor_bayar").html('');
+		$("#status_nama").html('');
+		$("#status_nomor_invoice").html('');
+
 		var id_tagihan = $(this).data("id_tagihan");
 		var id_invoice = $(this).data("id_invoice");
 		var id_tahun_ajaran = $(this).data("id_tahun_ajaran");
@@ -44,16 +65,20 @@ $(document).ready(function () {
 		}
 
 		if (status_nama_duplikat == "1") {
-			var nama_duplikat = "<p class='font-weight-boldest display-4 text-success text-center'>MIRIP</p>";
+			var nama_duplikat = "<p class='font-weight-boldest display-4 text-success text-center'>TERDAFTAR</p>";
 		} else if (status_nama_duplikat == "2") {
 			var nama_duplikat = "<p class='font-weight-boldest display-4 text-warning text-center'>TIDAK TERDAFTAR</p>";
-		} else {
+		} else if (status_nama_duplikat == "3") {
 			var nama_duplikat = "<p class='font-weight-boldest display-4 text-danger text-center'>DUPLIKAT</p>";
+		} else if (status_nama_duplikat == "4") {
+			var nama_duplikat = "<p class='font-weight-boldest display-4 text-warning text-center'>MIRIP</p>";
 		}
 
 		if (status_invoice_duplikat == "1") {
-			var invoice_duplikat = "<p class='font-weight-boldest display-4 text-success text-center'>TIDAK DUPLIKAT</p>";
-		} else {
+			var invoice_duplikat = "<p class='font-weight-boldest display-4 text-success text-center'>TIDAK TERDAFTAR</p>";
+		} else if (status_invoice_duplikat == "2") {
+			var invoice_duplikat = "<p class='font-weight-boldest display-4 text-danger text-center'>TERPAKAI</p>";
+		} else if (status_invoice_duplikat == "3") {
 			var invoice_duplikat = "<p class='font-weight-boldest display-4 text-danger text-center'>DUPLIKAT</p>";
 		}
 
@@ -103,7 +128,7 @@ $(document).ready(function () {
 							`${data.data[i].tahun_ajaran}` +
 							"</td>" +
 							"<td class='font-weight-bolder text-danger'>" +
-							`${data.data[i].score}` +
+							`${data.data[i].score}%` +
 							"</td>" +
 							"</tr>";
 					}
@@ -177,7 +202,7 @@ $(document).ready(function () {
 	});
 
 
-	$("#kt_datatable_income_dpb_invoice_success").on("click", ".delete_income_transition_du", function () {
+	$("#kt_datatable_income_dpb_invoice_success").on("click", ".delete_income_transition_dpb", function () {
 		var id_tagihan = $(this).data("id_tagihan");
 		var id_invoice = $(this).data("id_invoice");
 		var nomor_bayar = $(this).data("nomor_bayar");

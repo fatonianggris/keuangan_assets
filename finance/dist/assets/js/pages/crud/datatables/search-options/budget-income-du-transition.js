@@ -107,16 +107,20 @@
 						render: function (data, type, full, meta) {
 							var status = {
 								1: {
-									'title': 'MIRIP',
+									'title': 'TERDAFTAR',
 									'class': 'label-light-success'
 								},
 								2: {
-									'title': 'TIDAK MIRIP',
+									'title': 'TIDAK TERDAFTAR',
 									'class': 'label-light-warning'
 								},
 								3: {
 									'title': 'DUPLIKAT',
 									'class': 'label-light-danger'
+								},
+								4: {
+									'title': 'MIRIP',
+									'class': 'label-light-warning'
 								},
 							};
 							if (typeof status[data] === 'undefined') {
@@ -130,10 +134,14 @@
 						render: function (data, type, full, meta) {
 							var status = {
 								1: {
-									'title': 'TIDAK DUPLIKAT',
+									'title': 'TIDAK TERDAFTAR',
 									'class': 'label-light-success',
 								},
 								2: {
+									'title': 'TERPAKAI',
+									'class': 'label-light-danger',
+								},
+								3: {
 									'title': 'DUPLIKAT',
 									'class': 'label-light-danger'
 								},

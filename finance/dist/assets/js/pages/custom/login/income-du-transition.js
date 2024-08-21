@@ -4,6 +4,27 @@ $(document).ready(function () {
 
 		$("#modal_du").html("");
 
+		$('[name="id_tagihan"]').val('');
+		$('[name="id_invoice"]').val('');
+		$('[name="old_id_invoice"]').val('');
+		$('[name="nomor_bayar"]').val('');
+		$('[name="old_nomor_bayar"]').val('');
+		$('[name="nama"]').val('');
+		$('[name="old_nama"]').val('');
+		$('[name="tanggal_invoice"]').val('');
+		$('[name="informasi"]').text('');
+		$('[name="rincian"]').text('');
+		$('[name="nominal_tagihan"]').val('');
+		$('[name="email"]').val('');
+		$('[name="nomor_hp"]').val('');
+		$('[name="catatan"]').text('');
+		$('[name="tahun_ajaran"] option:selected').remove();
+		$('[name="level_tingkat"] option:selected').remove();
+
+		$("#status_nomor_bayar").html('');
+		$("#status_nama").html('');
+		$("#status_nomor_invoice").html('');
+
 		var id_tagihan = $(this).data("id_tagihan");
 		var id_invoice = $(this).data("id_invoice");
 		var id_tahun_ajaran = $(this).data("id_tahun_ajaran");
@@ -44,107 +65,114 @@ $(document).ready(function () {
 		}
 
 		if (status_nama_duplikat == "1") {
-			var nama_duplikat = "<p class='font-weight-boldest display-4 text-success text-center'>MIRIP</p>";
+			var nama_duplikat = "<p class='font-weight-boldest display-4 text-success text-center'>TERDAFTAR</p>";
 		} else if (status_nama_duplikat == "2") {
 			var nama_duplikat = "<p class='font-weight-boldest display-4 text-warning text-center'>TIDAK TERDAFTAR</p>";
-		} else {
+		} else if (status_nama_duplikat == "3") {
 			var nama_duplikat = "<p class='font-weight-boldest display-4 text-danger text-center'>DUPLIKAT</p>";
+		} else if (status_nama_duplikat == "4") {
+			var nama_duplikat = "<p class='font-weight-boldest display-4 text-warning text-center'>MIRIP</p>";
 		}
 
 		if (status_invoice_duplikat == "1") {
-			var invoice_duplikat = "<p class='font-weight-boldest display-4 text-success text-center'>TIDAK DUPLIKAT</p>";
-		} else {
+			var invoice_duplikat = "<p class='font-weight-boldest display-4 text-success text-center'>TIDAK TERDAFTAR</p>";
+		} else if (status_invoice_duplikat == "2") {
+			var invoice_duplikat = "<p class='font-weight-boldest display-4 text-danger text-center'>TERPAKAI</p>";
+		} else if (status_invoice_duplikat == "3") {
 			var invoice_duplikat = "<p class='font-weight-boldest display-4 text-danger text-center'>DUPLIKAT</p>";
 		}
 
-		$.ajax({
-			type: "GET",
-			url: `${HOST_URL}/finance/income/get_name_similliar/${nama.replace(/'/g, '')}`,
-			async: false,
-			dataType: "JSON",
-			success: function (data) {
-				if (data.status) {
-					var html = "";
-					for (var i = 0; i < data.data.length; i++) {
+		if (status_nama_duplikat == '4') {
 
-						if (data.data[i].level_tingkat == "1") {
-							var nama_tingkat = "KB";
-						} else if (data.data[i].level_tingkat == "2") {
-							var nama_tingkat = "TK";
-						} else if (data.data[i].level_tingkat == "3") {
-							var nama_tingkat = "SD";
-						} else if (data.data[i].level_tingkat == "4") {
-							var nama_tingkat = "SMP";
-						} else if (data.data[i].level_tingkat == "6") {
-							var nama_tingkat = "DC";
+			$.ajax({
+				type: "GET",
+				url: `${HOST_URL}/finance/income/get_name_similliar/${nama.replace(/'/g, '')}`,
+				async: false,
+				dataType: "JSON",
+				success: function (data) {
+					if (data.status) {
+						var html = "";
+						for (var i = 0; i < data.data.length; i++) {
+
+							if (data.data[i].level_tingkat == "1") {
+								var nama_tingkat = "KB";
+							} else if (data.data[i].level_tingkat == "2") {
+								var nama_tingkat = "TK";
+							} else if (data.data[i].level_tingkat == "3") {
+								var nama_tingkat = "SD";
+							} else if (data.data[i].level_tingkat == "4") {
+								var nama_tingkat = "SMP";
+							} else if (data.data[i].level_tingkat == "6") {
+								var nama_tingkat = "DC";
+							}
+
+							html +=
+								"<tr>" +
+								"<td class='font-weight-bolder text-danger'>" +
+								`${data.data[i].nomor_pembayaran_dpb}` +
+								"</td>" +
+								"<td class='font-weight-bolder text-danger'>" +
+								`${data.data[i].nomor_pembayaran_du}` +
+								"</td>" +
+								"<td class='font-weight-bolder text-dark'>" +
+								`${data.data[i].nama_lengkap.toUpperCase()}` +
+								"</td>" +
+								"<td class='font-weight-bolder text-dark'>" +
+								`${nama_tingkat}` +
+								"</td>" +
+								"<td>" +
+								`${data.data[i].email}` +
+								"</td>" +
+								"<td>" +
+								`${data.data[i].nomor_handphone}` +
+								"</td>" +
+								"<td>" +
+								`${data.data[i].tahun_ajaran}` +
+								"</td>" +
+								"<td class='font-weight-bolder text-danger'>" +
+								`${data.data[i].score}%` +
+								"</td>" +
+								"</tr>";
 						}
 
-						html +=
-							"<tr>" +
-							"<td class='font-weight-bolder text-danger'>" +
-							`${data.data[i].nomor_pembayaran_dpb}` +
-							"</td>" +
-							"<td class='font-weight-bolder text-danger'>" +
-							`${data.data[i].nomor_pembayaran_du}` +
-							"</td>" +
-							"<td class='font-weight-bolder text-dark'>" +
-							`${data.data[i].nama_lengkap.toUpperCase()}` +
-							"</td>" +
-							"<td class='font-weight-bolder text-dark'>" +
-							`${nama_tingkat}` +
-							"</td>" +
-							"<td>" +
-							`${data.data[i].email}` +
-							"</td>" +
-							"<td>" +
-							`${data.data[i].nomor_handphone}` +
-							"</td>" +
-							"<td>" +
-							`${data.data[i].tahun_ajaran}` +
-							"</td>" +
-							"<td class='font-weight-bolder text-danger'>" +
-							`${data.data[i].score}` +
-							"</td>" +
-							"</tr>";
+						$("#modal_du").html("<div class='alert alert-danger text-center font-weight-bold' role='alert'>"
+							+ `${String(data.messages)}`
+							+ "</div>"
+							+ "<table class='table table-separate table-hover table-light-dark table-checkable'>"
+							+ "<thead>"
+							+ "<tr>"
+							+ "<th>Nomor DPB</th>"
+							+ "<th>Nomor DU</th>"
+							+ "<th>Nama</th>"
+							+ "<th>Tingkat</th>"
+							+ "<th>Email</th>"
+							+ "<th>Nomor HP</th>"
+							+ "<th>Tahun Ajaran</th>"
+							+ "<th>Score</th>"
+							+ "</tr>"
+							+ "</thead>"
+							+ "<tbody>" +
+							html
+							+ "</tbody>"
+							+ "<tfoot>"
+							+ "<tr>"
+							+ "<th></th>"
+							+ "<th></th>"
+							+ "<th></th>"
+							+ "<th></th>"
+							+ "<th></th>"
+							+ "<th></th>"
+							+ "<th></th>"
+							+ "<th></th>"
+							+ "</tr>"
+							+ "</tfoot>"
+							+ "</table>");
+					} else {
+
 					}
-
-					$("#modal_du").html("<div class='alert alert-danger text-center font-weight-bold' role='alert'>"
-						+ `${String(data.messages)}`
-						+ "</div>"
-						+ "<table class='table table-separate table-hover table-light-dark table-checkable'>"
-						+ "<thead>"
-						+ "<tr>"
-						+ "<th>Nomor DPB</th>"
-						+ "<th>Nomor DU</th>"
-						+ "<th>Nama</th>"
-						+ "<th>Tingkat</th>"
-						+ "<th>Email</th>"
-						+ "<th>Nomor HP</th>"
-						+ "<th>Tahun Ajaran</th>"
-						+ "<th>Score</th>"
-						+ "</tr>"
-						+ "</thead>"
-						+ "<tbody>" +
-						html
-						+ "</tbody>"
-						+ "<tfoot>"
-						+ "<tr>"
-						+ "<th></th>"
-						+ "<th></th>"
-						+ "<th></th>"
-						+ "<th></th>"
-						+ "<th></th>"
-						+ "<th></th>"
-						+ "<th></th>"
-						+ "<th></th>"
-						+ "</tr>"
-						+ "</tfoot>"
-						+ "</table>");
-				} else {
-
-				}
-			},
-		});
+				},
+			});
+		}
 
 		$('[name="id_tagihan"]').val(id_tagihan);
 		$('[name="id_invoice"]').val(id_invoice);

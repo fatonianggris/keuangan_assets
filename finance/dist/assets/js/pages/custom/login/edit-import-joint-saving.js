@@ -37,9 +37,9 @@
 									message: 'Nomor Rekening telah digunakan, inputkan Nomor Rekening lain!',
 								},
 								stringLength: {
-									max: 7,
+									max: 8,
 									min: 7,
-									message: 'Nomor Rekening harus memiliki 7 karakter'
+									message: 'Nomor Rekening harus memiliki 7-8 karakter'
 								}
 							}
 						},
@@ -129,11 +129,137 @@
 				});
 			}
 
-			_edit_joint.on('submit', function (wizard) {
+			$("#btnUpdateTabungan").on("click", function () {
 				if (validation) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
-							form.submit(); // Submit form
+							var csrfName = $('.txt_csrfname').attr('name');
+							var csrfHash = $('.txt_csrfname').val(); // CSRF hash
+
+							var id_tabungan = $('[name="id_nasabah_bersama"]').val();
+							var nomor_rekening = $('[name="nomor_rekening_bersama"]').val();
+							var old_nomor_rekening = $('[name="old_nomor_rekening_bersama"]').val();
+							var nama_tabungan = $('[name="nama_tabungan_bersama"]').val();
+							var id_pj = $('[name="id_siswa_penanggung_jawab"]').val();
+							var id_tingkat = $('[name="id_tingkat"]').val();
+							var id_ta = $('[name="id_th_ajaran"]').val();
+							var nama_wali = $('[name="nama_wali"]').val();
+							var tanggal_transaksi = $('[name="tanggal_transaksi"]').val();
+							var nomor_hp = $('[name="nomor_handphone_wali"]').val()
+							var saldo_bersama = $('[name="saldo_bersama"]').val()
+
+							if (saldo_bersama >= 0) {
+
+								if (id_tabungan != null && id_tabungan != "" && nomor_rekening != null && nomor_rekening != "" && nama_tabungan != null && nama_tabungan != "" && id_pj != null && id_pj != "" && id_pj != "0" && id_tingkat != null && id_tingkat != "" && tanggal_transaksi != null && tanggal_transaksi != "") {
+
+									Swal.fire({
+										title: "Peringatan!",
+										html: "Apakah anda yakin Mengupdate Nasabah Bersama atas nama <b>" + nama_tabungan.toUpperCase() + " (" + nomor_rekening + ")</b> ?",
+										icon: "warning",
+										showCancelButton: true,
+										confirmButtonColor: "#DD6B55",
+										confirmButtonText: "Ya, Simpan!",
+										cancelButtonText: "Tidak, Batal!",
+										closeOnConfirm: false,
+										closeOnCancel: false
+									}).then(function (result) {
+										if (result.value) {
+
+											$("#modalEditJoint").modal("hide");
+											KTApp.blockPage({
+												overlayColor: '#FFA800',
+												state: 'warning',
+												size: 'lg',
+												opacity: 0.1,
+												message: 'Silahkan Tunggu...'
+											});
+
+											$.ajax({
+												type: "POST",
+												url: `${HOST_URL}/finance/savings/update_import_joint_saving`,
+												dataType: "JSON",
+												data: {
+													id_nasabah_bersama: id_tabungan,
+													nomor_rekening_bersama: nomor_rekening,
+													old_nomor_rekening_bersama: old_nomor_rekening,
+													nama_tabungan_bersama: nama_tabungan,
+													id_siswa_penanggung_jawab: id_pj,
+													id_tingkat: id_tingkat,
+													id_th_ajaran: id_ta,
+													nama_wali: nama_wali,
+													nomor_handphone: nomor_hp,
+													saldo_bersama: saldo_bersama,
+													tanggal_transaksi: tanggal_transaksi,
+													[csrfName]: csrfHash
+												},
+												success: function (data) {
+													// Update CSRF hash
+													KTApp.unblockPage();
+													$('.txt_csrfname').val(data.token);
+
+													if (data.status) {
+														Swal.fire({
+															html: data.messages,
+															icon: "success",
+															buttonsStyling: false,
+															confirmButtonText: "Oke!",
+															customClass: {
+																confirmButton: "btn font-weight-bold btn-success"
+															}
+														}).then(function () {
+															KTUtil.scrollTop();
+														});
+													} else {
+														Swal.fire({
+															html: data.messages,
+															icon: "error",
+															buttonsStyling: false,
+															confirmButtonText: "Oke!",
+															customClass: {
+																confirmButton: "btn font-weight-bold btn-danger"
+															}
+														}).then(function () {
+															KTUtil.scrollTop();
+														});
+													}
+													$("#table_transcation").DataTable().destroy();
+													datatable_init();
+												},
+											});
+										} else {
+											Swal.fire("Dibatalkan!", "Edit Nasabah Bersama atas nama <b>" + nama_tabungan.toUpperCase() + " (" + nomor_rekening + ")</b> batal diubah.", "error");
+											return false;
+										}
+									});
+
+									return false;
+								} else {
+									Swal.fire({
+										html: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh Kosong, Silahkan input ulang.",
+										icon: "error",
+										buttonsStyling: false,
+										confirmButtonText: "Oke!",
+										customClass: {
+											confirmButton: "btn font-weight-bold btn-danger"
+										}
+									}).then(function () {
+										KTUtil.scrollTop();
+									});
+
+								}
+							} else {
+								Swal.fire({
+									html: "Opps!, Pastikan Inputan Terisi dengan Benar & Nominal Tidak Boleh kurang dari 0 dan Kosong, Silahkan input ulang.",
+									icon: "error",
+									buttonsStyling: false,
+									confirmButtonText: "Oke!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-danger"
+									}
+								}).then(function () {
+									KTUtil.scrollTop();
+								});
+							}
 						} else {
 							Swal.fire({
 								text: "Mohon Maaf, kemungkinan terjadi kesalahan pada pengisian Anda, Mohon menginputkan dengan benar.",
@@ -144,11 +270,12 @@
 									confirmButton: "btn font-weight-bold btn-primary"
 								}
 							}).then(function () {
-								KTUtil.scrollTop();
+
 							});
 						}
 					});
 				}
+				return false;
 			});
 		};
 

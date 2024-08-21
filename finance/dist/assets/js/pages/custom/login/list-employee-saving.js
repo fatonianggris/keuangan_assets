@@ -363,12 +363,12 @@ $(document).ready(function () {
 								a.download = filename;
 								document.body.appendChild(a);
 								a.click();
+								document.body.removeChild(a); // Cleanup
 							}
 						} else {
 							window.open(downloadUrl, '_blank');
 						}
 
-						setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
 					}
 
 					Swal.fire({
@@ -414,7 +414,7 @@ $(document).ready(function () {
 	$(".findRekapNasabah").select2({
 		placeholder: "Input NIP Pegawai",
 		minimumInputLength: 5,
-		maximumInputLength: 6,
+		maximumInputLength: 7,
 		allowClear: true,
 	});
 

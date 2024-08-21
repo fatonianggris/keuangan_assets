@@ -281,12 +281,11 @@ $(document).ready(function () {
 								a.download = filename;
 								document.body.appendChild(a);
 								a.click();
+								document.body.removeChild(a); // Cle
 							}
 						} else {
 							window.open(downloadUrl, '_blank');
 						}
-
-						setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
 					}
 
 					Swal.fire({
@@ -332,28 +331,28 @@ $(document).ready(function () {
 	$(".findTabunganKredit").select2({
 		placeholder: "Cari Rekening Tabungan Bersama",
 		minimumInputLength: 7,
-		maximumInputLength: 7,
+		maximumInputLength: 8,
 		allowClear: true,
 	});
 
 	$(".findTabunganDebet").select2({
 		placeholder: "Cari Rekening Tabungan Bersama",
 		minimumInputLength: 7,
-		maximumInputLength: 7,
+		maximumInputLength: 8,
 		allowClear: true,
 	});
 
 	$(".findTabunganKreditEdit").select2({
 		placeholder: "Cari Rekening Tabungan Bersama",
 		minimumInputLength: 7,
-		maximumInputLength: 7,
+		maximumInputLength: 8,
 		allowClear: false,
 	});
 
 	$(".findTabunganDebetEdit").select2({
 		placeholder: "Cari Rekening Tabungan Bersama",
 		minimumInputLength: 7,
-		maximumInputLength: 7,
+		maximumInputLength: 8,
 		allowClear: false,
 	});
 

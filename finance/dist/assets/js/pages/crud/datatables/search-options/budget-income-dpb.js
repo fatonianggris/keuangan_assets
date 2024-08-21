@@ -31,7 +31,7 @@
                 },
                 footerCallback: function (row, data, start, end, display) {
 
-                    var column_da = 7;
+                    var column_da = 12;
                     var api_da = this.api(), data;
 
                     // Remove the formatting to get integer data for summation
@@ -73,38 +73,7 @@
                         },
                     },
                     {
-                        targets: 5,
-                        render: function (data, type, full, meta) {
-                            var status = {
-                                1: {
-                                    'title': 'KB',
-                                    'class': 'label-light-info'
-                                },
-                                2: {
-                                    'title': 'TK',
-                                    'class': 'label-light-primary'
-                                },
-                                3: {
-                                    'title': 'SD',
-                                    'class': 'label-light-success'
-                                },
-                                4: {
-                                    'title': 'SMP',
-                                    'class': 'label-light-warning'
-                                },
-                                5: {
-                                    'title': 'SMA',
-                                    'class': 'label-light-danger'
-                                },
-                            };
-                            if (typeof status[data] === 'undefined') {
-                                return data;
-                            }
-                            return '<span class="label label-lg font-weight-bold ' + status[data].class + ' label-inline">' + status[data].title + '</span>';
-                        },
-                    },
-                    {
-                        targets: 8,
+                        targets: 7,
                         render: function (data, type, full, meta) {
                             var status = {
                                 MENUNGGU: {
@@ -122,25 +91,6 @@
                                 GAGAL: {
                                     'title': 'GAGAL',
                                     'class': 'label-light-danger'
-                                },
-                            };
-                            if (typeof status[data] === 'undefined') {
-                                return data;
-                            }
-                            return '<span class="label label-lg font-weight-bold ' + status[data].class + ' label-inline">' + status[data].title + '</span>';
-                        },
-                    },
-                    {
-                        targets: 10,
-                        render: function (data, type, full, meta) {
-                            var status = {
-                                ganjil: {
-                                    'title': 'GANJIL',
-                                    'class': 'label-light-warning'
-                                },
-                                genap: {
-                                    'title': 'GENAP',
-                                    'class': 'label-light-success'
                                 },
                             };
                             if (typeof status[data] === 'undefined') {

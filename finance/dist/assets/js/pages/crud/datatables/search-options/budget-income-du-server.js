@@ -63,7 +63,7 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 					// parameters for custom backend script demo
 					columnsDef: [
 						'id_tagihan_pembayaran_du', 'id_invoice', 'tanggal_invoice', 'nama_lengkap', 'nomor_pembayaran_du', 'level_tingkat', 'nama_kelas',
-						'status_pembayaran', 'tahun_ajaran', 'rincian', 'bulan_invoice', 'tanggal_transaksi', 'nominal_tagihan', 'nis', 'id_encrypt', 'status_pembayaran'],
+						'status_pembayaran', 'tahun_ajaran', 'th_ajaran', 'rincian', 'bulan_invoice', 'tanggal_transaksi', 'nominal_tagihan', 'nis', 'id_encrypt'],
 				},
 			},
 			columns: [
@@ -75,7 +75,7 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 				{ data: 'level_tingkat' },
 				{ data: 'nama_kelas' },
 				{ data: 'status_pembayaran' },
-				{ data: 'tahun_ajaran' },
+				{ data: 'th_ajaran' },
 				{ data: 'rincian' },
 				{ data: 'bulan_invoice' },
 				{ data: 'tanggal_transaksi' },
@@ -100,7 +100,6 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 				{
 					targets: 1,
 					render: function (data, type, full, meta) {
-
 						if (data === '' || data === null || data === '0') {
 							return 'UNKNOWN';
 						} else {
@@ -218,7 +217,7 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 						if (data === '' || data === null || data === '0') {
 							return 'UNKNOWN';
 						} else {
-							return '<span class="font-weight-bolder">' + data + '</span>';
+							return '<span class="font-weight-bolder">' + full['tahun_ajaran'] + '</span>';
 						}
 					},
 				},
@@ -262,7 +261,7 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 						if (data === '' || data === null) {
 							return 'UNKNOWN';
 						} else {
-							return '<span class="font-weight-bolder">' + String(data).replace(/(.)(?=(\d{3})+$)/g, '$1,') + '</span>';
+							return '<span class="font-weight-bolder">' + String(data).replace(/(.)(?=(\d{3})+$)/g, '$1.') + '</span>';
 						}
 					},
 				},
@@ -317,11 +316,6 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 			document.getElementById('id_check_excel').value = rows_selected.join(",");
 		});
 
-		var filter = function () {
-			var val = $.fn.dataTable.util.escapeRegex($(this).val());
-			table.column($(this).data('col-index')).search(val ? val : '', false, false).draw();
-		};
-
 		var param = {};
 		$('.datatable-input').each(function () {
 			var i = $(this).data('col-index');
@@ -334,7 +328,7 @@ var KTDatatablesSearchOptionsAdvancedSearch = function () {
 		});
 
 		$.each(param, function (i, val) {
-			// apply search params to datatable
+			// apply search params to datatabl
 			table.column(i).search(val ? val : '', false, false).draw();
 		});
 
