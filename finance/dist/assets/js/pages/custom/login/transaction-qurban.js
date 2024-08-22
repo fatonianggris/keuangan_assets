@@ -343,12 +343,12 @@ $(document).ready(function () {
 	$(".findNasabahKredit").select2({
 		placeholder: "Input NIS Siswa",
 		allowClear: true,
-		minimumInputLength: 6,
+		minimumInputLength: 5,
 		maximumInputLength: 7,
 		tags: true
 	}).on("change", function (e) {
 		var isNew = $(".findNasabahKredit option:selected").text();
-		if (isNew.length == 7 || isNew.length == 6) {
+		if (isNew.length == 7 || isNew.length == 5) {
 			if (stat_close == true) {
 				Swal.fire({
 					title: "Peringatan!",
@@ -370,28 +370,28 @@ $(document).ready(function () {
 
 	$(".findNasabahDebet").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 6,
+		minimumInputLength: 5,
 		maximumInputLength: 7,
 		allowClear: true,
 	});
 
 	$(".findNasabahKreditEdit").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 6,
+		minimumInputLength: 5,
 		maximumInputLength: 7,
 		allowClear: false,
 	});
 
 	$(".findNasabahDebetEdit").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 6,
+		minimumInputLength: 5,
 		maximumInputLength: 7,
 		allowClear: false,
 	});
 
 	$(".findRekapNasabah").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 6,
+		minimumInputLength: 5,
 		maximumInputLength: 7,
 		allowClear: true,
 	});

@@ -413,7 +413,7 @@ $(document).ready(function () {
 
 	$(".findRekapNasabah").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 6,
+		minimumInputLength: 5,
 		maximumInputLength: 7,
 		allowClear: true,
 	});

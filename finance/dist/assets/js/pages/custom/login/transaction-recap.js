@@ -335,28 +335,28 @@ $(document).ready(function () {
 
 	$(".findNasabahKredit").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 6,
+		minimumInputLength: 5,
 		maximumInputLength: 7,
 		allowClear: false,
 	});
 
 	$(".findNasabahDebet").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 6,
+		minimumInputLength: 5,
 		maximumInputLength: 7,
 		allowClear: false,
 	});
 
 	$(".findNasabahKreditEdit").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 6,
+		minimumInputLength: 5,
 		maximumInputLength: 7,
 		allowClear: false,
 	});
 
 	$(".findNasabahDebetEdit").select2({
 		placeholder: "Input NIS Siswa",
-		minimumInputLength: 6,
+		minimumInputLength: 5,
 		maximumInputLength: 7,
 		allowClear: false,
 	});

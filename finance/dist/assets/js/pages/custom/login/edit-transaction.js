@@ -24,8 +24,8 @@
 								},
 								stringLength: {
 									max: 7,
-									min: 6,
-									message: 'Nomor Rekening harus memiliki 6 sampai 7 karakter'
+									min: 5,
+									message: 'Nomor Rekening harus memiliki 5 sampai 7 karakter'
 								}
 							}
 						},
@@ -131,9 +131,9 @@
 									message: 'NIS/Rekening Siswa diperlukan'
 								},
 								stringLength: {
-									max: 6,
+									max: 7,
 									min: 5,
-									message: 'Nomor Rekening harus memiliki 5 sampai 6 karakter'
+									message: 'Nomor Rekening harus memiliki 5 sampai 7 karakter'
 								}
 							}
 						},
