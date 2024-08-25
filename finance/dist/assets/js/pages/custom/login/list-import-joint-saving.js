@@ -97,7 +97,7 @@ function datatable_init() {
 }
 
 $('#btn_accept_import').on('click', function (e) {
-
+	e.preventDefault();
 	var rows_selected = $("#table_transcation").DataTable().column(0).checkboxes.selected();
 
 	var csrfName = $('.txt_csrfname').attr('name');
@@ -132,13 +132,81 @@ $('#btn_accept_import').on('click', function (e) {
 				data: {
 					password: text,
 					data_check: rows_selected.join(","),
+					status_pj: false,
 					[csrfName]: csrfHash
 				},
 				dataType: 'JSON',
 				success: function (data) {
-					$('.txt_csrfname').val(data.token);
 
-					if (data.status) {
+					if (data.status == true && data.confirm == true) {
+						Swal.fire({
+							html: data.messages,
+							icon: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#1BC5BD",
+							confirmButtonText: "Ya, Lanjutkan!",
+							cancelButtonText: "Tidak, Revisi!",
+							showLoaderOnConfirm: true,
+							closeOnConfirm: false,
+							closeOnCancel: true,
+						}).then(function (result) {
+
+							if (result.isConfirmed) {
+
+								$.ajax({
+									type: "post",
+									url: `${HOST_URL}/finance/savings/accept_import_joint_saving`,
+									data: {
+										password: text,
+										data_check: rows_selected.join(","),
+										status_pj: true,
+										[csrfName]: csrfHash
+									},
+									dataType: 'JSON',
+									success: function (data) {
+
+										$('.txt_csrfname').val(data.token);
+
+										if (data.status == true) {
+											Swal.fire({
+												html: data.messages,
+												icon: "success",
+												buttonsStyling: false,
+												confirmButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-success"
+												}
+											}).then(function () {
+												setTimeout(function () {
+													window.location.replace(`${HOST_URL}/finance/savings/list_joint_saving`);
+												}, 500);
+											});
+
+										} else {
+											Swal.fire({
+												html: data.messages,
+												icon: "error",
+												buttonsStyling: false,
+												confirmButtonText: "Oke!",
+												customClass: {
+													confirmButton: "btn font-weight-bold btn-danger"
+												}
+											}).then(function () {
+												KTUtil.scrollTop();
+											});
+										}
+									},
+									error: function (result) {
+										// console.log(result);
+										Swal.fire("Opsss!", "Koneksi Internet Bermasalah.", "error");
+									}
+								});
+							} else {
+								Swal.fire("Dibatalkan!", "Persetujuan Impor Data Nasabah Tabungan Bersama telah dibatalkan.", "error");
+							}
+						});
+						return false;
+					} else if (data.status == true && data.confirm == false) {
 						Swal.fire({
 							html: data.messages,
 							icon: "success",
@@ -150,7 +218,7 @@ $('#btn_accept_import').on('click', function (e) {
 						}).then(function () {
 							setTimeout(function () {
 								window.location.replace(`${HOST_URL}/finance/savings/list_joint_saving`);
-							}, 1000);
+							}, 500);
 						});
 
 					} else {
@@ -175,14 +243,15 @@ $('#btn_accept_import').on('click', function (e) {
 		},
 		allowOutsideClick: () => !Swal.isLoading()
 	}).then(function (result) {
-		if (!result.isConfirm) {
+		if (!result.isConfirmed) {
 			Swal.fire("Dibatalkan!", "Persetujuan Impor Data Nasabah Tabungan Bersama telah dibatalkan.", "error");
 		}
 	});
-	e.preventDefault();
+	return false;
 });
 
 $('#btn_reject_import').on('click', function (e) {
+	e.preventDefault();
 	var csrfName = $('.txt_csrfname').attr('name');
 	var csrfHash = $('.txt_csrfname').val(); // CSRF hash
 
@@ -209,11 +278,11 @@ $('#btn_reject_import').on('click', function (e) {
 					if (data.status) {
 						Swal.fire({
 							html: data.messages,
-							icon: "success",
+							icon: "warning",
 							buttonsStyling: false,
 							confirmButtonText: "Oke!",
 							customClass: {
-								confirmButton: "btn font-weight-bold btn-success"
+								confirmButton: "btn font-weight-bold btn-warning"
 							}
 						}).then(function () {
 							setTimeout(function () {
@@ -246,7 +315,7 @@ $('#btn_reject_import').on('click', function (e) {
 			Swal.fire("Dibatalkan!", "Pembatalan Impor Data Nasabah Tabungan Bersama telah dibatalkan.", "error");
 		}
 	});
-	e.preventDefault();
+	return false;
 });
 
 $('#kt_datepicker_transaction').datepicker({
@@ -539,7 +608,7 @@ $("#tb_transaksi").on("click", ".delete_joint", function () {
 		closeOnConfirm: false,
 		closeOnCancel: true,
 		html: "Apakah anda yakin ingin menghapus Data Import Tabungan Bersama atas nama <b>'" +
-		nama_tabungan.toUpperCase() + "' (" + norek + ")</b> ? <br></br> <div id='recaptcha_delete'></div>",
+			nama_tabungan.toUpperCase() + "' (" + norek + ")</b> ? <br></br> <div id='recaptcha_delete'></div>",
 		didOpen: () => {
 			grecaptcha.render('recaptcha_delete', {
 				'sitekey': CAPTCA_KEY

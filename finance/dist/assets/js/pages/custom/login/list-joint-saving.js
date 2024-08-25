@@ -712,7 +712,7 @@ $(document).ready(function () {
 						var nama_lengkap = data[i].nama_lengkap.toUpperCase();
 						var color = "text-dark";
 					} else if (data[i].nama_lengkap == null || data[i].nama_lengkap == "") {
-						var nama_lengkap = "NON DAFTAR";
+						var nama_lengkap = "TIDAK TERDAFTAR";
 						var color = "text-danger";
 					}
 
