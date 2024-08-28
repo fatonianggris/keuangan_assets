@@ -37,8 +37,8 @@
 									message: 'Inputan harus Angka',
 								},
 								greaterThan: {
-									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 2.000',
-									min: 2000,
+									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 1.000',
+									min: 1000,
 								},
 							}
 						},
@@ -135,8 +135,8 @@
 									message: 'Inputan harus Angka',
 								},
 								greaterThan: {
-									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 2.000',
-									min: 2000,
+									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 1.000',
+									min: 1000,
 								},
 							}
 						},

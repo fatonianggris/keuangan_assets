@@ -75,8 +75,8 @@
 									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 2.000',
-									min: 2000,
+									message: 'Nominal Saldo harus lebih atau sama dengan Rp. 1.000',
+									min: 1000,
 								},
 								callback: {
 									message: 'Wajib Mengisi Salah Satu Saldo Tabungan',
@@ -107,8 +107,8 @@
 									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Saldo harus lebih atau sama dengan dari Rp. 2.000',
-									min: 2000,
+									message: 'Nominal Saldo harus lebih atau sama dengan dari Rp. 1.000',
+									min: 1000,
 								},
 								callback: {
 									message: 'Wajib Mengisi Salah Satu Saldo Tabungan',
@@ -139,8 +139,8 @@
 									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Saldo harus lebih atau sama dengan dari Rp. 2.000',
-									min: 2000,
+									message: 'Nominal Saldo harus lebih atau sama dengan dari Rp. 1.000',
+									min: 1000,
 								},
 								callback: {
 									message: 'Wajib Mengisi Salah Satu Saldo Tabungan',

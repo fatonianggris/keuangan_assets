@@ -922,7 +922,7 @@ $(document).ready(function () {
 
 		nominal = parseInt(nominal.replace(/\./g, ""));
 
-		if (nominal != null && nominal >= 2000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && jenis_tabungan != null && jenis_tabungan != "" && tingkat != null && tingkat != "") {
+		if (nominal != null && nominal >= 1000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && jenis_tabungan != null && jenis_tabungan != "" && tingkat != null && tingkat != "") {
 
 			if (window.bundleObj.getOTPKredit() === false) {
 				Swal.fire({
@@ -1148,7 +1148,7 @@ $(document).ready(function () {
 			}
 		} else {
 			Swal.fire({
-				html: "Opps!, Pastikan Semua Inputan Terisi dengan Benar & Nominal Tidak Boleh < 2000, Silahkan input ulang.",
+				html: "Opps!, Pastikan Semua Inputan Terisi dengan Benar & Nominal Tidak Boleh < 1000, Silahkan input ulang.",
 				icon: "error",
 				buttonsStyling: false,
 				confirmButtonText: "Oke!",
@@ -1189,7 +1189,7 @@ $(document).ready(function () {
 
 		nominal = parseInt(nominal.replace(/\./g, ""));
 
-		if (nominal != null && nominal >= 2000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && tingkat != null && tingkat != "") {
+		if (nominal != null && nominal >= 1000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && tingkat != null && tingkat != "") {
 
 			if (window.bundleObj.getOTPKreditEdit() === false) {
 				Swal.fire({
@@ -1298,7 +1298,7 @@ $(document).ready(function () {
 			}
 		} else {
 			Swal.fire({
-				html: "Opps!, Pastikan Inputan Terisi dengan Benar &  Nominal Tidak Boleh < 2000 dan Kosong, Silahkan input ulang.",
+				html: "Opps!, Pastikan Inputan Terisi dengan Benar &  Nominal Tidak Boleh < 1000 dan Kosong, Silahkan input ulang.",
 				icon: "error",
 				buttonsStyling: false,
 				confirmButtonText: "Oke!",
@@ -1343,7 +1343,7 @@ $(document).ready(function () {
 
 		if (nominal <= saldo) {
 
-			if (nominal != null && nominal >= 2000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && tingkat != null && tingkat != "") {
+			if (nominal != null && nominal >= 1000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && tingkat != null && tingkat != "") {
 
 				if (window.bundleObj.getOTPDebet() === false) {
 					Swal.fire({
@@ -1452,7 +1452,7 @@ $(document).ready(function () {
 				}
 			} else {
 				Swal.fire({
-					html: "Opps!, Pastikan Inputan Terisi dengan Benar & Nominal Tidak Boleh < 2000 dan Kosong, Silahkan input ulang.",
+					html: "Opps!, Pastikan Inputan Terisi dengan Benar & Nominal Tidak Boleh < 1000 dan Kosong, Silahkan input ulang.",
 					icon: "error",
 					buttonsStyling: false,
 					confirmButtonText: "Oke!",
@@ -1511,7 +1511,7 @@ $(document).ready(function () {
 
 		if (nominal <= saldo) {
 
-			if (nominal != null && nominal >= 2000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && tingkat != null && tingkat != "") {
+			if (nominal != null && nominal >= 1000 && nominal != "" && nis != null && nis != "" && tahun_ajaran != null && tahun_ajaran != "" && tanggal_transaksi != null && tanggal_transaksi != "" && tingkat != null && tingkat != "") {
 
 				if (window.bundleObj.getOTPDebetEdit() === false) {
 					Swal.fire({
@@ -1621,7 +1621,7 @@ $(document).ready(function () {
 				}
 			} else {
 				Swal.fire({
-					html: "Opps!, Pastikan Inputan Terisi dengan Benar & Nominal Tidak Boleh < 2000 dan Kosong, Silahkan input ulang.",
+					html: "Opps!, Pastikan Inputan Terisi dengan Benar & Nominal Tidak Boleh < 1000 dan Kosong, Silahkan input ulang.",
 					icon: "error",
 					buttonsStyling: false,
 					confirmButtonText: "Oke!",

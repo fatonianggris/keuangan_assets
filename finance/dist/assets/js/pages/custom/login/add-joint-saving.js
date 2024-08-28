@@ -53,8 +53,8 @@
 									thousandsSeparator: ''
 								},
 								greaterThan: {
-									message: 'Nominal Saldo harus lebih dari Rp. 2.000',
-									min: 2000,
+									message: 'Nominal Saldo harus lebih dari Rp. 1.000',
+									min: 1000,
 								},
 							}
 						},
