@@ -128,7 +128,7 @@ $('#btn_accept_import').on('click', function (e) {
 		preConfirm: (text) => {
 			return $.ajax({
 				type: "post",
-				url: `${HOST_URL}/finance/savings/accept_import_joint_saving`,
+				url: `${HOST_URL}finance/savings/accept_import_joint_saving`,
 				data: {
 					password: text,
 					data_check: rows_selected.join(","),
@@ -155,7 +155,7 @@ $('#btn_accept_import').on('click', function (e) {
 
 								$.ajax({
 									type: "post",
-									url: `${HOST_URL}/finance/savings/accept_import_joint_saving`,
+									url: `${HOST_URL}finance/savings/accept_import_joint_saving`,
 									data: {
 										password: text,
 										data_check: rows_selected.join(","),
@@ -269,7 +269,7 @@ $('#btn_reject_import').on('click', function (e) {
 		preConfirm: (text) => {
 			return $.ajax({
 				type: "post",
-				url: `${HOST_URL}/finance/savings/reject_import_joint_saving`,
+				url: `${HOST_URL}finance/savings/reject_import_joint_saving`,
 				data: {
 					[csrfName]: csrfHash
 				},

@@ -150,7 +150,7 @@ $('#btn_accept_import').on('click', function (e) {
 		preConfirm: (text) => {
 			return $.ajax({
 				type: "post",
-				url: `${HOST_URL}/finance/savings/accept_import_personal_saving`,
+				url: `${HOST_URL}finance/savings/accept_import_personal_saving`,
 				data: {
 					password: text,
 					data_check: rows_selected.join(","),
@@ -177,7 +177,7 @@ $('#btn_accept_import').on('click', function (e) {
 
 								$.ajax({
 									type: "post",
-									url: `${HOST_URL}/finance/savings/accept_import_personal_saving`,
+									url: `${HOST_URL}finance/savings/accept_import_personal_saving`,
 									data: {
 										password: text,
 										data_check: rows_selected.join(","),
