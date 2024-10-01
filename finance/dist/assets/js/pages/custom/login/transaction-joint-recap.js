@@ -196,7 +196,7 @@ $(document).ready(function () {
 					$a.remove();
 
 					Swal.fire({
-						text: data.messages,
+						html: data.messages,
 						icon: "success",
 						buttonsStyling: false,
 						confirmButtonText: "Oke!",
@@ -209,7 +209,7 @@ $(document).ready(function () {
 
 				} else {
 					Swal.fire({
-						text: data.messages,
+						html: data.messages,
 						icon: "error",
 						buttonsStyling: false,
 						confirmButtonText: "Oke!",
@@ -289,7 +289,7 @@ $(document).ready(function () {
 					}
 
 					Swal.fire({
-						text: "Berhasil!, Laporan berhasil dicetak, Silahkan cek ulang.",
+						html: "Berhasil!, Laporan berhasil dicetak, Silahkan cek ulang.",
 						icon: "success",
 						buttonsStyling: false,
 						confirmButtonText: "Oke!",
@@ -302,7 +302,7 @@ $(document).ready(function () {
 				} catch {
 
 					Swal.fire({
-						text: "Mohon Maaf, Pilih/Centang data terlebih dahulu. Silahkan cek ulang.",
+						html: "Mohon Maaf, Pilih/Centang data terlebih dahulu. Silahkan cek ulang.",
 						icon: "error",
 						buttonsStyling: false,
 						confirmButtonText: "Oke!",
@@ -391,7 +391,6 @@ $(document).ready(function () {
 		var nama_tabungan = $(this).data("nama_tabungan_bersama");
 		var id_th_ajaran = $(this).data("id_th_ajaran");
 		var id_tingkat = $(this).data("id_tingkat");
-		var th_ajaran = $(this).data("th_ajaran");
 		var nominal = $(this).data("nominal");
 		var waktu_transaksi = $(this).data("waktu_transaksi");
 		var catatan = $(this).data("catatan");
@@ -412,10 +411,10 @@ $(document).ready(function () {
 
 		$('[name="id_transaksi_kredit_edit"]').val(id_transaksi);
 		$('[name="nomor_rekening_kredit_edit"]').empty(0).append($("<option selected></option>").attr("value", nomor_rekening).text(nama_tabungan + " (" + nomor_rekening + ")"));
-		$('[name="th_ajaran_kredit_edit"] option:selected').remove();
-		$('[name="th_ajaran_kredit_edit"]').prepend($("<option selected></option>").attr("value", id_th_ajaran).text(th_ajaran));
-		$('[name="tingkat_kredit_edit"] option:selected').remove();
-		$('[name="tingkat_kredit_edit"]').prepend($("<option selected></option>").attr("value", id_tingkat).text(nama_tingkat));
+
+		$('[name="tingkat_kredit_edit"]').find('option[value="' + id_tingkat + '"]').prop('selected', true);
+		$('[name="th_ajaran_kredit_edit"]').find('option[value="' + id_th_ajaran + '"]').prop('selected', true);
+
 		$('[name="nominal_kredit_edit"]').val(nominal);
 		$('[name="waktu_transaksi_kredit_edit"]').val(waktu_transaksi)
 		$('[name="catatan_kredit_edit"]').val(catatan);
@@ -433,11 +432,12 @@ $(document).ready(function () {
 					jumlah_saldo_akhir = data['info_tabungan'][0]['saldo_tabungan_bersama'];
 
 					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
-					nis = data['info_tabungan'][0]['nis'];
+					number = data['info_tabungan'][0]['number'];
 					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_siswa_pj = data['info_tabungan'][0]['nama_lengkap'];
+					nama_pj = data['info_tabungan'][0]['nama_lengkap'];
 					email_wali = data['info_tabungan'][0]['email'];
 					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
+					jenis_tabungan = data['info_tabungan'][0]['jenis_tabungan'];
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -451,14 +451,20 @@ $(document).ready(function () {
 						nama_tingkat = "DC";
 					}
 
+					if (jenis_tabungan == "1") {
+						nama_tabungan = "KOMITE";
+					} else if (jenis_tabungan == "2") {
+						nama_tabungan = "KELAS";
+					}
+
 				} else {
 					jumlah_saldo_bersama = "-";
 					nomor_rekening_bersama = "-";
 					nama_tabungan_bersama = "-";
 
 					nama_wali = "-";
-					nis = "-";
-					nama_siswa_pj = "-";
+					number = "-";
+					nama_pj = "-";
 					email_wali = "-";
 					nomor_handphone = "-";
 					nama_tingkat = "-";
@@ -480,7 +486,7 @@ $(document).ready(function () {
 		$("#nomorTransaksiKreditEdit").html("(" + nomor_transaksi + ")");
 
 		$("#userNorekKreditEdit").html(nama_tabungan_bersama.toUpperCase() + " (" + nomor_rekening_bersama + ")");
-		$("#userPenanggungJawabKreditEdit").html(nama_siswa_pj.toUpperCase() + "/" + nama_wali.toUpperCase() + " (" + nis + ")");
+		$("#userPenanggungJawabKreditEdit").html(nama_pj.toUpperCase() + " (" + number + ")");
 		$("#userTingkatKreditEdit").html(nama_tingkat);
 		$("#userCatatanKreditEdit").html(info_catatan_bersama);
 		$("#infoTerakhirTransaksiKreditEdit").html(info_waktu_transaksi_bersama);
@@ -498,7 +504,6 @@ $(document).ready(function () {
 		var nama_tabungan = $(this).data("nama_tabungan_bersama");
 		var id_th_ajaran = $(this).data("id_th_ajaran");
 		var id_tingkat = $(this).data("id_tingkat");
-		var th_ajaran = $(this).data("th_ajaran");
 		var nominal = $(this).data("nominal");
 		var waktu_transaksi = $(this).data("waktu_transaksi");
 		var catatan = $(this).data("catatan");
@@ -519,10 +524,10 @@ $(document).ready(function () {
 
 		$('[name="id_transaksi_debet_edit"]').val(id_transaksi);
 		$('[name="nomor_rekening_debet_edit"]').empty(0).append($("<option selected></option>").attr("value", nomor_rekening).text(nama_tabungan + " (" + nomor_rekening + ")"));
-		$('[name="th_ajaran_debet_edit"] option:selected').remove();
-		$('[name="th_ajaran_debet_edit"]').prepend($("<option selected></option>").attr("value", id_th_ajaran).text(th_ajaran));
-		$('[name="tingkat_debet_edit"] option:selected').remove();
-		$('[name="tingkat_debet_edit"]').prepend($("<option selected></option>").attr("value", id_tingkat).text(nama_tingkat));
+
+		$('[name="tingkat_debet_edit"]').find('option[value="' + id_tingkat + '"]').prop('selected', true);
+		$('[name="th_ajaran_debet_edit"]').find('option[value="' + id_th_ajaran + '"]').prop('selected', true);
+
 		$('[name="nominal_debet_edit"]').val(nominal);
 		$('[name="waktu_transaksi_debet_edit"]').val(waktu_transaksi)
 		$('[name="catatan_debet_edit"]').val(catatan);
@@ -540,11 +545,12 @@ $(document).ready(function () {
 					jumlah_saldo_akhir = data['info_tabungan'][0]['saldo_tabungan_bersama'];
 
 					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
-					nis = data['info_tabungan'][0]['nis'];
+					number = data['info_tabungan'][0]['number'];
 					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_siswa_pj = data['info_tabungan'][0]['nama_lengkap'];
+					nama_pj = data['info_tabungan'][0]['nama_lengkap'];
 					email_wali = data['info_tabungan'][0]['email'];
 					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
+					jenis_tabungan = data['info_tabungan'][0]['jenis_tabungan'];
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -558,14 +564,20 @@ $(document).ready(function () {
 						nama_tingkat = "DC";
 					}
 
+					if (jenis_tabungan == "1") {
+						nama_tabungan = "KOMITE";
+					} else if (jenis_tabungan == "2") {
+						nama_tabungan = "KELAS";
+					}
+
 				} else {
 					jumlah_saldo_bersama = "-";
 					nomor_rekening_bersama = "-";
 					nama_tabungan_bersama = "-";
 
 					nama_wali = "-";
-					nis = "-";
-					nama_siswa_pj = "-";
+					number = "-";
+					nama_pj = "-";
 					email_wali = "-";
 					nomor_handphone = "-";
 					nama_tingkat = "-";
@@ -588,7 +600,7 @@ $(document).ready(function () {
 		$("#nomorTransaksiDebetEdit").html("(" + nomor_transaksi + ")");
 
 		$("#userNorekDebetEdit").html(nama_tabungan_bersama.toUpperCase() + " (" + nomor_rekening_bersama + ")");
-		$("#userPenanggungJawabDebetEdit").html(nama_siswa_pj.toUpperCase() + "/" + nama_wali.toUpperCase() + " (" + nis + ")");
+		$("#userPenanggungJawabDebetEdit").html(nama_pj.toUpperCase() + " (" + number + ")");
 		$("#userTingkatDebetEdit").html(nama_tingkat);
 		$("#userCatatanDebetEdit").html(info_catatan_bersama);
 		$("#infoTerakhirTransaksiDebetEdit").html(info_waktu_transaksi_bersama);
@@ -650,9 +662,9 @@ $(document).ready(function () {
 					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'];
 					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
 
-					nis = data['info_tabungan'][0]['nis'];
+					number = data['info_tabungan'][0]['number'];
 					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_siswa_pj = data['info_tabungan'][0]['nama_lengkap'];
+					nama_pj = data['info_tabungan'][0]['nama_lengkap'];
 					email_wali = data['info_tabungan'][0]['email'];
 					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
 
@@ -674,8 +686,8 @@ $(document).ready(function () {
 					nama_tabungan_bersama = "-";
 
 					nama_wali = "-";
-					nis = "-";
-					nama_siswa_pj = "-";
+					number = "-";
+					nama_pj = "-";
 					email_wali = "-";
 					nomor_handphone = "-";
 					nama_tingkat = "-";
@@ -696,11 +708,10 @@ $(document).ready(function () {
 			},
 		});
 
-		$('#inputTingkatKredit').find(":selected").remove();
-		$('#inputTingkatKredit').prepend($("<option selected></option>").attr("value", id_tingkat).text(nama_tingkat));
+		$('#inputTingkatKredit').find('option[value="' + id_tingkat + '"]').prop('selected', true);
 
 		$("#userNorekKredit").html(nama_tabungan_bersama.toUpperCase() + " (" + nomor_rekening_bersama + ")");
-		$("#userPenanggungJawabKredit").html(nama_siswa_pj.toUpperCase() + "/" + nama_wali.toUpperCase() + " (" + nis + ")");
+		$("#userPenanggungJawabKredit").html(nama_pj.toUpperCase() + " (" + number + ")");
 		$("#userTingkatKredit").html(nama_tingkat);
 		$("#userCatatanKredit").html(info_catatan_bersama);
 		$("#infoTerakhirTransaksiKredit").html(info_waktu_transaksi_bersama);
@@ -723,9 +734,9 @@ $(document).ready(function () {
 					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'];
 					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
 
-					nis = data['info_tabungan'][0]['nis'];
+					number = data['info_tabungan'][0]['number'];
 					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_siswa_pj = data['info_tabungan'][0]['nama_lengkap'];
+					nama_pj = data['info_tabungan'][0]['nama_lengkap'];
 					email_wali = data['info_tabungan'][0]['email'];
 					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
 
@@ -747,8 +758,8 @@ $(document).ready(function () {
 					nama_tabungan_bersama = "-";
 
 					nama_wali = "-";
-					nis = "-";
-					nama_siswa_pj = "-";
+					number = "-";
+					nama_pj = "-";
 					email_wali = "-";
 					nomor_handphone = "-";
 					nama_tingkat = "-";
@@ -769,11 +780,10 @@ $(document).ready(function () {
 			},
 		});
 
-		$('#inputTingkatDebet').find(":selected").remove();
-		$('#inputTingkatDebet').prepend($("<option selected></option>").attr("value", id_tingkat).text(nama_tingkat));
+		$('#inputTingkatDebet').find('option[value="' + id_tingkat + '"]').prop('selected', true);
 
 		$("#userNorekDebet").html(nama_tabungan_bersama.toUpperCase() + " (" + nomor_rekening_bersama + ")");
-		$("#userPenanggungJawabDebet").html(nama_siswa_pj.toUpperCase() + "/" + nama_wali.toUpperCase() + " (" + nis + ")");
+		$("#userPenanggungJawabDebet").html(nama_pj.toUpperCase() + " (" + number + ")");
 		$("#userTingkatDebet").html(nama_tingkat);
 		$("#userCatatanDebet").html(info_catatan_bersama);
 		$("#infoTerakhirTransaksiDebet").html(info_waktu_transaksi_bersama);
@@ -837,9 +847,9 @@ $(document).ready(function () {
 					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'];
 					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
 
-					nis = data['info_tabungan'][0]['nis'];
+					number = data['info_tabungan'][0]['number'];
 					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_siswa_pj = data['info_tabungan'][0]['nama_lengkap'];
+					nama_pj = data['info_tabungan'][0]['nama_lengkap'];
 					email_wali = data['info_tabungan'][0]['email'];
 					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
 
@@ -861,8 +871,8 @@ $(document).ready(function () {
 					nama_tabungan_bersama = "-";
 
 					nama_wali = "-";
-					nis = "-";
-					nama_siswa_pj = "-";
+					number = "-";
+					nama_pj = "-";
 					email_wali = "-";
 					nomor_handphone = "-";
 					nama_tingkat = "-";
@@ -882,11 +892,10 @@ $(document).ready(function () {
 			},
 		});
 
-		$('#inputTingkatKredit').find(":selected").remove();
-		$('#inputTingkatKredit').prepend($("<option selected></option>").attr("value", id_tingkat).text(nama_tingkat));
+		$('#inputTingkatKredit').find('option[value="' + id_tingkat + '"]').prop('selected', true);
 
 		$("#userNorekKredit").html(nama_tabungan_bersama.toUpperCase() + " (" + nomor_rekening_bersama + ")");
-		$("#userPenanggungJawabKredit").html(nama_siswa_pj.toUpperCase() + "/" + nama_wali.toUpperCase() + " (" + nis + ")");
+		$("#userPenanggungJawabKredit").html(nama_pj.toUpperCase() + " (" + number + ")");
 		$("#userTingkatKredit").html(nama_tingkat);
 		$("#userCatatanKredit").html(info_catatan_bersama);
 		$("#infoTerakhirTransaksiKredit").html(info_waktu_transaksi_bersama);
@@ -910,9 +919,9 @@ $(document).ready(function () {
 					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'];
 					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
 
-					nis = data['info_tabungan'][0]['nis'];
+					number = data['info_tabungan'][0]['number'];
 					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_siswa_pj = data['info_tabungan'][0]['nama_lengkap'];
+					nama_pj = data['info_tabungan'][0]['nama_lengkap'];
 					email_wali = data['info_tabungan'][0]['email'];
 					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
 
@@ -934,8 +943,8 @@ $(document).ready(function () {
 					nama_tabungan_bersama = "-";
 
 					nama_wali = "-";
-					nis = "-";
-					nama_siswa_pj = "-";
+					number = "-";
+					nama_pj = "-";
 					email_wali = "-";
 					nomor_handphone = "-";
 					nama_tingkat = "-";
@@ -956,11 +965,10 @@ $(document).ready(function () {
 			},
 		});
 
-		$('#inputTingkatDebet').find(":selected").remove();
-		$('#inputTingkatDebet').prepend($("<option selected></option>").attr("value", id_tingkat).text(nama_tingkat));
+		$('#inputTingkatDebet').find('option[value="' + id_tingkat + '"]').prop('selected', true);
 
 		$("#userNorekDebet").html(nama_tabungan_bersama.toUpperCase() + " (" + nomor_rekening_bersama + ")");
-		$("#userPenanggungJawabDebet").html(nama_siswa_pj.toUpperCase() + "/" + nama_wali.toUpperCase() + " (" + nis + ")");
+		$("#userPenanggungJawabDebet").html(nama_pj.toUpperCase() + " (" + number + ")");
 		$("#userTingkatDebet").html(nama_tingkat);
 		$("#userCatatanDebet").html(info_catatan_bersama);
 		$("#infoTerakhirTransaksiDebet").html(info_waktu_transaksi_bersama);
@@ -1012,7 +1020,7 @@ $(document).ready(function () {
 
 				Swal.fire({
 					title: "Peringatan!",
-					text: "Apakah anda yakin ingin Menyetor Tabungan Bersama atas nama " + nama_tabungan + " (" + nomor_rekening + ") dengan Nominal Rp." + nominal + " ?",
+					html: "Apakah anda yakin ingin Menyetor Tabungan Bersama atas nama <b>" + nama_tabungan + " (" + nomor_rekening + ")</b> dengan Nominal Rp." + nominal + " ?",
 					icon: "warning",
 					showCancelButton: true,
 					confirmButtonColor: "#DD6B55",
@@ -1044,6 +1052,7 @@ $(document).ready(function () {
 								input_tahun_ajaran: tahun_ajaran,
 								input_catatan_saldo: catatan,
 								input_tanggal_transaksi: tanggal_transaksi,
+								pin_verification_kredit: $('[name="pin_verification_kredit"]').val(),
 								[csrfName]: csrfHash
 							},
 							success: function (data) {
@@ -1075,7 +1084,7 @@ $(document).ready(function () {
 									});
 								} else {
 									Swal.fire({
-										text: data.messages,
+										html: data.messages,
 										icon: "error",
 										buttonsStyling: false,
 										confirmButtonText: "Oke!",
@@ -1091,7 +1100,7 @@ $(document).ready(function () {
 							},
 						});
 					} else {
-						Swal.fire("Dibatalkan!", "Setoran Tabungan Bersama atas nama " + nama_tabungan + " (" + nomor_rekening + ") batal diinputkan.", "error");
+						Swal.fire("Dibatalkan!", "Setoran Tabungan Bersama atas nama <b>" + nama_tabungan + " (" + nomor_rekening + ")</b> batal diinputkan.", "error");
 						return false;
 					}
 				});
@@ -1100,7 +1109,7 @@ $(document).ready(function () {
 			}
 		} else {
 			Swal.fire({
-				text: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 1000, Silahkan input ulang.",
+				html: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 1000, Silahkan input ulang.",
 				icon: "error",
 				buttonsStyling: false,
 				confirmButtonText: "Oke!",
@@ -1160,7 +1169,7 @@ $(document).ready(function () {
 
 				Swal.fire({
 					title: "Peringatan!",
-					text: "Apakah anda yakin Update Kredit Tabungan Bersama atas nama " + nama_tabungan + " (" + nomor_rekening + ") dengan Nominal Rp." + nominal + " ?",
+					html: "Apakah anda yakin Update Kredit Tabungan Bersama atas nama <b>" + nama_tabungan + " (" + nomor_rekening + ")</b> dengan Nominal Rp." + nominal + " ?",
 					icon: "warning",
 					showCancelButton: true,
 					confirmButtonColor: "#DD6B55",
@@ -1192,6 +1201,7 @@ $(document).ready(function () {
 								input_catatan_saldo: catatan,
 								input_tahun_ajaran: tahun_ajaran,
 								input_tanggal_transaksi: tanggal_transaksi,
+								pin_verification_kredit_edit: $('[name="pin_verification_kredit_edit"]').val(),
 								[csrfName]: csrfHash
 							},
 							success: function (data) {
@@ -1224,7 +1234,7 @@ $(document).ready(function () {
 									});
 								} else {
 									Swal.fire({
-										text: data.messages,
+										html: data.messages,
 										icon: "error",
 										buttonsStyling: false,
 										confirmButtonText: "Oke!",
@@ -1240,7 +1250,7 @@ $(document).ready(function () {
 							},
 						});
 					} else {
-						Swal.fire("Dibatalkan!", "Edit Setoran Tabungan Bersama atas nama " + nama_tabungan + " (" + nomor_rekening + ") batal diubah.", "error");
+						Swal.fire("Dibatalkan!", "Edit Setoran Tabungan Bersama atas nama <b>" + nama_tabungan + " (" + nomor_rekening + ")</b> batal diubah.", "error");
 						return false;
 					}
 				});
@@ -1249,7 +1259,7 @@ $(document).ready(function () {
 			}
 		} else {
 			Swal.fire({
-				text: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 1000 dan Kosong, Silahkan input ulang.",
+				html: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 1000 dan Kosong, Silahkan input ulang.",
 				icon: "error",
 				buttonsStyling: false,
 				confirmButtonText: "Oke!",
@@ -1311,7 +1321,7 @@ $(document).ready(function () {
 
 					Swal.fire({
 						title: "Peringatan!",
-						text: "Apakah anda yakin Menarik Tabungan Bersama atas nama " + nama_tabungan + " (" + nomor_rekening + ") dengan Nominal Rp." + nominal + " ?",
+						html: "Apakah anda yakin Menarik Tabungan Bersama atas nama <b>" + nama_tabungan + " (" + nomor_rekening + ")</b> dengan Nominal Rp." + nominal + " ?",
 						icon: "warning",
 						showCancelButton: true,
 						confirmButtonColor: "#DD6B55",
@@ -1342,6 +1352,7 @@ $(document).ready(function () {
 									input_tahun_ajaran: tahun_ajaran,
 									input_catatan_saldo: catatan,
 									input_tanggal_transaksi: tanggal_transaksi,
+									pin_verification_debet: $('[name="pin_verification_debet"]').val(),
 									[csrfName]: csrfHash
 								},
 								success: function (data) {
@@ -1374,7 +1385,7 @@ $(document).ready(function () {
 										});
 									} else {
 										Swal.fire({
-											text: data.messages,
+											html: data.messages,
 											icon: "error",
 											buttonsStyling: false,
 											confirmButtonText: "Oke!",
@@ -1390,7 +1401,7 @@ $(document).ready(function () {
 								},
 							});
 						} else {
-							Swal.fire("Dibatalkan!", "Penarikan Tabungan Bersama atas nama " + nama_tabungan + " (" + nomor_rekening + ") batal diubah.", "error");
+							Swal.fire("Dibatalkan!", "Penarikan Tabungan Bersama atas nama <b>" + nama_tabungan + " (" + nomor_rekening + ")</b> batal diubah.", "error");
 							return false;
 						}
 					});
@@ -1399,7 +1410,7 @@ $(document).ready(function () {
 				}
 			} else {
 				Swal.fire({
-					text: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 1000 dan Kosong, Silahkan input ulang.",
+					html: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 1000 dan Kosong, Silahkan input ulang.",
 					icon: "error",
 					buttonsStyling: false,
 					confirmButtonText: "Oke!",
@@ -1413,7 +1424,7 @@ $(document).ready(function () {
 			}
 		} else {
 			Swal.fire({
-				text: "Opps!, Pastikan Inputan Penarikan Tidak Boleh Lebih dari Saldo Tabungan, Silahkan input ulang.",
+				html: "Opps!, Pastikan Inputan Penarikan Tidak Boleh Lebih dari Saldo Tabungan, Silahkan input ulang.",
 				icon: "error",
 				buttonsStyling: false,
 				confirmButtonText: "Oke!",
@@ -1477,7 +1488,7 @@ $(document).ready(function () {
 
 					Swal.fire({
 						title: "Peringatan!",
-						text: "Apakah anda yakin Update Penarikan Tabungan Bersama atas nama " + nama_tabungan + " (" + nomor_rekening + ") dengan Nominal Rp." + nominal + " ?",
+						html: "Apakah anda yakin Update Penarikan Tabungan Bersama atas nama <b>" + nama_tabungan + " (" + nomor_rekening + ")</b> dengan Nominal Rp." + nominal + " ?",
 						icon: "warning",
 						showCancelButton: true,
 						confirmButtonColor: "#DD6B55",
@@ -1509,6 +1520,7 @@ $(document).ready(function () {
 									input_catatan_saldo: catatan,
 									input_tahun_ajaran: tahun_ajaran,
 									input_tanggal_transaksi: tanggal_transaksi,
+									pin_verification_debet_edit: $('[name="pin_verification_debet_edit"]').val(),
 									[csrfName]: csrfHash
 								},
 								success: function (data) {
@@ -1541,7 +1553,7 @@ $(document).ready(function () {
 										});
 									} else {
 										Swal.fire({
-											text: data.messages,
+											html: data.messages,
 											icon: "error",
 											buttonsStyling: false,
 											confirmButtonText: "Oke!",
@@ -1557,7 +1569,7 @@ $(document).ready(function () {
 								},
 							});
 						} else {
-							Swal.fire("Dibatalkan!", "Edit Penarikan Tabungan Bersama atas nama " + nama_tabungan + " (" + nomor_rekening + ") batal diubah.", "error");
+							Swal.fire("Dibatalkan!", "Edit Penarikan Tabungan Bersama atas nama <b>" + nama_tabungan + " (" + nomor_rekening + ")</b> batal diubah.", "error");
 							return false;
 						}
 					});
@@ -1566,7 +1578,7 @@ $(document).ready(function () {
 				}
 			} else {
 				Swal.fire({
-					text: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 1000 dan Kosong, Silahkan input ulang.",
+					html: "Opps!, Pastikan Inputan Terisi dengan Benar & Tidak Boleh < 1000 dan Kosong, Silahkan input ulang.",
 					icon: "error",
 					buttonsStyling: false,
 					confirmButtonText: "Oke!",
@@ -1580,7 +1592,7 @@ $(document).ready(function () {
 			}
 		} else {
 			Swal.fire({
-				text: "Opps!, Pastikan Inputan Penarikan Tidak Boleh Lebih dari Saldo Tabungan, Silahkan input ulang.",
+				html: "Opps!, Pastikan Inputan Penarikan Tidak Boleh Lebih dari Saldo Tabungan, Silahkan input ulang.",
 				icon: "error",
 				buttonsStyling: false,
 				confirmButtonText: "Oke!",
@@ -1628,6 +1640,13 @@ $(document).ready(function () {
 						var saldo = CurrencyID(0);
 					}
 
+					if (data[i].jenis_tabungan == "1") {
+						var jenis_tabungan = "KOMITE";
+						var color_nama_tab = "text-warning";
+					} else if (data[i].jenis_tabungan == "2") {
+						var jenis_tabungan = "KELAS";
+						var color_nama_tab = "text-success";
+					}
 
 					if (data[i].id_tingkat == "1") {
 						var nama_tingkat = "KB";
@@ -1658,8 +1677,8 @@ $(document).ready(function () {
 								"' data-nomor_rekening_bersama='" + data[i].nomor_rekening_bersama + "' data-nomor_transaksi='" + data[i].nomor_transaksi_bersama + "' data-nama_tabungan_bersama='" + data[i].nama_tabungan_bersama + "' data-tingkat='" + nama_tingkat +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-saldo='" + saldo + "' data-nominal='" + CurrencyID(data[i].nominal) + "' data-waktu_transaksi='" + data[i].waktu_transaksi +
 								"' href='javascript:void(0);'><i class='nav-icon la la-print text-success'></i><span class='nav-text text-success font-weight-bold text-hover-primary'>Cetak</span></a></li>" +
-								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link delete_transaksi_kredit' data-id_transaksi_bersama='" +
-								data[i].id_transaksi_bersama + "' data-nomor_rekening_bersama='" + data[i].nomor_rekening_bersama + "' data-nama_tabungan_bersama='" + data[i].nama_tabungan_bersama + "' data-nomor_transaksi_bersama='" + data[i].nomor_transaksi_bersama +
+								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link delete_transaksi_kredit' data-id_transaksi_bersama='" + data[i].id_transaksi_bersama + "' data-number='" + data[i].number +
+								"' data-nomor_rekening_bersama='" + data[i].nomor_rekening_bersama + "' data-nama_tabungan_bersama='" + data[i].nama_tabungan_bersama + "' data-nomor_transaksi_bersama='" + data[i].nomor_transaksi_bersama +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-nominal='" + data[i].nominal + "'><i class='nav-icon la la-trash text-danger'></i><span class='nav-text text-danger font-weight-bold text-hover-primary'>Hapus</span></a></li>" +
 								"</ul>" +
 								"</div>" +
@@ -1679,8 +1698,8 @@ $(document).ready(function () {
 								"' data-nomor_rekening_bersama='" + data[i].nomor_rekening_bersama + "' data-nomor_transaksi='" + data[i].nomor_transaksi_bersama + "' data-nama_tabungan_bersama='" + data[i].nama_tabungan_bersama + "' data-tingkat='" + nama_tingkat +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-saldo='" + saldo + "' data-nominal='" + CurrencyID(data[i].nominal) + "' data-waktu_transaksi='" + data[i].waktu_transaksi +
 								"' href='javascript:void(0);'><i class='nav-icon la la-print text-success'></i><span class='nav-text text-success font-weight-bold text-hover-primary'>Cetak</span></a></li>" +
-								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link delete_transaksi_debet' data-id_transaksi_bersama='" +
-								data[i].id_transaksi_bersama + "' data-nomor_rekening_bersama='" + data[i].nomor_rekening_bersama + "' data-nama_tabungan_bersama='" + data[i].nama_tabungan_bersama + "' data-nomor_transaksi_bersama='" + data[i].nomor_transaksi_bersama +
+								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link delete_transaksi_debet' data-id_transaksi_bersama='" + data[i].id_transaksi_bersama + "' data-number='" + data[i].number +
+								"' data-nomor_rekening_bersama='" + data[i].nomor_rekening_bersama + "' data-nama_tabungan_bersama='" + data[i].nama_tabungan_bersama + "' data-nomor_transaksi_bersama='" + data[i].nomor_transaksi_bersama +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-nominal='" + data[i].nominal + "'><i class='nav-icon la la-trash text-danger'></i><span class='nav-text text-danger font-weight-bold text-hover-primary'>Hapus</span></a></li>" +
 								"</ul>" +
 								"</div>" +
@@ -1728,6 +1747,9 @@ $(document).ready(function () {
 						'<td class="">' +
 						`${saldo}` +
 						"</td>" +
+						'<td class="font-weight-bolder ' + color_nama_tab + '">' +
+						`${jenis_tabungan}` +
+						"</td>" +
 						'<td class="">' +
 						`${option}` +
 						"</td>" +
@@ -1740,10 +1762,10 @@ $(document).ready(function () {
 	}
 
 	$("#tb_transaksi").on("click", ".delete_transaksi_kredit", function () {
-		var id_transaksi = $(this).data("id_transaksi");
-		var nis_siswa = $(this).data("nis_siswa");
-		var nama_siswa = $(this).data("nama_lengkap");
-		var jenis_transaksi = $(this).data("jenis_transaksi");
+		var id_transaksi = $(this).data("id_transaksi_bersama");
+		var nomor_rekening_bersama = $(this).data("nomor_rekening_bersama");
+		var nomor_transaksi_bersama = $(this).data("nomor_transaksi_bersama");
+		var nama_tabungan = $(this).data("nama_tabungan_bersama");
 		var nominal = $(this).data("nominal");
 
 		var csrfName = $('.txt_csrfname').attr('name');
@@ -1769,8 +1791,8 @@ $(document).ready(function () {
 			cancelButtonText: "Tidak, batal!",
 			closeOnConfirm: false,
 			closeOnCancel: true,
-			html: "Apakah anda yakin ingin menghapus Transaksi (" + jenis_transaksi + ") atas nama '" +
-				nama_siswa + "' (" + nis_siswa + ") dengan nominal Kredit (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
+			html: "Apakah anda yakin ingin menghapus Transaksi Kredit Bersama(" + nomor_transaksi_bersama + ") atas nama <b>'" +
+				nama_tabungan + "' (" + nomor_rekening_bersama + ")</b> dengan nominal Kredit (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 			didOpen: () => {
 				grecaptcha.render('recaptcha_delete', {
 					'sitekey': CAPTCA_KEY
@@ -1785,10 +1807,11 @@ $(document).ready(function () {
 			if (result.value) {
 				$.ajax({
 					type: "post",
-					url: `${HOST_URL}/finance/savings/delete_credit_transaction`,
+					url: `${HOST_URL}/finance/savings/delete_joint_credit_transaction`,
 					data: {
-						id_transaksi: id_transaksi,
-						nis: nis_siswa,
+						id_transaksi_bersama: id_transaksi,
+						nomor_rekening_bersama: nomor_rekening_bersama,
+						nomor_transaksi_bersama: nomor_transaksi_bersama,
 						password: result.value,
 						[csrfName]: csrfHash
 					},
@@ -1834,7 +1857,7 @@ $(document).ready(function () {
 
 				return false;
 			} else {
-				Swal.fire("Dibatalkan!", "Penghapusan Transaksi Kredit atas nama '" + nama_siswa + "' (" + nis_siswa + ") batal dihapus.", "error");
+				Swal.fire("Dibatalkan!", "Penghapusan Transaksi Kredit Bersama (" + nomor_transaksi_bersama + ") atas nama <b>'" + nama_tabungan + "' (" + nomor_rekening_bersama + ")</b> batal dihapus.", "error");
 
 				return false;
 			}
@@ -1844,10 +1867,10 @@ $(document).ready(function () {
 	});
 
 	$("#tb_transaksi").on("click", ".delete_transaksi_debet", function () {
-		var id_transaksi = $(this).data("id_transaksi");
-		var nis_siswa = $(this).data("nis_siswa");
-		var nama_siswa = $(this).data("nama_lengkap");
-		var jenis_transaksi = $(this).data("jenis_transaksi");
+		var id_transaksi = $(this).data("id_transaksi_bersama");
+		var nomor_rekening_bersama = $(this).data("nomor_rekening_bersama");
+		var nomor_transaksi_bersama = $(this).data("nomor_transaksi_bersama");
+		var nama_tabungan = $(this).data("nama_tabungan_bersama");
 		var nominal = $(this).data("nominal");
 
 		var csrfName = $('.txt_csrfname').attr('name');
@@ -1873,8 +1896,8 @@ $(document).ready(function () {
 			cancelButtonText: "Tidak, batal!",
 			closeOnConfirm: false,
 			closeOnCancel: true,
-			html: "Apakah anda yakin ingin menghapus Transaksi (" + jenis_transaksi + ") atas nama '" +
-				nama_siswa + "' (" + nis_siswa + ") dengan nominal Debet (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
+			html: "Apakah anda yakin ingin menghapus Transaksi Debet Bersama (" + nomor_transaksi_bersama + ") atas nama <b>'" +
+				nama_tabungan + "' (" + nomor_rekening_bersama + ")</b> dengan nominal Debet (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 			didOpen: () => {
 				grecaptcha.render('recaptcha_delete', {
 					'sitekey': CAPTCA_KEY
@@ -1889,10 +1912,11 @@ $(document).ready(function () {
 			if (result.value) {
 				$.ajax({
 					type: "post",
-					url: `${HOST_URL}/finance/savings/delete_debet_transaction`,
+					url: `${HOST_URL}/finance/savings/delete_joint_debet_transaction`,
 					data: {
-						id_transaksi: id_transaksi,
-						nis: nis_siswa,
+						id_transaksi_bersama: id_transaksi,
+						nomor_rekening_bersama: nomor_rekening_bersama,
+						nomor_transaksi_bersama: nomor_transaksi_bersama,
 						password: result.value,
 						[csrfName]: csrfHash
 					},
@@ -1938,7 +1962,7 @@ $(document).ready(function () {
 				return false;
 
 			} else {
-				Swal.fire("Dibatalkan!", "Penghapusan Transaksi Debet atas nama '" + nama_siswa + "' (" + nis_siswa + ") batal dihapus.", "error");
+				Swal.fire("Dibatalkan!", "Penghapusan Transaksi Debet Bersama (" + nomor_transaksi_bersama + ") atas nama <b>'" + nama_tabungan + "' (" + nomor_rekening_bersama + ")</b> batal dihapus.", "error");
 
 				return false;
 			}

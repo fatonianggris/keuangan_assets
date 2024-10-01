@@ -39,12 +39,11 @@
 								}
 							}
 						},
-						nama_wali: {
+						jabatan_pegawai: {
 							validators: {
-								regexp: {
-									regexp: /^[a-zs\s.()-]+$/i,
-									message: 'Inputan harus berupa huruf'
-								}
+								notEmpty: {
+									message: 'Jabatan Pegawai diperlukan'
+								},
 							}
 						},
 						nomor_handphone_pegawai: {
@@ -63,17 +62,17 @@
 								},
 							}
 						},
-						th_ajaran: {
-							validators: {
-								notEmpty: {
-									message: 'Tahun Ajaran diperlukan'
-								},
-							}
-						},
 						status_pegawai: {
 							validators: {
 								notEmpty: {
 									message: 'Status Pegawai diperlukan'
+								},
+							}
+						},
+						th_ajaran: {
+							validators: {
+								notEmpty: {
+									message: 'Tahun Ajaran diperlukan'
 								},
 							}
 						},

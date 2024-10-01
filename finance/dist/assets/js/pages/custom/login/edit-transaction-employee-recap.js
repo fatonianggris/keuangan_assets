@@ -17,15 +17,15 @@
 				form,
 				{
 					fields: {
-						nis_kredit: {
+						nip_kredit: {
 							validators: {
 								notEmpty: {
-									message: 'NIS/Rekening Siswa diperlukan'
+									message: 'NIP/Rekening Pegawai diperlukan'
 								},
 								stringLength: {
-									max: 7,
-									min: 5,
-									message: 'Nomor Rekening harus memiliki 5 sampai 7 karakter'
+									max: 8,
+									min: 6,
+									message: 'Nomor Rekening harus memiliki 6 sampai 8 karakter'
 								}
 							}
 						},
@@ -125,15 +125,15 @@
 				form,
 				{
 					fields: {
-						nis_debet: {
+						nip_debet: {
 							validators: {
 								notEmpty: {
-									message: 'NIS/Rekening Siswa diperlukan'
+									message: 'NIP/Rekening Pegawai diperlukan'
 								},
 								stringLength: {
-									max: 7,
-									min: 5,
-									message: 'Nomor Rekening harus memiliki 5 sampai 7 karakter'
+									max: 8,
+									min: 6,
+									message: 'Nomor Rekening harus memiliki 6 sampai 8 karakter'
 								}
 							}
 						},

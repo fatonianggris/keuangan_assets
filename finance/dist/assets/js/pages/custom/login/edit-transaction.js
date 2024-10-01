@@ -59,7 +59,7 @@
 								},
 							}
 						},
-						tingkat_kredit_edit: {
+						tingkat_kredit: {
 							validators: {
 								notEmpty: {
 									message: 'Tingkat diperlukan'
@@ -167,7 +167,7 @@
 								},
 							}
 						},
-						tingkat_debet_edit: {
+						tingkat_debet: {
 							validators: {
 								notEmpty: {
 									message: 'Tingkat diperlukan'

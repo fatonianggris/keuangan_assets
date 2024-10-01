@@ -4,32 +4,31 @@
 
 	// Class Definition
 	var KTLogin = function () {
-		var _credit_edit;
-		var _debet_edit;
+		var _credit;
+		var _debet;
 
-		var _handleCreditFormEdit = function () {
+		var _handleCreditForm = function () {
 			var validation;
-			var edit_button = document.querySelectorAll('.edit_transaksi_kredit');
-			var form = KTUtil.getById('kt_add_transaction_credit_edit')
+			var form = KTUtil.getById('kt_add_transaction_credit')
 			var submitButton = form.querySelector('[type="submit"]');
 			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
 			validation = FormValidation.formValidation(
 				form,
 				{
 					fields: {
-						nis_kredit: {
+						inputCariPegawaiKredit: {
 							validators: {
 								notEmpty: {
-									message: 'NIS/Rekening Siswa diperlukan'
+									message: 'NIP/Rekening Pegawai diperlukan'
 								},
 								stringLength: {
-									max: 7,
-									min: 5,
-									message: 'Nomor Rekening harus memiliki 5 sampai 7 karakter'
+									max: 8,
+									min: 6,
+									message: 'Nomor Rekening harus memiliki 6-8 karakter'
 								}
 							}
 						},
-						nominal_kredit: {
+						inputNominalKreditName: {
 							validators: {
 								notEmpty: {
 									message: 'Nominal Kredit diperlukan'
@@ -45,25 +44,64 @@
 								},
 							}
 						},
-						th_ajaran_kredit: {
+						inputTahunAjaranKredit: {
 							validators: {
 								notEmpty: {
 									message: 'Tahun Ajaran diperlukan'
 								},
 							}
 						},
-						waktu_transaksi_kredit: {
+						inputTanggalKredit: {
 							validators: {
 								notEmpty: {
 									message: 'Tanggal Kredit diperlukan'
 								},
 							}
 						},
-						tingkat_kredit: {
+						inputJenisTabungan: {
+							validators: {
+								notEmpty: {
+									message: 'Jenis Tabungan diperlukan'
+								},
+							}
+						},
+						inputTingkatKredit: {
 							validators: {
 								notEmpty: {
 									message: 'Tingkat diperlukan'
 								},
+							}
+						},
+						nama_nasabah: {
+							validators: {
+								regexp: {
+									regexp: /^[a-zs\s.()-]+$/i,
+									message: 'Inputan harus berupa huruf'
+								}
+							}
+						},
+						nama_orangtua: {
+							validators: {
+								regexp: {
+									regexp: /^[a-zs\s.()-]+$/i,
+									message: 'Inputan harus berupa huruf'
+								}
+							}
+						},
+						nomor_hp_aktif: {
+							validators: {
+								integer: {
+									message: 'Inputan harus Angka',
+									// The default separators
+									thousandsSeparator: ''
+								},
+							}
+						},
+						email_orangtua: {
+							validators: {
+								emailAddress: {
+									message: 'Email anda tidak valid'
+								}
 							}
 						},
 
@@ -85,15 +123,9 @@
 				}
 			);
 
-			for (let i = 0; i < edit_button.length; i++) {
-				edit_button[i].addEventListener('click', function () {
-					validation.resetForm(true);
-				});
-			}
-
-			_credit_edit.on('submit', function (wizard) {
+			_credit.on('submit', function (wizard) {
 				wizard.preventDefault();
-				if (validation && window.bundleObj.getOTPKreditEdit() === true) {
+				if (validation && window.bundleObj.getOTPKredit() === true) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
 							form.submit(); // Submit form
@@ -115,29 +147,28 @@
 			});
 		};
 
-		var _handleDebitFormEdit = function () {
+		var _handleDebitForm = function () {
 			var validation;
-			var edit_button = document.querySelectorAll('.edit_transaksi_debet');
-			var form = KTUtil.getById('kt_add_transaction_debet_edit')
+			var form = KTUtil.getById('kt_add_transaction_debet')
 			var submitButton = form.querySelector('[type="submit"]');
 			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
 			validation = FormValidation.formValidation(
 				form,
 				{
 					fields: {
-						nis_debet: {
+						inputCariPegawaiDebet: {
 							validators: {
 								notEmpty: {
-									message: 'NIS/Rekening Siswa diperlukan'
+									message: 'NIP/Rekening Pegawai diperlukan'
 								},
 								stringLength: {
-									max: 7,
-									min: 5,
-									message: 'Nomor Rekening harus memiliki 5 sampai 7 karakter'
+									max: 8,
+									min: 6,
+									message: 'Nomor Rekening harus memiliki 6-8 karakter'
 								}
 							}
 						},
-						nominal_debet: {
+						inputNominalDebetName: {
 							validators: {
 								notEmpty: {
 									message: 'Nominal Debit diperlukan'
@@ -153,21 +184,21 @@
 								},
 							}
 						},
-						th_ajaran_debet: {
+						inputTahunAjaranDebet: {
 							validators: {
 								notEmpty: {
 									message: 'Tahun Ajaran diperlukan'
 								},
 							}
 						},
-						waktu_transaksi_debet: {
+						inputTanggalDebet: {
 							validators: {
 								notEmpty: {
 									message: 'Tanggal Debit diperlukan'
 								},
 							}
 						},
-						tingkat_debet: {
+						inputTingkatDebet: {
 							validators: {
 								notEmpty: {
 									message: 'Tingkat diperlukan'
@@ -193,15 +224,9 @@
 				}
 			);
 
-			for (let i = 0; i < edit_button.length; i++) {
-				edit_button[i].addEventListener('click', function () {
-					validation.resetForm(true);
-				});
-			}
-
-			_debet_edit.on('submit', function (wizard) {
+			_debet.on('submit', function (wizard) {
 				wizard.preventDefault();
-				if (validation && window.bundleObj.getOTPDebetEdit() === true) {
+				if (validation && window.bundleObj.getOTPDebet() === true) {
 					validation.validate().then(function (status) {
 						if (status == 'Valid') {
 							form.submit(); // Submit form
@@ -227,10 +252,10 @@
 		return {
 			// public functions
 			init: function () {
-				_credit_edit = $('#kt_form_credit_edit');
-				_debet_edit = $('#kt_form_debet_edit');
-				_handleCreditFormEdit();
-				_handleDebitFormEdit();
+				_credit = $('#kt_form_credit');
+				_debet = $('#kt_form_debet');
+				_handleCreditForm();
+				_handleDebitForm();
 			}
 		};
 	}();

@@ -74,9 +74,6 @@
 						},
 						input_nama_wali: {
 							validators: {
-								notEmpty: {
-									message: 'Nama Wali Penanggung Jawab diperlukan'
-								},
 								regexp: {
 									regexp: /^[a-zs\s.()-]+$/i,
 									message: 'Inputan harus berupa huruf'
@@ -85,9 +82,6 @@
 						},
 						input_nomor_hp_wali: {
 							validators: {
-								notEmpty: {
-									message: 'Nomor Wali Penanggung Jawab diperlukan'
-								},
 								integer: {
 									message: 'Inputan harus Angka',
 								},
@@ -100,10 +94,17 @@
 								},
 							}
 						},
-						input_nama_siswa_penanggungjawab: {
+						input_nama_penanggungjawab: {
 							validators: {
 								notEmpty: {
-									message: 'Nama Siswa Penanggung Jawab diperlukan'
+									message: 'Nama Penanggung Jawab diperlukan'
+								},
+							}
+						},
+						input_jenis_tabungan: {
+							validators: {
+								notEmpty: {
+									message: 'Jenis Tabungan diperlukan'
 								},
 							}
 						},

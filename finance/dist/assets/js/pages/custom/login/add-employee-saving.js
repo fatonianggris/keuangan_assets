@@ -26,12 +26,12 @@
 								remote: {
 									message: 'Nomor Rekening telah digunakan, inputkan Nomor Rekening lain',
 									method: 'POST',
-									url: HOST_URL + 'finance/savings/check_number_personal_saving',
+									url: HOST_URL + 'finance/savings/check_number_employee_saving',
 								},
 								stringLength: {
-									max: 7,
-									min: 7,
-									message: 'Nomor Rekening harus memiliki 7 karakter'
+									max: 8,
+									min: 6,
+									message: 'Nomor Rekening harus memiliki 6 sampai 8 karakter'
 								}
 							}
 						},
@@ -80,7 +80,7 @@
 								},
 							}
 						},
-						jenis_kelamin: {
+						input_jenis_kelamin: {
 							validators: {
 								notEmpty: {
 									message: 'Jenis Kelamin diperlukan'
@@ -101,10 +101,17 @@
 								},
 							}
 						},
-						status_pegawai: {
+						input_status_pegawai: {
 							validators: {
 								notEmpty: {
 									message: 'Status Pegawai diperlukan'
+								},
+							}
+						},
+						input_jabatan_pegawai: {
+							validators: {
+								notEmpty: {
+									message: 'Jabatan Pegawai diperlukan'
 								},
 							}
 						},

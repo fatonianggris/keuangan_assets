@@ -274,7 +274,7 @@ $(document).ready(function () {
 						if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
 					}
 
-					  // If no filename is found, give a default name
+					// If no filename is found, give a default name
 					if (typeof window.navigator.msSaveBlob !== 'undefined') {
 						// IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
 						window.navigator.msSaveBlob(blob, filename);
@@ -350,7 +350,7 @@ $(document).ready(function () {
 	}).on("change", function (e) {
 		//var isNew = e.params.data;
 		var isNew = $(".findNasabahKredit option:selected").text();
-		if (isNew.length == 7 || isNew.length == 5) {
+		if (isNew.length >= 5 && isNew.length <= 7) {
 			if (stat_close == true) {
 				Swal.fire({
 					title: "Peringatan!",
@@ -454,10 +454,10 @@ $(document).ready(function () {
 
 		$('[name="id_transaksi_kredit"]').val(id_transaksi);
 		$('[name="nis_kredit"]').empty(0).append($("<option selected></option>").attr("value", nis_siswa).text("(" + nis_siswa + ") " + nama_lengkap));
-		$('[name="th_ajaran_kredit"] option:selected').remove();
-		$('[name="th_ajaran_kredit"]').prepend($("<option selected></option>").attr("value", id_th_ajaran).text(th_ajaran));
-		$('[name="tingkat_kredit_edit"] option:selected').remove();
-		$('[name="tingkat_kredit_edit"]').prepend($("<option selected></option>").attr("value", id_tingkat).text(nama_tingkat));
+
+		$('[name="th_ajaran_kredit"]').find('option[value="' + id_th_ajaran + '"]').prop('selected', true);
+		$('[name="tingkat_kredit"]').find('option[value="' + id_tingkat + '"]').prop('selected', true);
+
 		$('[name="nominal_kredit"]').val(nominal);
 		$('[name="waktu_transaksi_kredit"]').val(waktu_transaksi)
 		$('[name="catatan_kredit"]').val(catatan);
@@ -544,10 +544,10 @@ $(document).ready(function () {
 
 		$('[name="id_transaksi_debet"]').val(id_transaksi);
 		$('[name="nis_debet"]').empty(0).append($("<option selected></option>").attr("value", nis_siswa).text("(" + nis_siswa + ") " + nama_lengkap));
-		$('[name="th_ajaran_debet"] option:selected').remove();
-		$('[name="th_ajaran_debet"]').prepend($("<option selected></option>").attr("value", id_th_ajaran).text(th_ajaran));
-		$('[name="tingkat_debet_edit"] option:selected').remove();
-		$('[name="tingkat_debet_edit"]').prepend($("<option selected></option>").attr("value", id_tingkat).text(nama_tingkat));
+
+		$('[name="th_ajaran_debet"]').find('option[value="' + id_th_ajaran + '"]').prop('selected', true);
+		$('[name="tingkat_debet"]').find('option[value="' + id_tingkat + '"]').prop('selected', true);
+
 		$('[name="nominal_debet"]').val(nominal);
 		$('[name="waktu_transaksi_debet"]').val(waktu_transaksi)
 		$('[name="catatan_debet"]').val(catatan);
@@ -672,8 +672,7 @@ $(document).ready(function () {
 					show_info_nasabah();
 					hide_nasabah_div();
 
-					$('#inputTingkatKredit').find(":selected").remove();
-					$('#inputTingkatKredit').prepend($("<option selected></option>").attr("value", id_tingkat).text(nama_tingkat));
+					$('#inputTingkatKredit').find('option[value="' + id_tingkat + '"]').prop('selected', true);
 
 				} else {
 					jumlah_saldo = "-";
@@ -748,8 +747,7 @@ $(document).ready(function () {
 			},
 		});
 
-		$('#inputTingkatDebet').find(":selected").remove();
-		$('#inputTingkatDebet').prepend($("<option selected></option>").attr("value", id_tingkat).text(nama_tingkat));
+		$('#inputTingkatDebet').find('option[value="' + id_tingkat + '"]').prop('selected', true);
 
 		$("#userNisDebet").html(nis);
 		$("#userNamaDebet").html(nama);
@@ -1029,7 +1027,6 @@ $(document).ready(function () {
 					});
 				} else if (stat_close == false) {
 
-
 					var nama_nasabah = $('#nama_nasabah').val();
 					var nama_orangtua = $("#nama_orangtua").val();
 					var nomor_hp_aktif = $("#nomor_hp_aktif").val();
@@ -1098,12 +1095,11 @@ $(document).ready(function () {
 											}).then(function (result) {
 												if (result.isConfirmed) {
 													var saldo_awal = (parseInt(data.saldo_akhir) - parseInt(nominal));
-													var only_name = $('#findNasabahKredit').find(":selected").text().split('(');
 
 													window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 														"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis,
 														data.nomor_transaksi, "UMUM", "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
-														CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(0, -1), nama_tingkat, 'www.sekolahutsman.sch.id');
+														CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", nama_nasabah, nama_tingkat, 'www.sekolahutsman.sch.id');
 												}
 											});
 										} else {
@@ -1124,7 +1120,7 @@ $(document).ready(function () {
 									},
 								});
 							} else {
-								Swal.fire("Dibatalkan!", "Setoran Tabungan Umum & Tambah Nasabah Baru atas nama <b>" + nama.toUpperCase() + " (" + nis + ")</b> batal diinputkan.", "error");
+								Swal.fire("Dibatalkan!", "Setoran Tabungan Umum & Tambah Nasabah Baru atas nama <b>" + nama_nasabah.toUpperCase() + " (" + nis + ")</b> batal diinputkan.", "error");
 								return false;
 							}
 						});
@@ -1173,7 +1169,7 @@ $(document).ready(function () {
 		var tahun_ajaran = $('[name="th_ajaran_kredit"]').val();
 		var catatan = $('[name="catatan_kredit"]').val();
 		var tanggal_transaksi = $('[name="waktu_transaksi_kredit"]').val();
-		var tingkat = $('[name="tingkat_kredit_edit"]').val();
+		var tingkat = $('[name="tingkat_kredit"]').val();
 
 		if (tingkat == "1") {
 			var nama_tingkat = "KB";
@@ -1491,7 +1487,7 @@ $(document).ready(function () {
 		var tahun_ajaran = $('[name="th_ajaran_debet"]').val();
 		var catatan = $('[name="catatan_debet"]').val();
 		var tanggal_transaksi = $('[name="waktu_transaksi_debet"]').val()
-		var tingkat = $('[name="tingkat_debet_edit"]').val()
+		var tingkat = $('[name="tingkat_debet"]').val()
 		var saldo = document.getElementById("userJumlahSaldoDebetEdit").textContent;
 
 		if (tingkat == "1") {
