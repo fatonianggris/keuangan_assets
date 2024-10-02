@@ -402,11 +402,11 @@ $(document).ready(function () {
 				dataType: "JSON",
 				success: function (data) {
 					if (data['data_siswa'][0]) {
-						nis = data['data_siswa'][0]['nis'];
-						nama_lengkap = data['data_siswa'][0]['nama_lengkap'];
-						nama_wali = data['data_siswa'][0]['nama_wali'];
-						nomor_handphone = data['data_siswa'][0]['nomor_handphone'];
-						email = data['data_siswa'][0]['email'];
+						nis = data['data_siswa'][0]['nis'] || "";
+						nama_lengkap = data['data_siswa'][0]['nama_lengkap'] || "";
+						nama_wali = data['data_siswa'][0]['nama_wali'] || "";
+						nomor_handphone = data['data_siswa'][0]['nomor_handphone'] || "";
+						email = data['data_siswa'][0]['email'] || "";
 					} else {
 						nis = "";
 						nama_lengkap = "";
@@ -483,17 +483,17 @@ $(document).ready(function () {
 		$('[name="id_penanggung_jawab"]').empty();
 		$('[name="keterangan_tabungan_bersama"]').text("");
 
-		var id_tabungan = $(this).data("id_tabungan_bersama");
-		var id_pj = $(this).data("id_penanggung_jawab");
-		var id_tingkat = $(this).data("id_tingkat")
-		var id_th_ajaran = $(this).data("id_th_ajaran");
-		var nomor_rekening = $(this).data("nomor_rekening_bersama");
-		var nama = $(this).data("nama_lengkap");
-		var nama_tabungan = $(this).data("nama_tabungan_bersama");
-		var nama_wali = $(this).data("nama_wali");
-		var jenis_tabungan = $(this).data("jenis_tabungan");
-		var nomor_handphone = $(this).data("nomor_handphone");
-		var keterangan_tabungan = $(this).data("keterangan_tabungan_bersama");
+		var id_tabungan = $(this).data("id_tabungan_bersama") || "";
+		var id_pj = $(this).data("id_penanggung_jawab") || "";
+		var id_tingkat = $(this).data("id_tingkat") || "";
+		var id_th_ajaran = $(this).data("id_th_ajaran") || "";
+		var nomor_rekening = $(this).data("nomor_rekening_bersama") || "";
+		var nama = $(this).data("nama_lengkap") || "";
+		var nama_tabungan = $(this).data("nama_tabungan_bersama") || "";
+		var nama_wali = $(this).data("nama_wali") || "";
+		var jenis_tabungan = $(this).data("jenis_tabungan") || "";
+		var nomor_handphone = $(this).data("nomor_handphone") || "";
+		var keterangan_tabungan = $(this).data("keterangan_tabungan_bersama") || "";
 
 		$('[name="id_tabungan_bersama"]').val(id_tabungan);
 		$('[name="nomor_rekening_bersama"]').val(nomor_rekening);
@@ -555,16 +555,16 @@ $(document).ready(function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_tabungan']) {
-					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'];
-					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'];
-					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'];
-					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
+					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'] || "";
+					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'] || "";
+					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'] || "";
+					id_tingkat = data['info_tabungan'][0]['id_tingkat'] || "";
 
-					number = data['info_tabungan'][0]['number'];
-					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_siswa_pj = data['info_tabungan'][0]['nama_lengkap'];
-					email_wali = data['info_tabungan'][0]['email'];
-					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
+					number = data['info_tabungan'][0]['number'] || "";
+					nama_wali = data['info_tabungan'][0]['nama_wali'] || "";
+					nama_siswa_pj = data['info_tabungan'][0]['nama_lengkap'] || "";
+					email_wali = data['info_tabungan'][0]['email'] || "";
+					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -653,15 +653,15 @@ $(document).ready(function () {
 		var csrfName = $('.txt_csrfname').attr('name');
 		var csrfHash = $('.txt_csrfname').val(); // CSRF hash
 
-		var id_tabungan = $('[name="id_tabungan_bersama"]').val();
-		var nomor_rekening = $('[name="nomor_rekening_bersama"]').val();
-		var nama_tabungan = $('[name="nama_tabungan_bersama"]').val();
-		var id_pj = $('[name="id_penanggung_jawab"]').val();
-		var id_tingkat = $('[name="id_tingkat"]').val();
-		var id_ta = $('[name="id_th_ajaran"]').val();
-		var nama_wali = $('[name="nama_wali"]').val();
-		var nomor_hp = $('[name="nomor_handphone_wali"]').val()
-		var keterangan_tabungan = $('[name="keterangan_tabungan_bersama"]').val()
+		var id_tabungan = $('[name="id_tabungan_bersama"]').val() || "";
+		var nomor_rekening = $('[name="nomor_rekening_bersama"]').val() || "";
+		var nama_tabungan = $('[name="nama_tabungan_bersama"]').val() || "";
+		var id_pj = $('[name="id_penanggung_jawab"]').val() || "";
+		var id_tingkat = $('[name="id_tingkat"]').val() || "";
+		var id_ta = $('[name="id_th_ajaran"]').val() || "";
+		var nama_wali = $('[name="nama_wali"]').val() || "";
+		var nomor_hp = $('[name="nomor_handphone_wali"]').val() || "";
+		var keterangan_tabungan = $('[name="keterangan_tabungan_bersama"]').val() || "";
 
 		if (id_tabungan != null && id_tabungan != "" && nomor_rekening != null && nomor_rekening != "" && nama_tabungan != null && nama_tabungan != "" && id_pj != null && id_pj != "" && id_tingkat != null && id_tingkat != "") {
 

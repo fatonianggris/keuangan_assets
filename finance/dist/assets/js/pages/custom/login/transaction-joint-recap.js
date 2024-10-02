@@ -385,15 +385,20 @@ $(document).ready(function () {
 	$("#tb_transaksi").on("click", ".edit_transaksi_kredit", function () {
 		window.bundleObj.resetOTPKreditEdit();
 
-		var id_transaksi = $(this).data("id_transaksi_bersama");
-		var nomor_rekening = $(this).data("nomor_rekening_bersama");
-		var nomor_transaksi = $(this).data("nomor_transaksi_bersama");
-		var nama_tabungan = $(this).data("nama_tabungan_bersama");
-		var id_th_ajaran = $(this).data("id_th_ajaran");
-		var id_tingkat = $(this).data("id_tingkat");
-		var nominal = $(this).data("nominal");
-		var waktu_transaksi = $(this).data("waktu_transaksi");
-		var catatan = $(this).data("catatan");
+		$('[name="id_transaksi_kredit_edit"]').val('');
+		$('[name="nominal_kredit_edit"]').val('');
+		$('[name="waktu_transaksi_kredit_edit"]').val('');
+		$('[name="catatan_kredit_edit"]').text('');
+
+		var id_transaksi = $(this).data("id_transaksi_bersama") || "";
+		var nomor_rekening = $(this).data("nomor_rekening_bersama") || "";
+		var nomor_transaksi = $(this).data("nomor_transaksi_bersama") || "";
+		var nama_tabungan = $(this).data("nama_tabungan_bersama") || "";
+		var id_th_ajaran = $(this).data("id_th_ajaran") || "";
+		var id_tingkat = $(this).data("id_tingkat") || "";
+		var nominal = $(this).data("nominal") || "";
+		var waktu_transaksi = $(this).data("waktu_transaksi") || "";
+		var catatan = $(this).data("catatan") || "";
 
 		if (id_tingkat == "1") {
 			var nama_tingkat = "KB";
@@ -426,18 +431,18 @@ $(document).ready(function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_tabungan']) {
-					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'];
-					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'];
-					jumlah_saldo_awal = (Number(data['info_tabungan'][0]['saldo_tabungan_bersama']) - Number(data['info_transaksi'][0]['nominal']));
-					jumlah_saldo_akhir = data['info_tabungan'][0]['saldo_tabungan_bersama'];
+					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'] || "";
+					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'] || "";
+					jumlah_saldo_awal = (Number(data['info_tabungan'][0]['saldo_tabungan_bersama']) - Number(data['info_transaksi'][0]['nominal'])) || "";
+					jumlah_saldo_akhir = data['info_tabungan'][0]['saldo_tabungan_bersama'] || "";
 
-					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
-					number = data['info_tabungan'][0]['number'];
-					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_pj = data['info_tabungan'][0]['nama_lengkap'];
-					email_wali = data['info_tabungan'][0]['email'];
-					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
-					jenis_tabungan = data['info_tabungan'][0]['jenis_tabungan'];
+					id_tingkat = data['info_tabungan'][0]['id_tingkat'] || "";
+					number = data['info_tabungan'][0]['number'] || "";
+					nama_wali = data['info_tabungan'][0]['nama_wali'] || "";
+					nama_pj = data['info_tabungan'][0]['nama_lengkap'] || "";
+					email_wali = data['info_tabungan'][0]['email'] || "";
+					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'] || "";
+					jenis_tabungan = data['info_tabungan'][0]['jenis_tabungan'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -498,15 +503,20 @@ $(document).ready(function () {
 	$("#tb_transaksi").on("click", ".edit_transaksi_debet", function () {
 		window.bundleObj.resetOTPDebetEdit();
 
-		var id_transaksi = $(this).data("id_transaksi_bersama");
-		var nomor_rekening = $(this).data("nomor_rekening_bersama");
-		var nomor_transaksi = $(this).data("nomor_transaksi_bersama");
-		var nama_tabungan = $(this).data("nama_tabungan_bersama");
-		var id_th_ajaran = $(this).data("id_th_ajaran");
-		var id_tingkat = $(this).data("id_tingkat");
-		var nominal = $(this).data("nominal");
-		var waktu_transaksi = $(this).data("waktu_transaksi");
-		var catatan = $(this).data("catatan");
+		$('[name="id_transaksi_debet_edit"]').val('');
+		$('[name="nominal_debet_edit"]').val('');
+		$('[name="waktu_transaksi_debet_edit"]').val('');
+		$('[name="catatan_debet_edit"]').text('');
+
+		var id_transaksi = $(this).data("id_transaksi_bersama") || "";
+		var nomor_rekening = $(this).data("nomor_rekening_bersama") || "";
+		var nomor_transaksi = $(this).data("nomor_transaksi_bersama") || "";
+		var nama_tabungan = $(this).data("nama_tabungan_bersama") || "";
+		var id_th_ajaran = $(this).data("id_th_ajaran") || "";
+		var id_tingkat = $(this).data("id_tingkat") || "";
+		var nominal = $(this).data("nominal") || "";
+		var waktu_transaksi = $(this).data("waktu_transaksi") || "";
+		var catatan = $(this).data("catatan") || "";
 
 		if (id_tingkat == "1") {
 			var nama_tingkat = "KB";
@@ -539,18 +549,18 @@ $(document).ready(function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_tabungan']) {
-					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'];
-					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'];
-					jumlah_saldo_awal = (Number(data['info_tabungan'][0]['saldo_tabungan_bersama']) + Number(data['info_transaksi'][0]['nominal']));
-					jumlah_saldo_akhir = data['info_tabungan'][0]['saldo_tabungan_bersama'];
+					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'] || "";
+					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'] || "";
+					jumlah_saldo_awal = (Number(data['info_tabungan'][0]['saldo_tabungan_bersama']) + Number(data['info_transaksi'][0]['nominal'])) || "";
+					jumlah_saldo_akhir = data['info_tabungan'][0]['saldo_tabungan_bersama'] || "";
 
-					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
-					number = data['info_tabungan'][0]['number'];
-					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_pj = data['info_tabungan'][0]['nama_lengkap'];
-					email_wali = data['info_tabungan'][0]['email'];
-					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
-					jenis_tabungan = data['info_tabungan'][0]['jenis_tabungan'];
+					id_tingkat = data['info_tabungan'][0]['id_tingkat'] || "";
+					number = data['info_tabungan'][0]['number'] || "";
+					nama_wali = data['info_tabungan'][0]['nama_wali'] || "";
+					nama_pj = data['info_tabungan'][0]['nama_lengkap'] || "";
+					email_wali = data['info_tabungan'][0]['email'] || "";
+					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'] || "";
+					jenis_tabungan = data['info_tabungan'][0]['jenis_tabungan'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -612,15 +622,15 @@ $(document).ready(function () {
 
 	$("#tb_transaksi").on("click", ".cetak_transaksi_kredit", function () {
 
-		var nomor_transaksi = $(this).data("nomor_transaksi_bersama");
-		var nomor_rekening = $(this).data("nomor_rekening_bersama");
-		var nama = $(this).data("nama_tabungan_bersama").toUpperCase();
-		var jenjang = $(this).data("id_tingkat");
-		var nominal = $(this).data("nominal").toString();
-		var jenis_transaksi = $(this).data("jenis_transaksi");
-		var waktu_transaksi = $(this).data("waktu_transaksi");
-		var saldo_akhir = $(this).data("saldo").toString();
-		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) - parseInt(nominal.replace(/\./g, "")));
+		var nomor_transaksi = $(this).data("nomor_transaksi_bersama") || "";
+		var nomor_rekening = $(this).data("nomor_rekening_bersama") || "";
+		var nama = $(this).data("nama_tabungan_bersama").toUpperCase() || "";
+		var jenjang = $(this).data("id_tingkat") || "";
+		var nominal = $(this).data("nominal").toString() || "";
+		var jenis_transaksi = $(this).data("jenis_transaksi") || "";
+		var waktu_transaksi = $(this).data("waktu_transaksi") || "";
+		var saldo_akhir = $(this).data("saldo").toString() || "";
+		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) - parseInt(nominal.replace(/\./g, ""))) || "";
 
 		window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 			"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nomor_rekening,
@@ -630,15 +640,15 @@ $(document).ready(function () {
 
 	$("#tb_transaksi").on("click", ".cetak_transaksi_debet", function () {
 
-		var nomor_transaksi = $(this).data("nomor_transaksi_bersama");
-		var nomor_rekening = $(this).data("nomor_rekening_bersama");
-		var nama = $(this).data("nama_tabungan_bersama").toUpperCase();
-		var jenjang = $(this).data("id_tingkat");
-		var nominal = $(this).data("nominal").toString();
-		var jenis_transaksi = $(this).data("jenis_transaksi");
-		var waktu_transaksi = $(this).data("waktu_transaksi");
-		var saldo_akhir = $(this).data("saldo").toString();
-		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) + parseInt(nominal.replace(/\./g, "")));
+		var nomor_transaksi = $(this).data("nomor_transaksi_bersama") || "";
+		var nomor_rekening = $(this).data("nomor_rekening_bersama") || "";
+		var nama = $(this).data("nama_tabungan_bersama").toUpperCase() || "";
+		var jenjang = $(this).data("id_tingkat") || "";
+		var nominal = $(this).data("nominal").toString() || "";
+		var jenis_transaksi = $(this).data("jenis_transaksi") || "";
+		var waktu_transaksi = $(this).data("waktu_transaksi") || "";
+		var saldo_akhir = $(this).data("saldo").toString() || "";
+		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) + parseInt(nominal.replace(/\./g, ""))) || "";
 
 		window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 			"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nomor_rekening,
@@ -657,16 +667,16 @@ $(document).ready(function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_tabungan']) {
-					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'];
-					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'];
-					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'];
-					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
+					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'] || "";
+					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'] || "";
+					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'] || "";
+					id_tingkat = data['info_tabungan'][0]['id_tingkat'] || "";
 
-					number = data['info_tabungan'][0]['number'];
-					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_pj = data['info_tabungan'][0]['nama_lengkap'];
-					email_wali = data['info_tabungan'][0]['email'];
-					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
+					number = data['info_tabungan'][0]['number'] || "";
+					nama_wali = data['info_tabungan'][0]['nama_wali'] || "";
+					nama_pj = data['info_tabungan'][0]['nama_lengkap'] || "";
+					email_wali = data['info_tabungan'][0]['email'] || "";
+					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -729,16 +739,16 @@ $(document).ready(function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_tabungan']) {
-					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'];
-					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'];
-					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'];
-					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
+					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'] || "";
+					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'] || "";
+					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'] || "";
+					id_tingkat = data['info_tabungan'][0]['id_tingkat'] || "";
 
-					number = data['info_tabungan'][0]['number'];
-					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_pj = data['info_tabungan'][0]['nama_lengkap'];
-					email_wali = data['info_tabungan'][0]['email'];
-					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
+					number = data['info_tabungan'][0]['number'] || "";
+					nama_wali = data['info_tabungan'][0]['nama_wali'] || "";
+					nama_pj = data['info_tabungan'][0]['nama_lengkap'] || "";
+					email_wali = data['info_tabungan'][0]['email'] || "";
+					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -842,16 +852,16 @@ $(document).ready(function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_tabungan']) {
-					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'];
-					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'];
-					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'];
-					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
+					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'] || "";
+					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'] || "";
+					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'] || "";
+					id_tingkat = data['info_tabungan'][0]['id_tingkat'] || "";
 
-					number = data['info_tabungan'][0]['number'];
-					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_pj = data['info_tabungan'][0]['nama_lengkap'];
-					email_wali = data['info_tabungan'][0]['email'];
-					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
+					number = data['info_tabungan'][0]['number'] || "";
+					nama_wali = data['info_tabungan'][0]['nama_wali'] || "";
+					nama_pj = data['info_tabungan'][0]['nama_lengkap'] || "";
+					email_wali = data['info_tabungan'][0]['email'] || "";
+					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -914,16 +924,16 @@ $(document).ready(function () {
 			success: function (data) {
 
 				if (data['info_tabungan']) {
-					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'];
-					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'];
-					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'];
-					id_tingkat = data['info_tabungan'][0]['id_tingkat'];
+					nomor_rekening_bersama = data['info_tabungan'][0]['nomor_rekening_bersama'] || "";
+					nama_tabungan_bersama = data['info_tabungan'][0]['nama_tabungan_bersama'] || "";
+					jumlah_saldo_bersama = data['info_tabungan'][0]['saldo_tabungan_bersama'] || "";
+					id_tingkat = data['info_tabungan'][0]['id_tingkat'] || "";
 
-					number = data['info_tabungan'][0]['number'];
-					nama_wali = data['info_tabungan'][0]['nama_wali'];
-					nama_pj = data['info_tabungan'][0]['nama_lengkap'];
-					email_wali = data['info_tabungan'][0]['email'];
-					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'];
+					number = data['info_tabungan'][0]['number'] || "";
+					nama_wali = data['info_tabungan'][0]['nama_wali'] || "";
+					nama_pj = data['info_tabungan'][0]['nama_lengkap'] || "";
+					email_wali = data['info_tabungan'][0]['email'] || "";
+					nomor_handphone = data['info_tabungan'][0]['nomor_handphone'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -1762,11 +1772,11 @@ $(document).ready(function () {
 	}
 
 	$("#tb_transaksi").on("click", ".delete_transaksi_kredit", function () {
-		var id_transaksi = $(this).data("id_transaksi_bersama");
-		var nomor_rekening_bersama = $(this).data("nomor_rekening_bersama");
-		var nomor_transaksi_bersama = $(this).data("nomor_transaksi_bersama");
-		var nama_tabungan = $(this).data("nama_tabungan_bersama");
-		var nominal = $(this).data("nominal");
+		var id_transaksi = $(this).data("id_transaksi_bersama") || "";
+		var nomor_rekening_bersama = $(this).data("nomor_rekening_bersama") || "";
+		var nomor_transaksi_bersama = $(this).data("nomor_transaksi_bersama") || "";
+		var nama_tabungan = $(this).data("nama_tabungan_bersama") || "";
+		var nominal = $(this).data("nominal") || "";
 
 		var csrfName = $('.txt_csrfname').attr('name');
 		var csrfHash = $('.txt_csrfname').val(); // CSRF hash
@@ -1867,11 +1877,11 @@ $(document).ready(function () {
 	});
 
 	$("#tb_transaksi").on("click", ".delete_transaksi_debet", function () {
-		var id_transaksi = $(this).data("id_transaksi_bersama");
-		var nomor_rekening_bersama = $(this).data("nomor_rekening_bersama");
-		var nomor_transaksi_bersama = $(this).data("nomor_transaksi_bersama");
-		var nama_tabungan = $(this).data("nama_tabungan_bersama");
-		var nominal = $(this).data("nominal");
+		var id_transaksi = $(this).data("id_transaksi_bersama") || "";
+		var nomor_rekening_bersama = $(this).data("nomor_rekening_bersama") || "";
+		var nomor_transaksi_bersama = $(this).data("nomor_transaksi_bersama") || "";
+		var nama_tabungan = $(this).data("nama_tabungan_bersama") || "";
+		var nominal = $(this).data("nominal") || "";
 
 		var csrfName = $('.txt_csrfname').attr('name');
 		var csrfHash = $('.txt_csrfname').val(); // CSRF hash

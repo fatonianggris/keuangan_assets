@@ -346,10 +346,10 @@ $("#id_penanggung_jawab").on("change", function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['data_pegawai'][0]) {
-					nip = data['data_pegawai'][0]['nip'];
-					nama_lengkap = data['data_pegawai'][0]['nama_lengkap'];
-					nomor_handphone = data['data_pegawai'][0]['nomor_hp'];
-					email = data['data_pegawai'][0]['email'];
+					nip = data['data_pegawai'][0]['nip'] || "";
+					nama_lengkap = data['data_pegawai'][0]['nama_lengkap'] || "";
+					nomor_handphone = data['data_pegawai'][0]['nomor_hp'] || "";
+					email = data['data_pegawai'][0]['email'] || "";
 				} else {
 					nip = "";
 					nama_lengkap = "";
@@ -370,11 +370,11 @@ $("#id_penanggung_jawab").on("change", function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['data_siswa'][0]) {
-					nis = data['data_siswa'][0]['nis'];
-					nama_lengkap = data['data_siswa'][0]['nama_lengkap'];
-					nama_wali = data['data_siswa'][0]['nama_wali'];
-					nomor_handphone = data['data_siswa'][0]['nomor_handphone'];
-					email = data['data_siswa'][0]['email'];
+					nis = data['data_siswa'][0]['nis'] || "";
+					nama_lengkap = data['data_siswa'][0]['nama_lengkap'] || "";
+					nama_wali = data['data_siswa'][0]['nama_wali'] || "";
+					nomor_handphone = data['data_siswa'][0]['nomor_handphone'] || "";
+					email = data['data_siswa'][0]['email'] || "";
 				} else {
 					nis = "";
 					nama_lengkap = "";
@@ -451,20 +451,20 @@ $("#tb_transaksi").on("click", ".edit_joint", function () {
 	$('[name="saldo_bersama"]').val('');
 	$('[name="id_penanggung_jawab"]').empty();
 
-	var id_tabungan = $(this).data("id_nasabah_bersama");
-	var id_pj = $(this).data("id_penanggung_jawab");
-	var id_tingkat = $(this).data("id_tingkat")
-	var id_th_ajaran = $(this).data("id_th_ajaran");
-	var nomor_rekening = $(this).data("nomor_rekening_bersama");
-	var old_nomor_rekening = $(this).data("nomor_rekening_bersama");
-	var nama = $(this).data("nama_lengkap");
-	var nama_tabungan = $(this).data("nama_tabungan_bersama");
-	var tanggal_transaksi = $(this).data("tanggal_transaksi");
-	var nama_wali = $(this).data("nama_wali");
-	var nomor_handphone = $(this).data("nomor_handphone_wali");
-	var jenis_tabungan = $(this).data("jenis_tabungan");
-	var saldo_bersama = $(this).data("saldo_bersama");
-	var status_norek_duplikat = $(this).data("status_nasabah_bersama");
+	var id_tabungan = $(this).data("id_nasabah_bersama") || "";
+	var id_pj = $(this).data("id_penanggung_jawab") || "";
+	var id_tingkat = $(this).data("id_tingkat") || "";
+	var id_th_ajaran = $(this).data("id_th_ajaran") || "";
+	var nomor_rekening = $(this).data("nomor_rekening_bersama") || "";
+	var old_nomor_rekening = $(this).data("nomor_rekening_bersama") || "";
+	var nama = $(this).data("nama_lengkap") || "";
+	var nama_tabungan = $(this).data("nama_tabungan_bersama") || "";
+	var tanggal_transaksi = $(this).data("tanggal_transaksi") || "";
+	var nama_wali = $(this).data("nama_wali") || "";
+	var nomor_handphone = $(this).data("nomor_handphone_wali") || "";
+	var jenis_tabungan = $(this).data("jenis_tabungan") || "";
+	var saldo_bersama = $(this).data("saldo_bersama") || "";
+	var status_norek_duplikat = $(this).data("status_nasabah_bersama") || "";
 
 	if (status_norek_duplikat == "1") {
 		var norek_duplikat = "<p class='font-weight-boldest display-4 text-danger text-center'>TERPAKAI</p>";

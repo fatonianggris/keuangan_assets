@@ -374,51 +374,20 @@ $(document).ready(function () {
 		$('[name="email_nasabah"]').val('');
 		$('[name="nama_wali"]').val('');
 		$('[name="nomor_handphone_pegawai"]').val('');
-		$('[name="jenis_kelamin"] option:selected').remove();
-		$('[name="status_pegawai"] option:selected').remove();
-		$('[name="level_tingkat"] option:selected').remove();
-		$('[name="jabatan_pegawai"] option:selected').remove();
-		$('[name="th_ajaran"] option:selected').remove();
+		$('[name="jabatan_pegawai"]').empty();
 
-		var id_pegawai = $(this).data("id_pegawai");
-		var id_jabatan = $(this).data("id_jabatan");
-		var nama_jabatan = $(this).data("nama_jabatan");
-		var nip_pegawai = $(this).data("nip_pegawai");
-		var nama_lengkap = $(this).data("nama_lengkap");
-		var level_tingkat = $(this).data("level_tingkat");
-		var jenis_kelamin = $(this).data("jenis_kelamin");
-		var id_th_ajaran = $(this).data("id_th_ajaran");
-		var nama_th_ajaran = $(this).data("nama_th_ajaran");
-		var email = $(this).data("email");
-		var status_pegawai = $(this).data("status_pegawai");
-		var nomor_handphone_pegawai = $(this).data("nomor_handphone");
-
-		if (jenis_kelamin == "1") {
-			nama_kelamin = "Laki-Laki";
-		} else {
-			nama_kelamin = "Perempuan";
-		}
-
-		if (status_pegawai == "1") {
-			nama_status_pegawai = "Tetap";
-		} else if (status_pegawai == "2") {
-			nama_status_pegawai = "Tidak Tetap";
-		} else if (status_pegawai == "3") {
-			nama_status_pegawai = "Honorer";
-		}
-
-		if (level_tingkat == "1") {
-			nama_tingkat = "DC/KB/TK";
-		} else if (level_tingkat == "3") {
-			nama_tingkat = "SD";
-		} else if (level_tingkat == "4") {
-			nama_tingkat = "SMP";
-		} else if (level_tingkat == "6") {
-			nama_tingkat = "UMUM";
-		}
-
-		var url_jab = `${HOST_URL}finance/savings/add_ajax_position/${level_tingkat}/${id_jabatan}`;
-		$('#jabatan').load(url_jab);
+		var id_pegawai = $(this).data("id_pegawai") || "";
+		var id_jabatan = $(this).data("id_jabatan") || "";
+		var nama_jabatan = $(this).data("nama_jabatan") || "";
+		var nip_pegawai = $(this).data("nip_pegawai") || "";
+		var nama_lengkap = $(this).data("nama_lengkap") || "";
+		var level_tingkat = $(this).data("level_tingkat") || "";
+		var jenis_kelamin = $(this).data("jenis_kelamin") || "";
+		var id_th_ajaran = $(this).data("id_th_ajaran") || "";
+		var nama_th_ajaran = $(this).data("nama_th_ajaran") || "";
+		var email = $(this).data("email") || "";
+		var status_pegawai = $(this).data("status_pegawai") || "";
+		var nomor_handphone_pegawai = $(this).data("nomor_handphone") || "";
 
 		$("#tingkat").change(function () {
 			level_tingkat = $(this).val();
@@ -430,13 +399,21 @@ $(document).ready(function () {
 		$('[name="id_pegawai"]').val(id_pegawai);
 		$('[name="nip_pegawai"]').val(nip_pegawai);
 		$('[name="nama_pegawai"]').val(nama_lengkap.toUpperCase());
-		$('[name="jenis_kelamin"]').prepend($("<option selected></option>").attr("value", jenis_kelamin).text(nama_kelamin));
-		$('[name="level_tingkat"]').prepend($("<option selected></option>").attr("value", level_tingkat).text(nama_tingkat));
-		$('[name="status_pegawai"]').prepend($("<option selected></option>").attr("value", status_pegawai).text(nama_status_pegawai));
-		$('[name="th_ajaran"]').prepend($("<option selected></option>").attr("value", id_th_ajaran).text(nama_th_ajaran));
-		$('[name="jabatan_pegawai"]').prepend($("<option selected></option>").attr("value", id_jabatan).text(nama_jabatan));
+
+		$('[name="jenis_kelamin"]').find('option[value="' + jenis_kelamin + '"]').prop('selected', true);
+		$('[name="level_tingkat"]').find('option[value="' + level_tingkat + '"]').prop('selected', true);
+		$('[name="status_pegawai"]').find('option[value="' + status_pegawai + '"]').prop('selected', true);
+		$('[name="th_ajaran"]').find('option[value="' + id_th_ajaran + '"]').prop('selected', true);
+
 		$('[name="email_nasabah"]').val(email);
 		$('[name="nomor_handphone_pegawai"]').val(nomor_handphone_pegawai);
+
+		if (nama_lengkap != null && nama_lengkap != "") {
+			$('[name="jabatan_pegawai"]').find('option[value="' + id_jabatan + '"]').prop('selected', true);
+		} else {
+			var nama_lengkap = "BELUM DIPILIH";
+			$('[name="jabatan_pegawai"]').prepend($("<option value='0' selected ></option>").text(`${nama_lengkap}`));
+		}
 
 		$("#modalEditNasabah").modal("show");
 	});
@@ -452,9 +429,9 @@ $(document).ready(function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_pegawai']) {
-					jumlah_saldo_umum = data['info_pegawai'][0]['saldo_tabungan_umum'];
-					info_jabatan = data['info_pegawai'][0]['hasil_nama_jabatan'];
-					info_status = data['info_pegawai'][0]['jenis_pegawai'];
+					jumlah_saldo_umum = data['info_pegawai'][0]['saldo_tabungan_umum'] || "";
+					info_jabatan = data['info_pegawai'][0]['hasil_nama_jabatan'] || "";
+					info_status = data['info_pegawai'][0]['jenis_pegawai'] || "";
 
 					if (info_status == '1') {
 						nama_status = 'PEGAWAI TETAP'
@@ -533,17 +510,17 @@ $(document).ready(function () {
 		var csrfName = $('.txt_csrfname').attr('name');
 		var csrfHash = $('.txt_csrfname').val(); // CSRF hash
 
-		var id_pegawai = $('[name="id_pegawai"]').val();
-		var id_jabatan = $('[name="jabatan_pegawai"]').val();
-		var nip = $('[name="nip_pegawai"]').val();
-		var nama = $('[name="nama_pegawai"]').val();
-		var level_tingkat = $('[name="level_tingkat"]').val();
-		var email = $('[name="email_nasabah"]').val();
-		var jenis_pegawai = $('[name="status_pegawai"]').val();
-		var email_nasabah = $('[name="email_nasabah"]').val()
-		var nomor_handphone_pegawai = $('[name="nomor_handphone_pegawai"]').val();
-		var jenis_kelamin = $('[name="jenis_kelamin"]').val()
-		var th_ajaran = $('[name="th_ajaran"]').val();
+		var id_pegawai = $('[name="id_pegawai"]').val() || "";
+		var id_jabatan = $('[name="jabatan_pegawai"]').val() || "";
+		var nip = $('[name="nip_pegawai"]').val() || "";
+		var nama = $('[name="nama_pegawai"]').val() || "";
+		var level_tingkat = $('[name="level_tingkat"]').val() || "";
+		var email = $('[name="email_nasabah"]').val() || "";
+		var jenis_pegawai = $('[name="status_pegawai"]').val() || "";
+		var email_nasabah = $('[name="email_nasabah"]').val() || "";
+		var nomor_handphone_pegawai = $('[name="nomor_handphone_pegawai"]').val() || "";
+		var jenis_kelamin = $('[name="jenis_kelamin"]').val() || "";
+		var th_ajaran = $('[name="th_ajaran"]').val() || "";
 
 		if (id_pegawai != null && id_pegawai != "" && id_jabatan != null && id_jabatan != "" && nip != null && nip != "" && nama != null && nama != "" && level_tingkat != null && level_tingkat != "" && jenis_kelamin != null && jenis_kelamin != "" && th_ajaran != null && th_ajaran != "" && jenis_pegawai != null && jenis_pegawai != "") {
 

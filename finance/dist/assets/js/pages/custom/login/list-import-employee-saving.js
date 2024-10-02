@@ -365,57 +365,29 @@ $("#tb_transaksi").on("click", ".edit_nasabah", function () {
 	$('[name="saldo_umum"]').val('');
 	$('[name="saldo_qurban"]').val('');
 	$('[name="saldo_wisata"]').val('');
-	$('[name="status_pegawai"] option:selected').remove();
-	$('[name="jenis_kelamin"] option:selected').remove();
-	$('[name="level_tingkat"] option:selected').remove();
-	$('[name="th_ajaran"] option:selected').remove();
 
 	$("#status_nip").html('');
 	$("#status_nama").html('');
 
-	var id_nasabah = $(this).data("id_nasabah");
-	var nip_pegawai = $(this).data("nip_pegawai");
-	var old_nip = $(this).data("nip_pegawai");
-	var nama_pegawai = $(this).data("nama_pegawai");
-	var old_nama_pegawai = $(this).data("nama_pegawai");
-	var level_tingkat = $(this).data("level_tingkat");
-	var tanggal_transaksi = $(this).data("tanggal_transaksi");
-	var id_th_ajaran = $(this).data("id_th_ajaran");
-	var nama_th_ajaran = $(this).data("nama_th_ajaran");
-	var email = $(this).data("email");
-	var status_pegawai = $(this).data("status_pegawai");
-	var jenis_kelamin = $(this).data("jenis_kelamin");
-	var nomor_handphone = $(this).data("nomor_handphone");
-	var status_nip_duplikat = $(this).data("status_nasabah");
-	var status_nama_duplikat = $(this).data("status_nama_nasabah");
+	var id_nasabah = $(this).data("id_nasabah") || "";
+	var nip_pegawai = $(this).data("nip_pegawai") || "";
+	var old_nip = $(this).data("nip_pegawai") || "";
+	var nama_pegawai = $(this).data("nama_pegawai") || "";
+	var old_nama_pegawai = $(this).data("nama_pegawai") || "";
+	var level_tingkat = $(this).data("level_tingkat") || "";
+	var tanggal_transaksi = $(this).data("tanggal_transaksi") || "";
+	var id_th_ajaran = $(this).data("id_th_ajaran") || "";
+	var nama_th_ajaran = $(this).data("nama_th_ajaran") || "";
+	var email = $(this).data("email") || "";
+	var status_pegawai = $(this).data("status_pegawai") || "";
+	var jenis_kelamin = $(this).data("jenis_kelamin") || "";
+	var nomor_handphone = $(this).data("nomor_handphone") || "";
+	var status_nip_duplikat = $(this).data("status_nasabah") || "";
+	var status_nama_duplikat = $(this).data("status_nama_nasabah") || "";
 
-	var saldo_umum = $(this).data("saldo_umum");
-	var saldo_qurban = $(this).data("saldo_qurban");
-	var saldo_wisata = $(this).data("saldo_wisata");
-
-	if (level_tingkat == "1") {
-		nama_tingkat = "DC/KB/TK";
-	} else if (level_tingkat == "3") {
-		nama_tingkat = "SD";
-	} else if (level_tingkat == "4") {
-		nama_tingkat = "SMP";
-	} else if (level_tingkat == "6") {
-		nama_tingkat = "UMUM";
-	}
-
-	if (jenis_kelamin == "1") {
-		nama_jk = "Laki-laki";
-	} else if (jenis_kelamin == "2") {
-		nama_jk = "Perempuan";
-	}
-
-	if (status_pegawai == "1") {
-		nama_status_pegawai = "Tetap";
-	} else if (status_pegawai == "2") {
-		nama_status_pegawai = "Tidak Tetap";
-	} else if (status_pegawai == "3") {
-		nama_status_pegawai = "Honorer";
-	}
+	var saldo_umum = $(this).data("saldo_umum") || "";
+	var saldo_qurban = $(this).data("saldo_qurban") || "";
+	var saldo_wisata = $(this).data("saldo_wisata") || "";
 
 	if (status_nip_duplikat == "1") {
 		var nip_duplikat = "<p class='font-weight-boldest display-4 text-danger text-center'>TERPAKAI</p>";
@@ -544,10 +516,12 @@ $("#tb_transaksi").on("click", ".edit_nasabah", function () {
 	$('[name="nama_pegawai"]').val(nama_pegawai.toUpperCase());
 	$('[name="old_nama_pegawai"]').val(old_nama_pegawai.toUpperCase());
 	$('[name="tanggal_transaksi"]').val(tanggal_transaksi);
-	$('[name="jenis_kelamin"]').prepend($("<option selected></option>").attr("value", jenis_kelamin).text(nama_jk));
-	$('[name="level_tingkat"]').prepend($("<option selected></option>").attr("value", level_tingkat).text(nama_tingkat));
-	$('[name="th_ajaran"]').prepend($("<option selected></option>").attr("value", id_th_ajaran).text(nama_th_ajaran));
-	$('[name="status_pegawai"]').prepend($("<option selected></option>").attr("value", status_pegawai).text(nama_status_pegawai));
+
+	$('[name="jenis_kelamin"]').find('option[value="' + jenis_kelamin + '"]').prop('selected', true);
+	$('[name="level_tingkat"]').find('option[value="' + level_tingkat + '"]').prop('selected', true);
+	$('[name="status_pegawai"]').find('option[value="' + status_pegawai + '"]').prop('selected', true);
+	$('[name="th_ajaran"]').find('option[value="' + id_th_ajaran + '"]').prop('selected', true);
+
 	$('[name="email_nasabah"]').val(email);
 	$('[name="nomor_handphone_pegawai"]').val(nomor_handphone);
 	$('[name="saldo_umum"]').val(saldo_umum);

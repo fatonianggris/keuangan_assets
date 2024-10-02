@@ -26,7 +26,7 @@ $(document).ready(function () {
 			cancelClass: 'btn-secondary',
 			startDate: start,
 			endDate: end,
-			showCustomRangeLabel:false,
+			showCustomRangeLabel: false,
 			ranges: {
 				'Today': [moment(), moment()],
 			}
@@ -431,47 +431,28 @@ $(document).ready(function () {
 		$('[name="email_wali"]').val('');
 		$('[name="nama_wali"]').val('');
 		$('[name="nomor_handphone_wali"]').val('');
-		$('[name="jenis_kelamin"] option:selected').remove();
-		$('[name="level_tingkat"] option:selected').remove();
-		$('[name="th_ajaran"] option:selected').remove();
 
-		var id_siswa = $(this).data("id_siswa");
-		var nis_siswa = $(this).data("nis_siswa");
-		var nama_lengkap = $(this).data("nama_lengkap");
-		var level_tingkat = $(this).data("level_tingkat");
-		var jenis_kelamin = $(this).data("jenis_kelamin");
-		var id_th_ajaran = $(this).data("id_th_ajaran");
-		var nama_th_ajaran = $(this).data("nama_th_ajaran");
-		var email = $(this).data("email");
-		var nama_wali = $(this).data("nama_wali");
-		var nomor_handphone = $(this).data("nomor_handphone");
-
-		if (jenis_kelamin == "1") {
-			nama_kelamin = "Laki-Laki";
-		} else {
-			nama_kelamin = "Perempuan";
-		}
-
-		if (level_tingkat == "1") {
-			nama_tingkat = "KB";
-		} else if (level_tingkat == "2") {
-			nama_tingkat = "TK";
-		} else if (level_tingkat == "3") {
-			nama_tingkat = "SD";
-		} else if (level_tingkat == "4") {
-			nama_tingkat = "SMP";
-		} else if (level_tingkat == "6") {
-			nama_tingkat = "DC";
-		}
+		var id_siswa = $(this).data("id_siswa") || "";
+		var nis_siswa = $(this).data("nis_siswa") || "";
+		var nama_lengkap = $(this).data("nama_lengkap") || "";
+		var level_tingkat = $(this).data("level_tingkat") || "";
+		var jenis_kelamin = $(this).data("jenis_kelamin") || "";
+		var id_th_ajaran = $(this).data("id_th_ajaran") || "";
+		var nama_th_ajaran = $(this).data("nama_th_ajaran") || "";
+		var email = $(this).data("email") || "";
+		var nama_wali = $(this).data("nama_wali") || "";
+		var nomor_handphone = $(this).data("nomor_handphone") || "";
 
 		$("#modalEditNasabah").modal("show");
 
 		$('[name="id_siswa"]').val(id_siswa);
 		$('[name="nis_siswa"]').val(nis_siswa);
 		$('[name="nama_siswa"]').val(nama_lengkap.toUpperCase());
-		$('[name="jenis_kelamin"]').prepend($("<option selected></option>").attr("value", jenis_kelamin).text(nama_kelamin));
-		$('[name="level_tingkat"]').prepend($("<option selected></option>").attr("value", level_tingkat).text(nama_tingkat));
-		$('[name="th_ajaran"]').prepend($("<option selected></option>").attr("value", id_th_ajaran).text(nama_th_ajaran));
+
+		$('[name="jenis_kelamin"]').find('option[value="' + jenis_kelamin + '"]').prop('selected', true);
+		$('[name="level_tingkat"]').find('option[value="' + level_tingkat + '"]').prop('selected', true);
+		$('[name="th_ajaran"]').find('option[value="' + th_ajaran + '"]').prop('selected', true);
+
 		$('[name="email_wali"]').val(email);
 		$('[name="nama_wali"]').val(nama_wali.toUpperCase())
 		$('[name="nomor_handphone_wali"]').val(nomor_handphone);
@@ -488,10 +469,10 @@ $(document).ready(function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_siswa']) {
-					jumlah_saldo_umum = data['info_siswa'][0]['saldo_tabungan_umum'];
-					jumlah_saldo_qurban = data['info_siswa'][0]['saldo_tabungan_qurban'];
-					jumlah_saldo_wisata = data['info_siswa'][0]['saldo_tabungan_wisata'];
-					info_kelas = data['info_siswa'][0]['informasi'];
+					jumlah_saldo_umum = data['info_siswa'][0]['saldo_tabungan_umum'] || "";
+					jumlah_saldo_qurban = data['info_siswa'][0]['saldo_tabungan_qurban'] || "";
+					jumlah_saldo_wisata = data['info_siswa'][0]['saldo_tabungan_wisata'] || "";
+					info_kelas = data['info_siswa'][0]['informasi'] || "";
 				} else {
 					jumlah_saldo_umum = "-";
 					jumlah_saldo_qurban = "-";
@@ -595,15 +576,15 @@ $(document).ready(function () {
 		var csrfName = $('.txt_csrfname').attr('name');
 		var csrfHash = $('.txt_csrfname').val(); // CSRF hash
 
-		var id_siswa = $('[name="id_siswa"]').val();
-		var nis = $('[name="nis_siswa"]').val();
-		var nama = $('[name="nama_siswa"]').val();
-		var level_tingkat = $('[name="level_tingkat"]').val();
-		var nama_wali = $('[name="nama_wali"]').val();
-		var email_wali = $('[name="email_wali"]').val()
-		var nomor_handphone_wali = $('[name="nomor_handphone_wali"]').val();
-		var jenis_kelamin = $('[name="jenis_kelamin"]').val()
-		var th_ajaran = $('[name="th_ajaran"]').val();
+		var id_siswa = $('[name="id_siswa"]').val() || "";
+		var nis = $('[name="nis_siswa"]').val() || "";
+		var nama = $('[name="nama_siswa"]').val() || "";
+		var level_tingkat = $('[name="level_tingkat"]').val() || "";
+		var nama_wali = $('[name="nama_wali"]').val() || "";
+		var email_wali = $('[name="email_wali"]').val() || "";
+		var nomor_handphone_wali = $('[name="nomor_handphone_wali"]').val() || "";
+		var jenis_kelamin = $('[name="jenis_kelamin"]').val() || "";
+		var th_ajaran = $('[name="th_ajaran"]').val() || "";
 
 		if (nis != null && nis != "" && nama != null && nama != "" && level_tingkat != null && level_tingkat != "" && jenis_kelamin != null && jenis_kelamin != "" && th_ajaran != null && th_ajaran != "") {
 
@@ -686,7 +667,7 @@ $(document).ready(function () {
 				}
 			});
 		} else {
-			
+
 			Swal.fire({
 				html: "Opps!, Pastikan Inputan Terisi dengan Benar dan Tidak Boleh Kosong, Silahkan input ulang.",
 				icon: "error",

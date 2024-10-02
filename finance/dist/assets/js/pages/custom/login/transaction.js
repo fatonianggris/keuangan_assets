@@ -427,16 +427,21 @@ $(document).ready(function () {
 	$("#tb_transaksi").on("click", ".edit_transaksi_kredit", function () {
 		window.bundleObj.resetOTPKreditEdit();
 
-		var id_transaksi = $(this).data("id_transaksi");
-		var nomor_transaksi = $(this).data("nomor_transaksi");
-		var nis_siswa = $(this).data("nis_siswa");
-		var nama_lengkap = $(this).data("nama_lengkap");
-		var id_th_ajaran = $(this).data("id_th_ajaran");
-		var id_tingkat = $(this).data("id_tingkat");
-		var th_ajaran = $(this).data("th_ajaran");
-		var nominal = $(this).data("nominal");
-		var waktu_transaksi = $(this).data("waktu_transaksi");
-		var catatan = $(this).data("catatan");
+		$('[name="id_transaksi_kredit"]').val('');
+		$('[name="nominal_kredit"]').val('');
+		$('[name="waktu_transaksi_kredit"]').val('');
+		$('[name="catatan_kredit"]').text('');
+
+		var id_transaksi = $(this).data("id_transaksi") || "";
+		var nomor_transaksi = $(this).data("nomor_transaksi") || "";
+		var nis_siswa = $(this).data("nis_siswa") || "";
+		var nama_lengkap = $(this).data("nama_lengkap") || "";
+		var id_th_ajaran = $(this).data("id_th_ajaran") || "";
+		var id_tingkat = $(this).data("id_tingkat") || "";
+		var th_ajaran = $(this).data("th_ajaran") || "";
+		var nominal = $(this).data("nominal") || "";
+		var waktu_transaksi = $(this).data("waktu_transaksi") || "";
+		var catatan = $(this).data("catatan") || "";
 
 		if (id_tingkat == "1") {
 			var nama_tingkat = "KB";
@@ -470,8 +475,8 @@ $(document).ready(function () {
 			success: function (data) {
 				if (data['info_siswa']) {
 					jumlah_saldo_awal = (Number(data['info_siswa'][0]['saldo_tabungan_umum']) - Number(data['info_tabungan'][0]['nominal']));
-					jumlah_saldo_akhir = data['info_siswa'][0]['saldo_tabungan_umum'];
-					id_tingkat = data['info_siswa'][0]['id_tingkat'];
+					jumlah_saldo_akhir = data['info_siswa'][0]['saldo_tabungan_umum'] || "";
+					id_tingkat = data['info_siswa'][0]['id_tingkat'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -517,16 +522,21 @@ $(document).ready(function () {
 	$("#tb_transaksi").on("click", ".edit_transaksi_debet", function () {
 		window.bundleObj.resetOTPDebetEdit();
 
-		var id_transaksi = $(this).data("id_transaksi");
-		var nis_siswa = $(this).data("nis_siswa");
-		var nomor_transaksi = $(this).data("nomor_transaksi");
-		var nama_lengkap = $(this).data("nama_lengkap");
-		var id_tingkat = $(this).data("id_tingkat");
-		var id_th_ajaran = $(this).data("id_th_ajaran");
-		var th_ajaran = $(this).data("th_ajaran");
-		var nominal = $(this).data("nominal");
-		var waktu_transaksi = $(this).data("waktu_transaksi");
-		var catatan = $(this).data("catatan");
+		$('[name="id_transaksi_debet"]').val('')
+		$('[name="nominal_debet"]').val('');
+		$('[name="waktu_transaksi_debet"]').val('');
+		$('[name="catatan_debet"]').text('');
+
+		var id_transaksi = $(this).data("id_transaksi") || "";
+		var nis_siswa = $(this).data("nis_siswa") || "";
+		var nomor_transaksi = $(this).data("nomor_transaksi") || "";
+		var nama_lengkap = $(this).data("nama_lengkap") || "";
+		var id_tingkat = $(this).data("id_tingkat") || "";
+		var id_th_ajaran = $(this).data("id_th_ajaran") || "";
+		var th_ajaran = $(this).data("th_ajaran") || "";
+		var nominal = $(this).data("nominal") || "";
+		var waktu_transaksi = $(this).data("waktu_transaksi") || "";
+		var catatan = $(this).data("catatan") || "";
 
 		if (id_tingkat == "1") {
 			var nama_tingkat = "KB";
@@ -560,8 +570,8 @@ $(document).ready(function () {
 			success: function (data) {
 				if (data['info_siswa']) {
 					jumlah_saldo_awal = (Number(data['info_siswa'][0]['saldo_tabungan_umum']) + Number(data['info_tabungan'][0]['nominal']));
-					jumlah_saldo_akhir = data['info_siswa'][0]['saldo_tabungan_umum'];
-					id_tingkat = data['info_siswa'][0]['id_tingkat'];
+					jumlah_saldo_akhir = data['info_siswa'][0]['saldo_tabungan_umum'] || "";
+					id_tingkat = data['info_siswa'][0]['id_tingkat'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -608,15 +618,15 @@ $(document).ready(function () {
 
 	$("#tb_transaksi").on("click", ".cetak_transaksi_kredit", function () {
 
-		var nomor_transaksi = $(this).data("nomor_transaksi");
-		var nis_siswa = $(this).data("nis_siswa");
-		var nama = $(this).data("nama_lengkap").toUpperCase();
-		var jenjang = $(this).data("tingkat");
-		var nominal = $(this).data("nominal").toString();
-		var jenis_transaksi = $(this).data("jenis_transaksi");
-		var waktu_transaksi = $(this).data("waktu_transaksi");
-		var saldo_akhir = $(this).data("saldo").toString();
-		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) - parseInt(nominal.replace(/\./g, "")));
+		var nomor_transaksi = $(this).data("nomor_transaksi") || "";
+		var nis_siswa = $(this).data("nis_siswa") || "";
+		var nama = $(this).data("nama_lengkap").toUpperCase() || "";
+		var jenjang = $(this).data("tingkat") || "";
+		var nominal = $(this).data("nominal").toString() || "";
+		var jenis_transaksi = $(this).data("jenis_transaksi") || "";
+		var waktu_transaksi = $(this).data("waktu_transaksi") || "";
+		var saldo_akhir = $(this).data("saldo").toString() || "";
+		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) - parseInt(nominal.replace(/\./g, ""))) || "";
 
 		window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 			"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis_siswa,
@@ -626,15 +636,15 @@ $(document).ready(function () {
 
 	$("#tb_transaksi").on("click", ".cetak_transaksi_debet", function () {
 
-		var nomor_transaksi = $(this).data("nomor_transaksi");
-		var nis_siswa = $(this).data("nis_siswa");
-		var nama = $(this).data("nama_lengkap").toUpperCase();
-		var jenjang = $(this).data("tingkat");
-		var nominal = $(this).data("nominal").toString();
-		var jenis_transaksi = $(this).data("jenis_transaksi");
-		var waktu_transaksi = $(this).data("waktu_transaksi");
-		var saldo_akhir = $(this).data("saldo").toString();
-		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) + parseInt(nominal.replace(/\./g, "")));
+		var nomor_transaksi = $(this).data("nomor_transaksi") || "";
+		var nis_siswa = $(this).data("nis_siswa") || "";
+		var nama = $(this).data("nama_lengkap").toUpperCase() || "";
+		var jenjang = $(this).data("tingkat") || "";
+		var nominal = $(this).data("nominal").toString() || "";
+		var jenis_transaksi = $(this).data("jenis_transaksi") || "";
+		var waktu_transaksi = $(this).data("waktu_transaksi") || "";
+		var saldo_akhir = $(this).data("saldo").toString() || "";
+		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) + parseInt(nominal.replace(/\./g, ""))) || "";
 
 		window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 			"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nis_siswa,
@@ -655,8 +665,8 @@ $(document).ready(function () {
 
 				if (data['info_siswa'][0]) {
 
-					jumlah_saldo = data['info_siswa'][0]['saldo_tabungan_umum'];
-					id_tingkat = data['info_siswa'][0]['id_tingkat'];
+					jumlah_saldo = data['info_siswa'][0]['saldo_tabungan_umum'] || "";
+					id_tingkat = data['info_siswa'][0]['id_tingkat'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -714,8 +724,8 @@ $(document).ready(function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_siswa'][0]) {
-					jumlah_saldo = data['info_siswa'][0]['saldo_tabungan_umum'];
-					id_tingkat = data['info_siswa'][0]['id_tingkat'];
+					jumlah_saldo = data['info_siswa'][0]['saldo_tabungan_umum'] || "";
+					id_tingkat = data['info_siswa'][0]['id_tingkat'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -768,10 +778,10 @@ $(document).ready(function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_siswa']) {
-					jumlah_saldo_umum = data['info_siswa'][0]['saldo_tabungan_umum'];
-					jumlah_saldo_qurban = data['info_siswa'][0]['saldo_tabungan_qurban'];
-					jumlah_saldo_wisata = data['info_siswa'][0]['saldo_tabungan_wisata'];
-					id_tingkat = data['info_siswa'][0]['id_tingkat'];
+					jumlah_saldo_umum = data['info_siswa'][0]['saldo_tabungan_umum'] || "";
+					jumlah_saldo_qurban = data['info_siswa'][0]['saldo_tabungan_qurban'] || "";
+					jumlah_saldo_wisata = data['info_siswa'][0]['saldo_tabungan_wisata'] || "";
+					id_tingkat = data['info_siswa'][0]['id_tingkat'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "KB";
@@ -1805,12 +1815,12 @@ $(document).ready(function () {
 	}
 
 	$("#tb_transaksi").on("click", ".delete_transaksi_kredit", function () {
-		var id_transaksi = $(this).data("id_transaksi");
-		var nis_siswa = $(this).data("nis_siswa");
-		var nama_siswa = $(this).data("nama_lengkap");
-		var jenis_transaksi = $(this).data("jenis_transaksi");
-		var nomor_transaksi = $(this).data("nomor_transaksi");
-		var nominal = $(this).data("nominal");
+		var id_transaksi = $(this).data("id_transaksi") || "";
+		var nis_siswa = $(this).data("nis_siswa") || "";
+		var nama_siswa = $(this).data("nama_lengkap") || "";
+		var jenis_transaksi = $(this).data("jenis_transaksi") || "";
+		var nomor_transaksi = $(this).data("nomor_transaksi") || "";
+		var nominal = $(this).data("nominal") || "";
 
 		var csrfName = $('.txt_csrfname').attr('name');
 		var csrfHash = $('.txt_csrfname').val(); // CSRF hash
@@ -1911,12 +1921,12 @@ $(document).ready(function () {
 	});
 
 	$("#tb_transaksi").on("click", ".delete_transaksi_debet", function () {
-		var id_transaksi = $(this).data("id_transaksi");
-		var nis_siswa = $(this).data("nis_siswa");
-		var nama_siswa = $(this).data("nama_lengkap");
-		var jenis_transaksi = $(this).data("jenis_transaksi");
-		var nomor_transaksi = $(this).data("nomor_transaksi");
-		var nominal = $(this).data("nominal");
+		var id_transaksi = $(this).data("id_transaksi") || "";
+		var nis_siswa = $(this).data("nis_siswa") || "";
+		var nama_siswa = $(this).data("nama_lengkap") || "";
+		var jenis_transaksi = $(this).data("jenis_transaksi") || "";
+		var nomor_transaksi = $(this).data("nomor_transaksi") || "";
+		var nominal = $(this).data("nominal") || "";
 
 		var csrfName = $('.txt_csrfname').attr('name');
 		var csrfHash = $('.txt_csrfname').val(); // CSRF hash

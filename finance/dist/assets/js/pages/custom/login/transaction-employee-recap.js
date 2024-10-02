@@ -372,17 +372,22 @@ $(document).ready(function () {
 	$("#tb_transaksi").on("click", ".edit_transaksi_kredit", function () {
 		window.bundleObj.resetOTPKreditEdit();
 
-		var id_transaksi = $(this).data("id_transaksi");
-		var nip_pegawai = $(this).data("nip_pegawai");
-		var nama_lengkap = $(this).data("nama_lengkap");
-		var nomor_transaksi = $(this).data("nomor_transaksi");
-		var id_th_ajaran = $(this).data("id_th_ajaran");
-		var th_ajaran = $(this).data("th_ajaran");
-		var id_tingkat = $(this).data("id_tingkat");
-		var nominal = $(this).data("nominal");
-		var jenis_tabungan = $(this).data("jenis_tabungan");
-		var waktu_transaksi = $(this).data("waktu_transaksi");
-		var catatan = $(this).data("catatan");
+		$('[name="id_transaksi_kredit"]').val('');
+		$('[name="nominal_kredit"]').val('');
+		$('[name="waktu_transaksi_kredit"]').val('');
+		$('[name="catatan_kredit"]').text('');
+
+		var id_transaksi = $(this).data("id_transaksi") || "";
+		var nip_pegawai = $(this).data("nip_pegawai") || "";
+		var nama_lengkap = $(this).data("nama_lengkap") || "";
+		var nomor_transaksi = $(this).data("nomor_transaksi") || "";
+		var id_th_ajaran = $(this).data("id_th_ajaran") || "";
+		var th_ajaran = $(this).data("th_ajaran") || "";
+		var id_tingkat = $(this).data("id_tingkat") || "";
+		var nominal = $(this).data("nominal") || "";
+		var jenis_tabungan = $(this).data("jenis_tabungan") || "";
+		var waktu_transaksi = $(this).data("waktu_transaksi") || "";
+		var catatan = $(this).data("catatan") || "";
 
 		if (id_tingkat == "1") {
 			var nama_tingkat = "DC/KB/TK";
@@ -407,8 +412,7 @@ $(document).ready(function () {
 		$('[name="catatan_kredit"]').val(catatan);
 
 		if (jenis_tabungan == "1") {
-			$('[name="jenis_tabungan_kredit"] option:selected').remove();
-			$('[name="jenis_tabungan_kredit"]').empty().append($("<option selected></option>").attr("value", jenis_tabungan).text("UMUM"));
+			$('[name="jenis_tabungan_kredit"]').find('option[value="' + jenis_tabungan + '"]').prop('selected', true);
 
 			$.ajax({
 				type: "GET",
@@ -450,8 +454,7 @@ $(document).ready(function () {
 				},
 			});
 		} else if (jenis_tabungan == "2") {
-			$('[name="jenis_tabungan_kredit"] option:selected').remove();
-			$('[name="jenis_tabungan_kredit"]').empty().append($("<option selected></option>").attr("value", jenis_tabungan).text("QURBAN"));
+			$('[name="jenis_tabungan_kredit"]').find('option[value="' + jenis_tabungan + '"]').prop('selected', true);
 
 			$.ajax({
 				type: "GET",
@@ -493,8 +496,7 @@ $(document).ready(function () {
 				},
 			});
 		} else if (jenis_tabungan == "3") {
-			$('[name="jenis_tabungan_kredit"] option:selected').remove();
-			$('[name="jenis_tabungan_kredit"]').empty().append($("<option selected></option>").attr("value", jenis_tabungan).text("WISATA"));
+			$('[name="jenis_tabungan_kredit"]').find('option[value="' + jenis_tabungan + '"]').prop('selected', true);
 
 			$.ajax({
 				type: "GET",
@@ -549,17 +551,22 @@ $(document).ready(function () {
 	$("#tb_transaksi").on("click", ".edit_transaksi_debet", function () {
 		window.bundleObj.resetOTPDebetEdit();
 
-		var id_transaksi = $(this).data("id_transaksi");
-		var nip_pegawai = $(this).data("nip_pegawai");
-		var nomor_transaksi = $(this).data("nomor_transaksi");
-		var nama_lengkap = $(this).data("nama_lengkap");
-		var id_th_ajaran = $(this).data("id_th_ajaran");
-		var id_tingkat = $(this).data("id_tingkat");
-		var th_ajaran = $(this).data("th_ajaran");
-		var nominal = $(this).data("nominal");
-		var waktu_transaksi = $(this).data("waktu_transaksi");
-		var jenis_tabungan = $(this).data("jenis_tabungan");
-		var catatan = $(this).data("catatan");
+		$('[name="id_transaksi_debet"]').val('');
+		$('[name="nominal_debet"]').val('');
+		$('[name="waktu_transaksi_debet"]').val('');
+		$('[name="catatan_debet"]').text('');
+
+		var id_transaksi = $(this).data("id_transaksi") || "";
+		var nip_pegawai = $(this).data("nip_pegawai") || "";
+		var nomor_transaksi = $(this).data("nomor_transaksi") || "";
+		var nama_lengkap = $(this).data("nama_lengkap") || "";
+		var id_th_ajaran = $(this).data("id_th_ajaran") || "";
+		var id_tingkat = $(this).data("id_tingkat") || "";
+		var th_ajaran = $(this).data("th_ajaran") || "";
+		var nominal = $(this).data("nominal") || "";
+		var waktu_transaksi = $(this).data("waktu_transaksi") || "";
+		var jenis_tabungan = $(this).data("jenis_tabungan") || "";
+		var catatan = $(this).data("catatan") || "";
 
 		if (id_tingkat == "1") {
 			var nama_tingkat = "DC/KB/TK";
@@ -581,11 +588,10 @@ $(document).ready(function () {
 
 		$('[name="nominal_debet"]').val(nominal);
 		$('[name="waktu_transaksi_debet"]').val(waktu_transaksi)
-		$('[name="catatan_debet"]').val(catatan);
+		$('[name="catatan_debet"]').text(catatan);
 
 		if (jenis_tabungan == "1") {
-			$('[name="jenis_tabungan_debet"] option:selected').remove();
-			$('[name="jenis_tabungan_debet"]').empty().append($("<option selected></option>").attr("value", jenis_tabungan).text("UMUM"));
+			$('[name="jenis_tabungan_debet"]').find('option[value="' + jenis_tabungan + '"]').prop('selected', true);
 
 			$.ajax({
 				type: "GET",
@@ -630,8 +636,7 @@ $(document).ready(function () {
 
 		}
 		else if (jenis_tabungan == "2") {
-			$('[name="jenis_tabungan_debet"] option:selected').remove();
-			$('[name="jenis_tabungan_debet"]').empty().append($("<option selected></option>").attr("value", jenis_tabungan).text("QURBAN"));
+			$('[name="jenis_tabungan_debet"]').find('option[value="' + jenis_tabungan + '"]').prop('selected', true);
 
 			$.ajax({
 				type: "GET",
@@ -676,8 +681,7 @@ $(document).ready(function () {
 
 		}
 		else if (jenis_tabungan == "3") {
-			$('[name="jenis_tabungan_debet"] option:selected').remove();
-			$('[name="jenis_tabungan_debet"]').empty().append($("<option selected></option>").attr("value", jenis_tabungan).text("WISATA"));
+			$('[name="jenis_tabungan_debet"]').find('option[value="' + jenis_tabungan + '"]').prop('selected', true);
 
 			$.ajax({
 				type: "GET",
@@ -735,16 +739,16 @@ $(document).ready(function () {
 
 	$("#tb_transaksi").on("click", ".cetak_transaksi_kredit", function () {
 
-		var nomor_transaksi = $(this).data("nomor_transaksi");
-		var nip_pegawai = $(this).data("nip_pegawai");
-		var nama = $(this).data("nama_lengkap").toUpperCase();
-		var jenjang = $(this).data("tingkat");
-		var nominal = $(this).data("nominal").toString();
-		var jenis_transaksi = $(this).data("jenis_transaksi");
-		var jenis_tabungan = $(this).data("jenis_tabungan");
-		var waktu_transaksi = $(this).data("waktu_transaksi");
-		var saldo_akhir = $(this).data("saldo").toString();
-		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) - parseInt(nominal.replace(/\./g, "")));
+		var nomor_transaksi = $(this).data("nomor_transaksi") || "";
+		var nip_pegawai = $(this).data("nip_pegawai") || "";
+		var nama = $(this).data("nama_lengkap").toUpperCase() || "";
+		var jenjang = $(this).data("tingkat") || "";
+		var nominal = $(this).data("nominal").toString() || "";
+		var jenis_transaksi = $(this).data("jenis_transaksi") || "";
+		var jenis_tabungan = $(this).data("jenis_tabungan") || "";
+		var waktu_transaksi = $(this).data("waktu_transaksi") || "";
+		var saldo_akhir = $(this).data("saldo").toString() || "";
+		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) - parseInt(nominal.replace(/\./g, ""))) || "";
 
 		window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 			"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nip_pegawai,
@@ -754,16 +758,16 @@ $(document).ready(function () {
 
 	$("#tb_transaksi").on("click", ".cetak_transaksi_debet", function () {
 
-		var nomor_transaksi = $(this).data("nomor_transaksi");
-		var nip_pegawai = $(this).data("nip_pegawai");
-		var nama = $(this).data("nama_lengkap").toUpperCase();
-		var jenjang = $(this).data("tingkat");
-		var nominal = $(this).data("nominal").toString();
-		var jenis_transaksi = $(this).data("jenis_transaksi");
-		var jenis_tabungan = $(this).data("jenis_tabungan");
-		var waktu_transaksi = $(this).data("waktu_transaksi");
-		var saldo_akhir = $(this).data("saldo").toString();
-		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) + parseInt(nominal.replace(/\./g, "")));
+		var nomor_transaksi = $(this).data("nomor_transaksi") || "";
+		var nip_pegawai = $(this).data("nip_pegawai") || "";
+		var nama = $(this).data("nama_lengkap").toUpperCase() || "";
+		var jenjang = $(this).data("tingkat") || "";
+		var nominal = $(this).data("nominal").toString() || "";
+		var jenis_transaksi = $(this).data("jenis_transaksi") || "";
+		var jenis_tabungan = $(this).data("jenis_tabungan") || "";
+		var waktu_transaksi = $(this).data("waktu_transaksi") || "";
+		var saldo_akhir = $(this).data("saldo").toString() || "";
+		var saldo_awal = (parseInt(saldo_akhir.replace(/\./g, "")) + parseInt(nominal.replace(/\./g, ""))) || "";
 
 		window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 			"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nip_pegawai,
@@ -782,8 +786,8 @@ $(document).ready(function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_employee']) {
-					jumlah_saldo = data['info_employee'][0]['saldo_tabungan_umum'];
-					id_tingkat = data['info_employee'][0]['id_tingkat'];
+					jumlah_saldo = data['info_employee'][0]['saldo_tabungan_umum'] || "";
+					id_tingkat = data['info_employee'][0]['id_tingkat'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "DC/KB/TK";
@@ -837,8 +841,8 @@ $(document).ready(function () {
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_pegawai']) {
-					jumlah_saldo = data['info_pegawai'][0]['saldo_tabungan_umum'];
-					id_tingkat = data['info_pegawai'][0]['id_tingkat'];
+					jumlah_saldo = data['info_pegawai'][0]['saldo_tabungan_umum'] || "";
+					id_tingkat = data['info_pegawai'][0]['id_tingkat'] || "";
 
 					if (id_tingkat == "1") {
 						nama_tingkat = "DC/KB/TK";
@@ -906,7 +910,7 @@ $(document).ready(function () {
 		var nominal = $("#inputNominalKredit").val();
 		var tahun_ajaran = $("#inputTahunAjaranKredit").val();
 		var catatan = $("#inputCatatanKredit").val();
-		var tanggal_transaksi = $("#inputTanggalKredit").val()
+		var tanggal_transaksi = $("#inputTanggalKredit").val();
 		var jenis_tabungan = $('#inputJenisTabunganKredit').find(":selected").val();
 		var tingkat = $("#inputTingkatKredit").val();
 
@@ -2849,13 +2853,13 @@ $(document).ready(function () {
 	});
 
 	$("#tb_transaksi").on("click", ".delete_transaksi_debet", function () {
-		var id_transaksi = $(this).data("id_transaksi");
-		var nip_pegawai = $(this).data("nip_pegawai");
-		var nama_pegawai = $(this).data("nama_lengkap");
-		var nomor_transaksi = $(this).data("nomor_transaksi");
-		var jenis_transaksi = $(this).data("jenis_transaksi");
-		var jenis_tabungan = $(this).data("jenis_tabungan");
-		var nominal = $(this).data("nominal");
+		var id_transaksi = $(this).data("id_transaksi") || "";
+		var nip_pegawai = $(this).data("nip_pegawai") || "";
+		var nama_pegawai = $(this).data("nama_lengkap") || "";
+		var nomor_transaksi = $(this).data("nomor_transaksi") || "";
+		var jenis_transaksi = $(this).data("jenis_transaksi") || "";
+		var jenis_tabungan = $(this).data("jenis_tabungan") || "";
+		var nominal = $(this).data("nominal") || "";
 
 		var csrfName = $('.txt_csrfname').attr('name');
 		var csrfHash = $('.txt_csrfname').val();
@@ -3149,9 +3153,9 @@ $(document).ready(function () {
 
 	$("#inputJenisTabunganKredit").on("change", function () {
 
-		var nip = $("#findNasabahKredit").find(":selected").val();
-		var nama = $("#findNasabahKredit").find(":selected").text();
-		var jenis_tabungan = $("#inputJenisTabunganKredit").find(":selected").val();
+		var nip = $("#findNasabahKredit").find(":selected").val() || "";
+		var nama = $("#findNasabahKredit").find(":selected").text() || "";
+		var jenis_tabungan = $("#inputJenisTabunganKredit").find(":selected").val() || "";
 
 		if (jenis_tabungan == '1') {
 			nama_jenis_tabungan = "UMUM";
