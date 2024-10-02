@@ -343,35 +343,35 @@ $(document).ready(function () {
 
 	$(".findTabunganKredit").select2({
 		placeholder: "Cari Tabungan Bersama",
-		minimumInputLength: 7,
+		minimumInputLength: 6,
 		maximumInputLength: 8,
 		allowClear: true,
 	});
 
 	$(".findTabunganDebet").select2({
 		placeholder: "Cari Tabungan Bersama",
-		minimumInputLength: 7,
+		minimumInputLength: 6,
 		maximumInputLength: 8,
 		allowClear: true,
 	});
 
 	$(".findTabunganKreditEdit").select2({
 		placeholder: "Cari Tabungan Bersama",
-		minimumInputLength: 7,
+		minimumInputLength: 6,
 		maximumInputLength: 8,
 		allowClear: false,
 	});
 
 	$(".findTabunganDebetEdit").select2({
 		placeholder: "Cari Tabungan Bersama",
-		minimumInputLength: 7,
+		minimumInputLength: 6,
 		maximumInputLength: 8,
 		allowClear: false,
 	});
 
 	$(".findTabunganRekap").select2({
 		placeholder: "Cari Tabungan Bersama",
-		minimumInputLength: 7,
+		minimumInputLength: 6,
 		maximumInputLength: 8,
 		allowClear: true,
 	});

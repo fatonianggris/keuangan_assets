@@ -37,8 +37,8 @@
 									message: 'Nomor Rekening telah digunakan, inputkan Nomor Rekening lain!',
 								},
 								stringLength: {
-									max: 7,
-									min: 5,
+									max: 8,
+									min: 6,
 									message: 'Nomor Rekening harus memiliki 6 sampai 8 karakter'
 								}
 							}

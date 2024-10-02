@@ -24,8 +24,8 @@
 								},
 								stringLength: {
 									max: 8,
-									min: 7,
-									message: 'Nomor Rekening harus memiliki 7-8 karakter'
+									min: 6,
+									message: 'Nomor Rekening harus memiliki 6-8 karakter'
 								}
 							}
 						},
@@ -122,8 +122,8 @@
 								},
 								stringLength: {
 									max: 8,
-									min: 7,
-									message: 'Nomor Rekening harus memiliki 7-8 karakter'
+									min: 6,
+									message: 'Nomor Rekening harus memiliki 6-8 karakter'
 								}
 							}
 						},
