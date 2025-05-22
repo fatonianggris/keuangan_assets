@@ -88,9 +88,9 @@ $(document).ready(function () {
 			</label>`;
 			},
 			footerCallback: function (row, data, start, end, display) {
-				var column_kredit_um = 9;
-				var column_debit_um = 10;
-				var column_saldo_um = 11;
+				var column_kredit_um = 8;
+				var column_debit_um = 9;
+				var column_saldo_um = 10;
 				var api = this.api(),
 					data;
 
@@ -439,6 +439,8 @@ $(document).ready(function () {
 						nama_status = 'PEGAWAI TIDAK TETAP'
 					} else if (info_status == '3') {
 						nama_status = 'HONORER'
+					} else if (info_status == '4') {
+						nama_status = 'KELUAR'
 					}
 
 				} else {
@@ -655,6 +657,24 @@ $(document).ready(function () {
 						var saldo_umum = CurrencyID(0);
 					}
 
+					if (data[i].kredit_tht != null) {
+						var kredit_tht = CurrencyID(data[i].kredit_tht);
+					} else if (data[i].kredit_tht == null) {
+						var kredit_tht = CurrencyID(0);
+					}
+
+					if (data[i].debet_tht != null) {
+						var debet_tht = CurrencyID(data[i].debet_tht);
+					} else if (data[i].debet_tht == null) {
+						var debet_tht = CurrencyID(0);
+					}
+
+					if (data[i].saldo_tht != null) {
+						var saldo_tht = CurrencyID(data[i].saldo_tht);
+					} else if (data[i].saldo_tht == null) {
+						var saldo_tht = CurrencyID(0);
+					}
+
 					if (data[i].hasil_nama_jabatan != null) {
 						var nama_jabatan = data[i].hasil_nama_jabatan;
 					} else if (data[i].hasil_nama_jabatan == null) {
@@ -685,6 +705,9 @@ $(document).ready(function () {
 						var color = "text-warning";
 					} else if (data[i].jenis_pegawai == "3") {
 						var status_pegawai = "HONORER";
+						var color = "text-info";
+					} else if (data[i].jenis_pegawai == "4") {
+						var status_pegawai = "KELUAR";
 						var color = "text-danger";
 					}
 
@@ -723,9 +746,6 @@ $(document).ready(function () {
 						`${nama_tingkat}` +
 						"</td>" +
 						"<td>" +
-						`${data[i].tahun_ajaran}` +
-						"</td>" +
-						"<td>" +
 						`${data[i].nomor_hp}` +
 						"</td>" +
 						"<td class='font-weight-bolder " + color + "'>" +
@@ -739,6 +759,15 @@ $(document).ready(function () {
 						"</td>" +
 						'<td class="">' +
 						`${saldo_umum}` +
+						"</td>" +
+						"<td>" +
+						`${kredit_tht}` +
+						"</td>" +
+						'<td class="">' +
+						`${debet_tht}` +
+						"</td>" +
+						'<td class="">' +
+						`${saldo_tht}` +
 						"</td>" +
 						'<td class="">' +
 						`${option}` +

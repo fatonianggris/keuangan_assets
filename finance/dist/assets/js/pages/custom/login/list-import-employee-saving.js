@@ -440,6 +440,8 @@ $("#tb_transaksi").on("click", ".edit_nasabah", function () {
 							var status_pegawai = "TIDAK TETAP";
 						} else if (data.data[i].jenis_pegawai == "3") {
 							var status_pegawai = "HONORER";
+						} else if (data.data[i].jenis_pegawai == "4") {
+							var status_pegawai = "KELUAR";
 						}
 
 						html +=
@@ -597,6 +599,9 @@ function show_import_employee_saving() {
 					var color_status = "text-warning";
 				} else if (data[i].status_pegawai == "3") {
 					var nama_status_pegawai = "HONORER";
+					var color_status = "text-info";
+				} else if (data[i].status_pegawai == "4") {
+					var nama_status_pegawai = "KELUAR";
 					var color_status = "text-danger";
 				}
 

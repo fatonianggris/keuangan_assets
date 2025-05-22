@@ -39,6 +39,13 @@
 								}
 							}
 						},
+						status_siswa: {
+							validators: {
+								notEmpty: {
+									message: 'Status diperlukan'
+								},
+							}
+						},
 						nama_wali: {
 							validators: {
 								regexp: {

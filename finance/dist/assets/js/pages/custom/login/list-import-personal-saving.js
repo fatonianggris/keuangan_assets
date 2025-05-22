@@ -360,6 +360,7 @@ $("#tb_transaksi").on("click", ".edit_nasabah", function () {
 	$('[name="nama_siswa"]').val('');
 	$('[name="old_nama_siswa"]').val('');
 	$('[name="email_wali"]').val('');
+	$('[name="status_siswa"]').val('');
 	$('[name="nama_wali"]').val('');
 	$('[name="tanggal_transaksi"]').val('');
 	$('[name="nomor_handphone_wali"]').val('');
@@ -380,6 +381,7 @@ $("#tb_transaksi").on("click", ".edit_nasabah", function () {
 	var id_th_ajaran = $(this).data("id_th_ajaran") || "";
 	var nama_th_ajaran = $(this).data("nama_th_ajaran") || "";
 	var email = $(this).data("email") || "";
+	var status_siswa = $(this).data("status_siswa") || "0";
 	var nama_wali = $(this).data("nama_wali") || "";
 	var nomor_handphone = $(this).data("nomor_handphone") || "";
 	var status_nis_duplikat = $(this).data("status_nasabah") || "";
@@ -512,6 +514,7 @@ $("#tb_transaksi").on("click", ".edit_nasabah", function () {
 	$('[name="tanggal_transaksi"]').val(tanggal_transaksi);
 
 	$('[name="level_tingkat"]').find('option[value="' + level_tingkat + '"]').prop('selected', true);
+	$('[name="status_siswa"]').find('option[value="' + status_siswa + '"]').prop('selected', true);
 	$('[name="th_ajaran"]').find('option[value="' + id_th_ajaran + '"]').prop('selected', true);
 
 	$('[name="email_wali"]').val(email);
@@ -603,6 +606,13 @@ function show_import_personal_saving() {
 					var color_nama = "label-light-danger";
 				}
 
+				if (data[i].status_siswa == "1") {
+					var status_siswa = "AKTIF";
+					var color_siswa = "text-success";
+				} else if (data[i].status_siswa == "0") {
+					var status_siswa = "TIDAK AKTIF";
+					var color_siswa = "text-danger";
+				}
 				var option = "<div class='dropdown dropdown-inline'>" +
 					"<a href='javascript:;' class='btn btn-xs  btn-clean btn-icon btn-primary' data-toggle='dropdown'>" +
 					"<i class='la la-cog'></i>" +
@@ -610,7 +620,7 @@ function show_import_personal_saving() {
 					"<div class='dropdown-menu dropdown-menu-sm dropdown-menu-right'>" +
 					"<ul class='nav nav-hover flex-column'>" +
 					"<li class='nav-item'><a href='javascript:void(0);' id='edit_button' class='nav-link edit_nasabah' data-id_nasabah='" +
-					data[i].id_nasabah + "' data-nis_siswa='" + data[i].nis + "' data-level_tingkat='" + data[i].tingkat + "' data-id_th_ajaran='" + data[i].tahun_ajaran + "' data-nama_th_ajaran='" + data[i].nama_tahun_ajaran +
+					data[i].id_nasabah + "' data-nis_siswa='" + data[i].nis + "' data-level_tingkat='" + data[i].tingkat + "' data-id_th_ajaran='" + data[i].tahun_ajaran + "' data-nama_th_ajaran='" + data[i].nama_tahun_ajaran + "' data-status_siswa='" + data[i].status_siswa +
 					"' data-nama_siswa='" + data[i].nama_nasabah + "' data-tanggal_transaksi='" + data[i].tanggal_transaksi + "' data-email='" + data[i].email_nasabah + "' data-nama_wali='" + data[i].nama_wali + "' data-nomor_handphone='" + data[i].nomor_hp_wali +
 					"' data-saldo_umum='" + data[i].saldo_umum + "' data-saldo_wisata='" + data[i].saldo_wisata + "' data-saldo_qurban='" + data[i].saldo_qurban + "' data-status_nasabah='" + data[i].status_nasabah + "' data-status_nama_nasabah='" + data[i].status_nama_nasabah +
 					"' href='javascript:void(0);'><i class='nav-icon la la-pencil-ruler text-warning'></i><span class='nav-text text-warning font-weight-bold text-hover-primary'>Edit Data</span></a></li>" +
@@ -633,9 +643,6 @@ function show_import_personal_saving() {
 					`${data[i].nama_nasabah.toUpperCase()}` +
 					"</td>" +
 					"<td>" +
-					`${data[i].tanggal_transaksi}` +
-					"</td>" +
-					"<td>" +
 					`${data[i].nama_tahun_ajaran}` +
 					"</td>" +
 					"<td class='font-weight-bolder'>" +
@@ -646,6 +653,9 @@ function show_import_personal_saving() {
 					"</td>" +
 					'<td class="">' +
 					`${data[i].nomor_hp_wali}` +
+					"</td>" +
+					'<td class="font-weight-bolder ' + color_siswa + ' ">' +
+					`${status_siswa}` +
 					"</td>" +
 					'<td class="">' +
 					`${data[i].email_nasabah}` +
@@ -664,7 +674,7 @@ function show_import_personal_saving() {
 					"</span> </td>" +
 					'<td class=""> <span class="label label-over ' + color_nama + ' font-weight-bolder label-inline">' +
 					`${status_nama_nasabah}` +
-					"</span> </td>" +
+					"</span></td>" +
 					'<td class="">' +
 					`${option}` +
 					"</td>" +

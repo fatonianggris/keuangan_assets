@@ -186,7 +186,7 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "POST",
-			url: `${HOST_URL}/finance/report/export_data_csv_transaction_tour_all_employee`,
+			url: `${HOST_URL}/finance/report/export_data_csv_transaction_tht_all_employee`,
 			dataType: "JSON",
 			data: {
 				data_check: rows_selected.join(","),
@@ -255,7 +255,7 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "POST",
-			url: `${HOST_URL}/finance/report/print_data_pdf_transaction_tour_all_employee`,
+			url: `${HOST_URL}/finance/report/print_data_pdf_transaction_tht_all_employee`,
 			data: {
 				data_check: rows_selected.join(","),
 				date_range: date_range
@@ -464,13 +464,13 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "GET",
-			url: `${HOST_URL}/finance/savings/get_employee_tour_info/${nip_pegawai}`,
+			url: `${HOST_URL}/finance/savings/get_employee_tht_info/${nip_pegawai}`,
 			async: false,
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_pegawai']) {
-					jumlah_saldo_awal = (Number(data['info_pegawai'][0]['saldo_tabungan_wisata']) - Number(data['info_tabungan'][0]['nominal']));
-					jumlah_saldo_akhir = data['info_pegawai'][0]['saldo_tabungan_wisata'] || "";
+					jumlah_saldo_awal = (Number(data['info_pegawai'][0]['saldo_tabungan_tht']) - Number(data['info_tabungan'][0]['nominal']));
+					jumlah_saldo_akhir = data['info_pegawai'][0]['saldo_tabungan_tht'] || "";
 					id_tingkat = data['info_pegawai'][0]['id_tingkat'] || "";
 
 					if (id_tingkat == "1") {
@@ -555,13 +555,13 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "GET",
-			url: `${HOST_URL}/finance/savings/get_employee_tour_info/${nip_pegawai}`,
+			url: `${HOST_URL}/finance/savings/get_employee_tht_info/${nip_pegawai}`,
 			async: false,
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_pegawai']) {
-					jumlah_saldo_awal = (Number(data['info_pegawai'][0]['saldo_tabungan_wisata']) + Number(data['info_tabungan'][0]['nominal']));
-					jumlah_saldo_akhir = data['info_pegawai'][0]['saldo_tabungan_wisata'] || "";
+					jumlah_saldo_awal = (Number(data['info_pegawai'][0]['saldo_tabungan_tht']) + Number(data['info_tabungan'][0]['nominal']));
+					jumlah_saldo_akhir = data['info_pegawai'][0]['saldo_tabungan_tht'] || "";
 					id_tingkat = data['info_pegawai'][0]['id_tingkat'] || "";
 
 					if (id_tingkat == "1") {
@@ -619,7 +619,7 @@ $(document).ready(function () {
 
 		window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 			"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nip_pegawai,
-			nomor_transaksi, "WISATA", jenis_transaksi, waktu_transaksi, nominal, CurrencyID(saldo_awal.toString()), saldo_akhir, "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", nama, jenjang, 'www.sekolahutsman.sch.id');
+			nomor_transaksi, "THT", jenis_transaksi, waktu_transaksi, nominal, CurrencyID(saldo_awal.toString()), saldo_akhir, "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", nama, jenjang, 'www.sekolahutsman.sch.id');
 
 	});
 
@@ -637,7 +637,7 @@ $(document).ready(function () {
 
 		window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 			"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nip_pegawai,
-			nomor_transaksi, "WISATA", jenis_transaksi, waktu_transaksi, nominal, CurrencyID(saldo_awal.toString()), saldo_akhir, "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", nama, jenjang, 'www.sekolahutsman.sch.id');
+			nomor_transaksi, "THT", jenis_transaksi, waktu_transaksi, nominal, CurrencyID(saldo_awal.toString()), saldo_akhir, "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", nama, jenjang, 'www.sekolahutsman.sch.id');
 
 	});
 
@@ -647,14 +647,14 @@ $(document).ready(function () {
 		// var HOST_URL = "<?php echo base_url('admin/getMemberInfo/'); ?>" + nip;
 		$.ajax({
 			type: "GET",
-			url: `${HOST_URL}/finance/savings/get_employee_tour_info/${nip}`,
+			url: `${HOST_URL}/finance/savings/get_employee_tht_info/${nip}`,
 			async: false,
 			dataType: "JSON",
 			success: function (data) {
 
 				if (data['info_pegawai'][0]) {
 
-					jumlah_saldo = data['info_pegawai'][0]['saldo_tabungan_wisata'] || "";
+					jumlah_saldo = data['info_pegawai'][0]['saldo_tabungan_tht'] || "";
 					id_tingkat = data['info_pegawai'][0]['id_tingkat'] || "";
 
 					if (id_tingkat == "1") {
@@ -707,12 +707,12 @@ $(document).ready(function () {
 		// var HOST_URL = "<?php echo base_url('admin/getMemberInfo/'); ?>" + nip;
 		$.ajax({
 			type: "GET",
-			url: `${HOST_URL}/finance/savings/get_employee_tour_info/${nip}`,
+			url: `${HOST_URL}/finance/savings/get_employee_tht_info/${nip}`,
 			async: false,
 			dataType: "JSON",
 			success: function (data) {
 				if (data['info_pegawai'][0]) {
-					jumlah_saldo = data['info_pegawai'][0]['saldo_tabungan_wisata'] || "";
+					jumlah_saldo = data['info_pegawai'][0]['saldo_tabungan_tht'] || "";
 					id_tingkat = data['info_pegawai'][0]['id_tingkat'] || "";
 
 					if (id_tingkat == "1") {
@@ -767,7 +767,7 @@ $(document).ready(function () {
 				if (data['info_pegawai']) {
 					jumlah_saldo_umum = data['info_pegawai'][0]['saldo_tabungan_umum'] || "";
 					jumlah_saldo_qurban = data['info_pegawai'][0]['saldo_tabungan_qurban'] || "";
-					jumlah_saldo_wisata = data['info_pegawai'][0]['saldo_tabungan_wisata'] || "";
+					jumlah_saldo_tht = data['info_pegawai'][0]['saldo_tabungan_tht'] || "";
 					id_tingkat = data['info_pegawai'][0]['id_tingkat'] || "";
 
 					if (id_tingkat == "1") {
@@ -783,7 +783,7 @@ $(document).ready(function () {
 				} else {
 					jumlah_saldo_umum = "-";
 					jumlah_saldo_qurban = "-";
-					jumlah_saldo_wisata = "-";
+					jumlah_saldo_tht = "-";
 					nama_tingkat = "-";
 				}
 
@@ -811,16 +811,16 @@ $(document).ready(function () {
 					info_waktu_transaksi_qurban = "-";
 				}
 
-				if (data['info_tabungan_wisata'].length !== 0) {
-					if (data['info_tabungan_wisata'][0]['catatan'] == "" || data['info_tabungan_wisata'][0]['catatan'] == null) {
-						info_catatan_wisata = "-"
+				if (data['info_tabungan_tht'].length !== 0) {
+					if (data['info_tabungan_tht'][0]['catatan'] == "" || data['info_tabungan_tht'][0]['catatan'] == null) {
+						info_catatan_tht = "-"
 					} else {
-						info_catatan_wisata = data['info_tabungan_wisata'][0]['catatan'];
+						info_catatan_tht = data['info_tabungan_tht'][0]['catatan'];
 					}
-					info_waktu_transaksi_wisata = data['info_tabungan_wisata'][0]['waktu_transaksi'];
+					info_waktu_transaksi_tht = data['info_tabungan_tht'][0]['waktu_transaksi'];
 				} else {
-					info_catatan_wisata = "-";
-					info_waktu_transaksi_wisata = "-";
+					info_catatan_tht = "-";
+					info_waktu_transaksi_tht = "-";
 				}
 			},
 		});
@@ -838,9 +838,9 @@ $(document).ready(function () {
 		$("#infoTerakhirTransaksiRekapQurban").html(info_waktu_transaksi_qurban);
 		$("#userJumlahSaldoRekapQurban").html(CurrencyID(jumlah_saldo_qurban));
 
-		$("#userCatatanRekapWisata").html(info_catatan_wisata);
-		$("#infoTerakhirTransaksiRekapWisata").html(info_waktu_transaksi_wisata);
-		$("#userJumlahSaldoRekapWisata").html(CurrencyID(jumlah_saldo_wisata));
+		$("#userCatatanRekapTHT").html(info_catatan_tht);
+		$("#infoTerakhirTransaksiRekapTHT").html(info_waktu_transaksi_tht);
+		$("#userJumlahSaldoRekapTHT").html(CurrencyID(jumlah_saldo_tht));
 	});
 
 
@@ -855,7 +855,7 @@ $(document).ready(function () {
 	function list_employee() {
 		$.ajax({
 			type: "GET",
-			url: `${HOST_URL}finance/savings/savings/get_all_employee`,
+			url: `${HOST_URL}finance/savings/savings/get_all_permanent_employee`,
 			contentType: 'application/json; charset=utf-8',
 			dataType: 'json',
 			success: function (data) {
@@ -932,7 +932,7 @@ $(document).ready(function () {
 
 					Swal.fire({
 						title: "Peringatan!",
-						html: "Apakah anda yakin ingin Menyetor Tabungan Wisata Pegawai atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
+						html: "Apakah anda yakin ingin Menyetor Tabungan THT Pegawai atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
 						icon: "warning",
 						showCancelButton: true,
 						confirmButtonColor: "#DD6B55",
@@ -954,7 +954,7 @@ $(document).ready(function () {
 
 							$.ajax({
 								type: "POST",
-								url: `${HOST_URL}/finance/savings/post_tour_credit_employee`,
+								url: `${HOST_URL}/finance/savings/post_tht_credit_employee`,
 								dataType: "JSON",
 								data: {
 									nip: nip,
@@ -991,7 +991,7 @@ $(document).ready(function () {
 
 												window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 													"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nip,
-													data.nomor_transaksi, "WISATA", "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+													data.nomor_transaksi, "THT", "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
 													CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(0, -1), nama_tingkat, 'www.sekolahutsman.sch.id');
 											}
 										});
@@ -1013,7 +1013,7 @@ $(document).ready(function () {
 								},
 							});
 						} else {
-							Swal.fire("Dibatalkan!", "Setoran Tabungan Wisata Pegawai atas nama <b>" + nama.toUpperCase() + "</b> batal diinputkan.", "error");
+							Swal.fire("Dibatalkan!", "Setoran Tabungan THT Pegawai atas nama <b>" + nama.toUpperCase() + "</b> batal diinputkan.", "error");
 							return false;
 						}
 					});
@@ -1030,7 +1030,7 @@ $(document).ready(function () {
 
 						Swal.fire({
 							title: "Peringatan!",
-							html: "Apakah anda yakin ingin MENYETOR TABUNGAN WISATA & MENAMBAH NASABAH PEGAWAI BARU atas nama <b>" + nama_nasabah.toUpperCase() + " (" + nip + ")</b> dengan Nominal Rp." + nominal + " ?",
+							html: "Apakah anda yakin ingin MENYETOR TABUNGAN THT & MENAMBAH NASABAH PEGAWAI BARU atas nama <b>" + nama_nasabah.toUpperCase() + " (" + nip + ")</b> dengan Nominal Rp." + nominal + " ?",
 							icon: "warning",
 							showCancelButton: true,
 							confirmButtonColor: "#DD6B55",
@@ -1052,7 +1052,7 @@ $(document).ready(function () {
 
 								$.ajax({
 									type: "POST",
-									url: `${HOST_URL}/finance/savings/post_tour_credit_new_client_employee`,
+									url: `${HOST_URL}/finance/savings/post_tht_credit_new_client_employee`,
 									dataType: "JSON",
 									data: {
 										nip: nip,
@@ -1094,7 +1094,7 @@ $(document).ready(function () {
 
 													window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 														"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nip,
-														data.nomor_transaksi, "WISATA", "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+														data.nomor_transaksi, "THT", "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
 														CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", nama_nasabah, nama_tingkat, 'www.sekolahutsman.sch.id');
 												}
 											});
@@ -1198,7 +1198,7 @@ $(document).ready(function () {
 
 				Swal.fire({
 					title: "Peringatan!",
-					html: "Apakah anda yakin Update Kredit Tabungan Wisata Pegawai atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
+					html: "Apakah anda yakin Update Kredit Tabungan THT Pegawai atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
 					icon: "warning",
 					showCancelButton: true,
 					confirmButtonColor: "#DD6B55",
@@ -1220,7 +1220,7 @@ $(document).ready(function () {
 
 						$.ajax({
 							type: "POST",
-							url: `${HOST_URL}/finance/savings/update_tour_credit_employee`,
+							url: `${HOST_URL}/finance/savings/update_tht_credit_employee`,
 							dataType: "JSON",
 							data: {
 								id_transaksi: id_transaksi,
@@ -1258,7 +1258,7 @@ $(document).ready(function () {
 
 											window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 												"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nip,
-												data.nomor_transaksi, "WISATA", "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+												data.nomor_transaksi, "THT", "KREDIT", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
 												CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(1), nama_tingkat, 'www.sekolahutsman.sch.id');
 										}
 									});
@@ -1280,7 +1280,7 @@ $(document).ready(function () {
 							},
 						});
 					} else {
-						Swal.fire("Dibatalkan!", "Edit Setoran Tabungan Wisata Pegawai atas nama <b>" + nama.toUpperCase() + "</b> batal diubah.", "error");
+						Swal.fire("Dibatalkan!", "Edit Setoran Tabungan THT Pegawai atas nama <b>" + nama.toUpperCase() + "</b> batal diubah.", "error");
 						return false;
 					}
 				});
@@ -1351,7 +1351,7 @@ $(document).ready(function () {
 
 					Swal.fire({
 						title: "Peringatan!",
-						html: "Apakah anda yakin Menarik Tabungan Wisata Pegawai atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
+						html: "Apakah anda yakin Menarik Tabungan THT Pegawai atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
 						icon: "warning",
 						showCancelButton: true,
 						confirmButtonColor: "#DD6B55",
@@ -1373,7 +1373,7 @@ $(document).ready(function () {
 
 							$.ajax({
 								type: "POST",
-								url: `${HOST_URL}/finance/savings/post_tour_debet_employee`,
+								url: `${HOST_URL}/finance/savings/post_tht_debet_employee`,
 								dataType: "JSON",
 								data: {
 									nip: nip,
@@ -1410,7 +1410,7 @@ $(document).ready(function () {
 
 												window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 													"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nip,
-													data.nomor_transaksi, "WISATA", "DEBET", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+													data.nomor_transaksi, "THT", "DEBET", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
 													CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(0, -1), nama_tingkat, 'www.sekolahutsman.sch.id');
 											}
 										});
@@ -1432,7 +1432,7 @@ $(document).ready(function () {
 								},
 							});
 						} else {
-							Swal.fire("Dibatalkan!", "Penarikan Tabungan Wisata Pegawai atas nama <b>" + nama.toUpperCase() + "</b> batal diubah.", "error");
+							Swal.fire("Dibatalkan!", "Penarikan Tabungan THT Pegawai atas nama <b>" + nama.toUpperCase() + "</b> batal diubah.", "error");
 							return false;
 						}
 					});
@@ -1516,7 +1516,7 @@ $(document).ready(function () {
 				} else {
 					Swal.fire({
 						title: "Peringatan!",
-						html: "Apakah anda yakin Update Penarikan Tabungan Wisata Pegawai atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
+						html: "Apakah anda yakin Update Penarikan Tabungan THT Pegawai atas nama <b>" + nama.toUpperCase() + "</b> dengan Nominal Rp." + nominal + " ?",
 						icon: "warning",
 						showCancelButton: true,
 						confirmButtonColor: "#DD6B55",
@@ -1538,7 +1538,7 @@ $(document).ready(function () {
 
 							$.ajax({
 								type: "POST",
-								url: `${HOST_URL}/finance/savings/update_tour_debet_employee`,
+								url: `${HOST_URL}/finance/savings/update_tht_debet_employee`,
 								dataType: "JSON",
 								data: {
 									id_transaksi: id_transaksi,
@@ -1576,7 +1576,7 @@ $(document).ready(function () {
 
 												window.bundle.getPrint("RUMAH AMANAH - SEKOLAH UTSMAN", HOST_URL + "uploads/data/rumah_amanah.png",
 													"Jln. Lakarsantri Selatan 31-35", "Surabaya, Jawa Timur", "031-99424800", nip,
-													data.nomor_transaksi, "WISATA", "DEBET", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
+													data.nomor_transaksi, "THT", "DEBET", data.waktu_transaksi, CurrencyID(nominal.toString()), CurrencyID(saldo_awal.toString()),
 													CurrencyID(data.saldo_akhir.toString()), "SIMPAN STRUK INI", "UNTUK BUKTI TRANSAKSI", only_name[1].slice(1), nama_tingkat, 'www.sekolahutsman.sch.id');
 											}
 										});
@@ -1598,7 +1598,7 @@ $(document).ready(function () {
 								},
 							});
 						} else {
-							Swal.fire("Dibatalkan!", "Edit Penarikan Tabungan Wisata Pegawai atas nama <b>" + nama.toUpperCase() + "</b> batal diubah.", "error");
+							Swal.fire("Dibatalkan!", "Edit Penarikan Tabungan THT Pegawai atas nama <b>" + nama.toUpperCase() + "</b> batal diubah.", "error");
 							return false;
 						}
 					});
@@ -1639,7 +1639,7 @@ $(document).ready(function () {
 
 		$.ajax({
 			type: "GET",
-			url: `${HOST_URL}/finance/savings/get_all_tour_transaction_employee`,
+			url: `${HOST_URL}/finance/savings/get_all_tht_transaction_employee`,
 			async: false,
 			data: {
 				start_date: lstart,
@@ -1659,7 +1659,7 @@ $(document).ready(function () {
 						var jenis_tabungan = "QURBAN"
 					} else if (data[i].jenis_tabungan == "3") {
 						var color_tabungan = "text-danger";
-						var jenis_tabungan = "WISATA"
+						var jenis_tabungan = "THT"
 					}
 
 					if (data[i].status_kredit_debet == "1") {
@@ -1700,15 +1700,15 @@ $(document).ready(function () {
 								"<div class='dropdown-menu dropdown-menu-sm dropdown-menu-right'>" +
 								"<ul class='nav nav-hover flex-column'>" +
 								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link edit_transaksi_kredit' data-id_transaksi='" +
-								data[i].id_transaksi_wisata_pegawai + "' data-nip_pegawai='" + data[i].nip_pegawai + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_wisata +
+								data[i].id_transaksi_tht_pegawai + "' data-nip_pegawai='" + data[i].nip_pegawai + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_tht +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-id_th_ajaran='" + data[i].th_ajaran + "' data-th_ajaran='" + data[i].tahun_ajaran + "' data-nominal='" + data[i].nominal + "' data-waktu_transaksi='" + data[i].tanggal_transaksi + "' data-catatan='" + data[i].catatan +
 								"' href='javascript:void(0);'><i class='nav-icon la la-pencil-ruler text-warning'></i><span class='nav-text text-warning font-weight-bold text-hover-primary'>Edit</span></a></li>" +
 								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link cetak_transaksi_kredit'" +
-								"' data-nip_pegawai='" + data[i].nip_pegawai + "' data-nomor_transaksi='" + data[i].nomor_transaksi_wisata + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-tingkat='" + nama_tingkat +
+								"' data-nip_pegawai='" + data[i].nip_pegawai + "' data-nomor_transaksi='" + data[i].nomor_transaksi_tht + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-tingkat='" + nama_tingkat +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-saldo='" + saldo + "' data-nominal='" + CurrencyID(data[i].nominal) + "' data-waktu_transaksi='" + data[i].waktu_transaksi +
 								"' href='javascript:void(0);'><i class='nav-icon la la-print text-success'></i><span class='nav-text text-success font-weight-bold text-hover-primary'>Cetak</span></a></li>" +
 								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link delete_transaksi_kredit' data-id_transaksi='" +
-								data[i].id_transaksi_wisata_pegawai + "' data-nip_pegawai='" + data[i].nip_pegawai + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_wisata +
+								data[i].id_transaksi_tht_pegawai + "' data-nip_pegawai='" + data[i].nip_pegawai + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_tht +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-nominal='" + data[i].nominal + "'><i class='nav-icon la la-trash text-danger'></i><span class='nav-text text-danger font-weight-bold text-hover-primary'>Hapus</span></a></li>" +
 								"</ul>" +
 								"</div>" +
@@ -1721,15 +1721,15 @@ $(document).ready(function () {
 								"<div class='dropdown-menu dropdown-menu-sm dropdown-menu-right'>" +
 								"<ul class='nav nav-hover flex-column'>" +
 								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link edit_transaksi_debet' data-id_transaksi='" +
-								data[i].id_transaksi_wisata_pegawai + "' data-nip_pegawai='" + data[i].nip_pegawai + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_wisata +
+								data[i].id_transaksi_tht_pegawai + "' data-nip_pegawai='" + data[i].nip_pegawai + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_tht +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-id_th_ajaran='" + data[i].th_ajaran + "' data-th_ajaran='" + data[i].tahun_ajaran + "' data-nominal='" + data[i].nominal + "' data-waktu_transaksi='" + data[i].tanggal_transaksi + "' data-catatan='" + data[i].catatan +
 								"' href='javascript:void(0);'><i class='nav-icon la la-pencil-ruler text-warning'></i><span class='nav-text text-warning font-weight-bold text-hover-primary'>Edit</span></a></li>" +
 								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link cetak_transaksi_debet'" +
-								"' data-nip_pegawai='" + data[i].nip_pegawai + "' data-nomor_transaksi='" + data[i].nomor_transaksi_wisata + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-tingkat='" + nama_tingkat +
+								"' data-nip_pegawai='" + data[i].nip_pegawai + "' data-nomor_transaksi='" + data[i].nomor_transaksi_tht + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-tingkat='" + nama_tingkat +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-saldo='" + saldo + "' data-nominal='" + CurrencyID(data[i].nominal) + "' data-waktu_transaksi='" + data[i].waktu_transaksi +
 								"' href='javascript:void(0);'><i class='nav-icon la la-print text-success'></i><span class='nav-text text-success font-weight-bold text-hover-primary'>Cetak</span></a></li>" +
 								"<li class='nav-item'><a href='javascript:void(0);' class='nav-link delete_transaksi_debet' data-id_transaksi='" +
-								data[i].id_transaksi_wisata_pegawai + "' data-nip_pegawai='" + data[i].nip_pegawai + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_wisata +
+								data[i].id_transaksi_tht_pegawai + "' data-nip_pegawai='" + data[i].nip_pegawai + "' data-nama_lengkap='" + data[i].nama_lengkap + "' data-id_tingkat='" + data[i].id_tingkat + "' data-nomor_transaksi='" + data[i].nomor_transaksi_tht +
 								"' data-jenis_transaksi='" + jenis_transaksi + "' data-nominal='" + data[i].nominal + "'><i class='nav-icon la la-trash text-danger'></i><span class='nav-text text-danger font-weight-bold text-hover-primary'>Hapus</span></a></li>" +
 								"</ul>" +
 								"</div>" +
@@ -1745,10 +1745,10 @@ $(document).ready(function () {
 					html +=
 						"<tr class='" + `${bg_color}` + "'>" +
 						"<td>" +
-						`${data[i].id_transaksi_wisata_pegawai}` +
+						`${data[i].id_transaksi_tht_pegawai}` +
 						"</td>" +
 						"<td class='font-weight-bolder text-danger'>" +
-						`${data[i].nomor_transaksi_wisata}` +
+						`${data[i].nomor_transaksi_tht}` +
 						"</td>" +
 						"<td class='font-weight-bolder'>" +
 						`${data[i].nip_pegawai}` +
@@ -1822,7 +1822,7 @@ $(document).ready(function () {
 			cancelButtonText: "Tidak, batal!",
 			closeOnConfirm: false,
 			closeOnCancel: true,
-			html: "Apakah anda yakin ingin menghapus Transaksi Wisata Pegawai <b>" + nomor_transaksi + "</b>  (" + jenis_transaksi + ") atas nama <b>'" +
+			html: "Apakah anda yakin ingin menghapus Transaksi THT Pegawai <b>" + nomor_transaksi + "</b>  (" + jenis_transaksi + ") atas nama <b>'" +
 				nama_pegawai.toUpperCase() + "' (" + nip_pegawai + ")</b> dengan nominal Kredit (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 			didOpen: () => {
 				grecaptcha.render('recaptcha_delete', {
@@ -1838,7 +1838,7 @@ $(document).ready(function () {
 			if (result.value) {
 				$.ajax({
 					type: "post",
-					url: `${HOST_URL}/finance/savings/delete_tour_credit_transaction_employee`,
+					url: `${HOST_URL}/finance/savings/delete_tht_credit_transaction_employee`,
 					data: {
 						id_transaksi: id_transaksi,
 						nomor_transaksi: nomor_transaksi,
@@ -1888,7 +1888,7 @@ $(document).ready(function () {
 
 				return false;
 			} else {
-				Swal.fire("Dibatalkan!", "Penghapusan Transaksi Wisata Pegawai <b>" + nomor_transaksi + "</b>  (" + jenis_transaksi + ") atas nama <b>'" + nama_pegawai.toUpperCase() + "'</b> (" + nip_pegawai + ") batal dihapus.", "error");
+				Swal.fire("Dibatalkan!", "Penghapusan Transaksi THT Pegawai <b>" + nomor_transaksi + "</b>  (" + jenis_transaksi + ") atas nama <b>'" + nama_pegawai.toUpperCase() + "'</b> (" + nip_pegawai + ") batal dihapus.", "error");
 
 				return false;
 			}
@@ -1928,7 +1928,7 @@ $(document).ready(function () {
 			cancelButtonText: "Tidak, batal!",
 			closeOnConfirm: false,
 			closeOnCancel: true,
-			html: "Apakah anda yakin ingin menghapus Transaksi Wisata Pegawai <b>" + nomor_transaksi + "</b> (" + jenis_transaksi + ") atas nama <b>'" +
+			html: "Apakah anda yakin ingin menghapus Transaksi THT Pegawai <b>" + nomor_transaksi + "</b> (" + jenis_transaksi + ") atas nama <b>'" +
 				nama_pegawai.toUpperCase() + "' (" + nip_pegawai + ")</b> dengan nominal Debet (Rp. " + nominal + ") ? <br></br> <div id='recaptcha_delete'></div>",
 			didOpen: () => {
 				grecaptcha.render('recaptcha_delete', {
@@ -1944,7 +1944,7 @@ $(document).ready(function () {
 			if (result.value) {
 				$.ajax({
 					type: "post",
-					url: `${HOST_URL}/finance/savings/delete_tour_debet_transaction_employee`,
+					url: `${HOST_URL}/finance/savings/delete_tht_debet_transaction_employee`,
 					data: {
 						id_transaksi: id_transaksi,
 						nomor_transaksi: nomor_transaksi,
@@ -1994,7 +1994,7 @@ $(document).ready(function () {
 				return false;
 
 			} else {
-				Swal.fire("Dibatalkan!", "Penghapusan Transaksi Wisata Pegawai <b>" + nomor_transaksi + "</b> (" + jenis_transaksi + ") atas nama <b>'" + nama_pegawai.toUpperCase() + "'</b> (" + nip_pegawai + ") batal dihapus.", "error");
+				Swal.fire("Dibatalkan!", "Penghapusan Transaksi THT Pegawai <b>" + nomor_transaksi + "</b> (" + jenis_transaksi + ") atas nama <b>'" + nama_pegawai.toUpperCase() + "'</b> (" + nip_pegawai + ") batal dihapus.", "error");
 
 				return false;
 			}

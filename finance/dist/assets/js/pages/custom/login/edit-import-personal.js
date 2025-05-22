@@ -73,6 +73,13 @@
 								},
 							}
 						},
+						status_siswa: {
+							validators: {
+								notEmpty: {
+									message: 'Status diperlukan'
+								},
+							}
+						},
 						email_wali: {
 							validators: {
 								emailAddress: {
@@ -186,6 +193,7 @@
 							var tanggal_transaksi = $('[name="tanggal_transaksi"]').val()
 							var nama_wali = $('[name="nama_wali"]').val();
 							var email_wali = $('[name="email_wali"]').val()
+							var status_siswa = $('[name="status_siswa"]').val()
 							var nomor_handphone_wali = $('[name="nomor_handphone_wali"]').val();
 
 							var saldo_umum = $('[name="saldo_umum"]').val();
@@ -196,7 +204,7 @@
 
 							if (saldo_umum >= 0 && saldo_qurban >= 0 && saldo_wisata >= 0) {
 
-								if (nis != null && nis != "" && nama != null && nama != "" && level_tingkat != null && level_tingkat != "" && tanggal_transaksi != null && tanggal_transaksi != "" && th_ajaran != null && th_ajaran != "") {
+								if (nis != null && nis != "" && nama != null && nama != "" && level_tingkat != null && level_tingkat != "" && tanggal_transaksi != null && tanggal_transaksi != "" && th_ajaran != null && th_ajaran != "" && status_siswa != null && status_siswa != "") {
 
 									Swal.fire({
 										title: "Peringatan!",
@@ -235,6 +243,7 @@
 													tingkat: level_tingkat,
 													nama_wali: nama_wali,
 													nomor_hp_wali: nomor_handphone_wali,
+													status_siswa: status_siswa,
 													email_nasabah: email_wali,
 													saldo_umum: saldo_umum,
 													saldo_qurban: saldo_qurban,
